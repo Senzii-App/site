@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shift Bidding Optimizer — Fair & Cost-Effective Open Shift Assignment | Senzii</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description" content="Free interactive tool: enter open shifts and employee bids to optimize shift assignment based on fairness, seniority, cost, and compliance. Visual results, fairness scoring, CSV export.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/theme.20fbb461.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Shift Bidding Optimizer",
+    "description": "Enter open shifts and employee bids to optimize shift assignment based on fairness, seniority, cost, and compliance. Visual results, fairness scoring, CSV export.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "publisher": { "@type": "Organization", "name": "Senzii", "url": "https://senzii.com" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does the shift bidding optimizer work?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Enter your open shifts with day, start time, duration, and coverage needed. Then add employee bids — each employee specifies which shifts they want, their seniority, hourly rate, and current hours. The optimizer assigns shifts using a weighted scoring algorithm that balances seniority, fairness (hours equity), cost, and coverage requirements." }
+      },
+      {
+        "@type": "Question",
+        "name": "What fairness rules does the optimizer enforce?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The optimizer tracks each employee's cumulative hours and prioritizes employees with fewer hours when scores are close. It also checks for consecutive day limits, minimum rest periods, and maximum weekly hours to ensure compliance." }
+      },
+      {
+        "@type": "Question",
+        "name": "How is seniority weighted in the bidding process?",
+        "acceptedAnswer": { "@type": "Answer", "text": "You can set the seniority weight (0-100%). At 50%, seniority and fairness contribute equally to the bid score. At 100%, the most senior employee always wins ties. At 0%, only hours equity and cost matter." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I export the bidding results?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The optimized shift assignments, fairness breakdown, and cost summary can be downloaded as a CSV file. You can also print the results directly from your browser." }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens if not enough employees bid on a shift?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The optimizer flags any shifts with insufficient bids as coverage gaps. These are highlighted in red in the results, so you know which shifts still need manual assignment or additional outreach." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this tool free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, completely free. Enter your email to receive your optimized bid results with detailed analysis. No signup required." }
+      }
+    ]
+  }
+  </script>
+  <style>
+    .sbo-hero { padding: 3rem 0 2rem; text-align: center; border-bottom: 1px solid var(--border); }
+    .sbo-hero h1 { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; color: var(--text); letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .sbo-hero p { font-size: 1.05rem; color: var(--text-muted); max-width: 620px; margin: 0 auto; }
+
+    .sbo-container { max-width: 960px; margin: 0 auto; padding: 2rem; }
+
+    .sbo-steps { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2.5rem; }
+    .sbo-step-dot { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--text-dim); }
+    .sbo-step-dot.active { color: var(--accent); }
+    .sbo-step-dot.done { color: var(--accent); }
+    .sbo-step-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; border: 2px solid var(--border); background: var(--surface); }
+    .sbo-step-dot.active .sbo-step-num { border-color: var(--accent); background: var(--accent); color: #fff; }
+    .sbo-step-dot.done .sbo-step-num { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
+    .sbo-step-line { width: 40px; height: 2px; background: var(--border); }
+    .sbo-step-line.done { background: var(--accent); }
+
+    .sbo-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .sbo-card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+    .sbo-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text); }
+
+    .sbo-form-group { margin-bottom: 1rem; }
+    .sbo-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.35rem; }
+    .sbo-input, .sbo-select { width: 100%; padding: 0.6rem 0.8rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; background: #fff; color: var(--text); box-sizing: border-box; }
+    .sbo-input:focus, .sbo-select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+
+    .sbo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .sbo-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+    .sbo-row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.75rem; }
+    @media (max-width: 640px) { .sbo-row, .sbo-row-3, .sbo-row-4 { grid-template-columns: 1fr; } }
+
+    .sbo-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.7rem 1.4rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+    .sbo-btn-primary { background: var(--accent); color: #fff; }
+    .sbo-btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .sbo-btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .sbo-btn-secondary:hover { border-color: var(--accent); }
+    .sbo-btn-danger { background: #fee2e2; color: #dc2626; }
+    .sbo-btn-danger:hover { background: #fecaca; }
+    .sbo-btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+
+    .sbo-item-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto; gap: 0.5rem; align-items: center; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; background: #fff; }
+    @media (max-width: 640px) { .sbo-item-row { grid-template-columns: 1fr; } }
+    .sbo-item-row input, .sbo-item-row select { padding: 0.4rem 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; }
+
+    .sbo-bid-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr auto; gap: 0.5rem; align-items: center; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; background: #fff; }
+    @media (max-width: 640px) { .sbo-bid-row { grid-template-columns: 1fr; } }
+    .sbo-bid-row input, .sbo-bid-row select { padding: 0.4rem 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; }
+
+    .sbo-results { display: none; }
+    .sbo-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .sbo-stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; }
+    .sbo-stat-value { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+    .sbo-stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+    .sbo-assign-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    .sbo-assign-table th { text-align: left; padding: 0.6rem; background: var(--surface); border-bottom: 2px solid var(--border); font-size: 0.8rem; color: var(--text-muted); }
+    .sbo-assign-table td { padding: 0.6rem; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .sbo-badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .sbo-badge-assigned { background: #dcfce7; color: #16a34a; }
+    .sbo-badge-gap { background: #fee2e2; color: #dc2626; }
+    .sbo-badge-conflict { background: #fef3c7; color: #d97706; }
+
+    .sbo-fairness-bar { height: 24px; border-radius: 6px; background: var(--border); overflow: hidden; margin-bottom: 0.5rem; position: relative; }
+    .sbo-fairness-fill { height: 100%; border-radius: 6px; transition: width 0.5s; }
+
+    .sbo-alert { padding: 0.8rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem; }
+    .sbo-alert-warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+    .sbo-alert-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+    .sbo-alert-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+    .sbo-alert-danger { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+
+    .sbo-email-capture { display: none; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 1px solid #bae6fd; border-radius: 12px; padding: 2rem; text-align: center; margin-top: 2rem; }
+    .sbo-email-capture h3 { font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--text); }
+    .sbo-email-capture p { color: var(--text-muted); margin-bottom: 1.5rem; }
+
+    .sbo-loading { display: none; text-align: center; padding: 2rem; }
+    .sbo-spinner { display: inline-block; width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: sbo-spin 0.8s linear infinite; }
+    @keyframes sbo-spin { to { transform: rotate(360deg); } }
+
+    .sbo-hidden { display: none; }
+  </style>
+</head>
+<body>
+<nav style="display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;max-width:1200px;margin:0 auto;">
+  <a href="/" style="font-weight:800;font-size:1.25rem;color:var(--accent);text-decoration:none;">Senzii</a>
+  <div style="display:flex;gap:1.5rem;align-items:center;">
+    <a href="/#pricing" style="text-decoration:none;color:var(--text-muted);font-size:0.9rem;">Pricing</a>
+    <a href="/compare" style="text-decoration:none;color:var(--text-muted);font-size:0.9rem;">Compare</a>
+    <a href="/faq" style="text-decoration:none;color:var(--text-muted);font-size:0.9rem;">FAQ</a>
+    <a href="/#pricing" style="background:var(--accent);color:#fff;padding:0.5rem 1.2rem;border-radius:8px;text-decoration:none;font-size:0.9rem;font-weight:600;">Start Free Trial</a>
+  </div>
+</nav>
+
+<section class="sbo-hero">
+  <h1>Shift Bidding Optimizer</h1>
+  <p>Enter open shifts and employee bids. Get the optimal assignment that balances seniority, fairness, cost, and coverage — automatically.</p>
+</section>
+
+<div class="sbo-container">
+  <div class="sbo-steps" id="sbo-steps">
+    <div class="sbo-step-dot active" id="sbo-step-1"><span class="sbo-step-num">1</span> Setup</div>
+    <div class="sbo-step-line"></div>
+    <div class="sbo-step-dot" id="sbo-step-2"><span class="sbo-step-num">2</span> Shifts</div>
+    <div class="sbo-step-line"></div>
+    <div class="sbo-step-dot" id="sbo-step-3"><span class="sbo-step-num">3</span> Bids</div>
+    <div class="sbo-step-line"></div>
+    <div class="sbo-step-dot" id="sbo-step-4"><span class="sbo-step-num">4</span> Results</div>
+  </div>
+
+  <!-- Step 1: Setup -->
+  <div id="sbo-panel-1">
+    <div class="sbo-card">
+      <h2>Bidding Configuration</h2>
+      <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1rem;">Set the weighting rules for how shift bids are evaluated.</p>
+      <div class="sbo-row">
+        <div class="sbo-form-group">
+          <label class="sbo-label">Seniority Weight (0-100%)</label>
+          <input type="number" class="sbo-input" id="sbo-seniority-weight" value="40" min="0" max="100">
+          <small style="color:var(--text-muted);font-size:0.75rem;">Higher = senior employees prioritized. Lower = hours equity matters more.</small>
+        </div>
+        <div class="sbo-form-group">
+          <label class="sbo-label">Cost Weight (0-100%)</label>
+          <input type="number" class="sbo-input" id="sbo-cost-weight" value="20" min="0" max="100">
+          <small style="color:var(--text-muted);font-size:0.75rem;">Higher = lower-cost employees preferred for open shifts.</small>
+        </div>
+      </div>
+      <div class="sbo-row">
+        <div class="sbo-form-group">
+          <label class="sbo-label">Max Weekly Hours per Employee</label>
+          <input type="number" class="sbo-input" id="sbo-max-hours" value="40" min="1" max="80">
+        </div>
+        <div class="sbo-form-group">
+          <label class="sbo-label">Max Consecutive Working Days</label>
+          <input type="number" class="sbo-input" id="sbo-max-consecutive" value="6" min="1" max="14">
+        </div>
+      </div>
+      <div class="sbo-row">
+        <div class="sbo-form-group">
+          <label class="sbo-label">Minimum Rest Between Shifts (hours)</label>
+          <input type="number" class="sbo-input" id="sbo-min-rest" value="10" min="0" max="16">
+        </div>
+        <div class="sbo-form-group">
+          <label class="sbo-label">Industry (for recommendations)</label>
+          <select class="sbo-select" id="sbo-industry">
+            <option value="generic">General</option>
+            <option value="healthcare">Home Healthcare</option>
+            <option value="construction">Construction</option>
+            <option value="restaurant">Restaurant</option>
+            <option value="retail">Retail</option>
+            <option value="manufacturing">Manufacturing</option>
+            <option value="hospitality">Hospitality</option>
+            <option value="security">Security</option>
+            <option value="warehouse">Warehouse/Logistics</option>
+            <option value="call-center">Call Center</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <button class="sbo-btn sbo-btn-primary" onclick="sboGoStep(2)">Next: Enter Open Shifts →</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Shifts -->
+  <div id="sbo-panel-2" class="sbo-hidden">
+    <div class="sbo-card">
+      <h2>Open Shifts</h2>
+      <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1rem;">Enter the shifts that need coverage. Employees will bid on these in the next step.</p>
+      <div id="sbo-shifts-container">
+        <div class="sbo-item-row">
+          <input type="text" placeholder="Shift name (e.g. Mon AM)" class="sbo-shift-name" value="Mon AM">
+          <select class="sbo-shift-day"><option value="Mon">Mon</option><option value="Tue">Tue</option><option value="Wed">Wed</option><option value="Thu">Thu</option><option value="Fri">Fri</option><option value="Sat">Sat</option><option value="Sun">Sun</option></select>
+          <input type="number" placeholder="Start (h)" class="sbo-shift-start" value="7" min="0" max="23">
+          <input type="number" placeholder="Length (h)" class="sbo-shift-len" value="8" min="1" max="16">
+          <input type="number" placeholder="Staff needed" class="sbo-shift-need" value="2" min="1" max="20">
+          <button class="sbo-btn sbo-btn-danger sbo-btn-sm" onclick="sboRemoveShift(this)">✕</button>
+        </div>
+      </div>
+      <button class="sbo-btn sbo-btn-secondary sbo-btn-sm" onclick="sboAddShift()" style="margin-top:0.5rem;">+ Add Shift</button>
+    </div>
+    <div style="display:flex;justify-content:space-between;">
+      <button class="sbo-btn sbo-btn-secondary" onclick="sboGoStep(1)">← Back</button>
+      <button class="sbo-btn sbo-btn-primary" onclick="sboGoStep(3)">Next: Enter Employee Bids →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Bids -->
+  <div id="sbo-panel-3" class="sbo-hidden">
+    <div class="sbo-card">
+      <h2>Employee Bids</h2>
+      <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1rem;">For each open shift, add employees who bid on it. Enter their seniority (years), hourly rate, and current weekly hours.</p>
+      <div id="sbo-bids-container">
+        <!-- Dynamically generated per shift -->
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;">
+      <button class="sbo-btn sbo-btn-secondary" onclick="sboGoStep(2)">← Back</button>
+      <button class="sbo-btn sbo-btn-primary" onclick="sboOptimize()">Optimize Bids →</button>
+    </div>
+  </div>
+
+  <!-- Step 4: Results -->
+  <div id="sbo-panel-4" class="sbo-hidden">
+    <div class="sbo-loading" id="sbo-loading">
+      <div class="sbo-spinner"></div>
+      <p style="margin-top:1rem;color:var(--text-muted);">Optimizing bid assignments...</p>
+    </div>
+
+    <div class="sbo-results" id="sbo-results">
+      <!-- Stats -->
+      <div class="sbo-stat-grid" id="sbo-stats-grid"></div>
+
+      <!-- Alerts -->
+      <div id="sbo-alerts"></div>
+
+      <!-- Assignment table -->
+      <div class="sbo-card">
+        <h2>Optimized Shift Assignments</h2>
+        <table class="sbo-assign-table" id="sbo-assign-table"></table>
+      </div>
+
+      <!-- Fairness breakdown -->
+      <div class="sbo-card">
+        <h2>Fairness Analysis</h2>
+        <div id="sbo-fairness"></div>
+      </div>
+
+      <!-- Employee summary -->
+      <div class="sbo-card">
+        <h2>Employee Workload Summary</h2>
+        <table class="sbo-assign-table" id="sbo-employee-summary"></table>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="sbo-card">
+        <h2>Recommendations</h2>
+        <div id="sbo-recommendations"></div>
+      </div>
+
+      <!-- Actions -->
+      <div style="display:flex;gap:0.75rem;margin-bottom:1.5rem;">
+        <button class="sbo-btn sbo-btn-secondary" onclick="sboExportCSV()">📊 Export CSV</button>
+        <button class="sbo-btn sbo-btn-secondary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        <button class="sbo-btn sbo-btn-secondary" onclick="sboGoStep(1)">↻ Start Over</button>
+      </div>
+
+      <!-- Email capture -->
+      <div class="sbo-email-capture" id="sbo-email-capture">
+        <h3>Get Your Bid Results Emailed</h3>
+        <p>Enter your email to receive the full optimization report with fairness analysis and cost breakdown.</p>
+        <form onsubmit="sboSubmitEmail(event)" style="max-width:400px;margin:0 auto;">
+          <input type="email" required placeholder="your@email.com" id="sbo-email" class="sbo-input" style="margin-bottom:0.75rem;">
+          <button type="submit" class="sbo-btn sbo-btn-primary" style="width:100%;">Send Me My Results →</button>
+        </form>
+        <p style="font-size:0.75rem;color:var(--text-muted);margin-top:1rem;">No spam. We will send your results and scheduling tips. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- More Free Scheduling Tools -->
+<section class="tools-grid-section" style="max-width:1200px;margin:40px auto;padding:0 20px;">
+<h3 style="font-size:1.5rem;margin-bottom:20px;">More Free Scheduling Tools</h3>
+<div class="tools-grid">
+<a href="/cost-calculator" class="tool-card"><strong>Cost Calculator</strong><span>Free tool →</span></a>
+<a href="/scheduling-quiz" class="tool-card"><strong>Pain Point Quiz</strong><span>Free tool →</span></a>
+<a href="/template-generator" class="tool-card"><strong>Template Generator</strong><span>Free tool →</span></a>
+<a href="/coverage-analyzer" class="tool-card"><strong>Coverage Gap Analyzer</strong><span>Free tool →</span></a>
+</div>
+</section>
+
+<!-- CTA -->
+<section style="background:linear-gradient(135deg,var(--accent),#6366f1);padding:3rem 2rem;text-align:center;margin-top:2rem;">
+  <h2 style="color:#fff;font-size:1.5rem;font-weight:800;margin-bottom:0.75rem;">Ready to Automate Your Shift Bidding?</h2>
+  <p style="color:rgba(255,255,255,0.9);font-size:1rem;margin-bottom:1.5rem;max-width:560px;margin:0 auto 1.5rem;">Senzii handles shift bidding, scheduling, and team coordination — all in one platform. $5/seat/month. No contracts.</p>
+  <a href="/#pricing" style="display:inline-block;background:#fff;color:var(--accent);padding:0.8rem 2rem;border-radius:8px;text-decoration:none;font-weight:700;font-size:1rem;">Start Free Trial →</a>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">
+        <svg class="footer-logo-mark" width="20" height="20" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="700" height="700" rx="155" fill="#16a34a"/>
+          <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+            <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+            <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+            <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+          </g>
+        </svg>
+        Senzii
+      </span>
+      <span class="footer-tagline">Intelligent workforce scheduling</span>
+    </div>
+    <div class="footer-links">
+      <a href="/#pricing">Pricing</a>
+      <a href="/compare">Compare</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/refunds">Refund Policy</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 REPL Made LLC. Built with &hearts;.</div>
+  </div>
+</footer>
+
+<script>
+var sboShifts = [];
+var sboBids = {};
+var sboResult = null;
+var sboCurrentStep = 1;
+
+var INDUSTRY_RECS = {
+  healthcare: [
+    "In home healthcare, prioritize caregivers who already have a relationship with the client. Senzii's caregiver-matching feature handles this automatically.",
+    "Use shift bidding to fill last-minute gaps from call-outs. Pair with the No-Show Impact Calculator to quantify the cost of unfilled shifts.",
+    "Ensure caregivers don't exceed state-mandated max hours. Check your state with the Labor Law Lookup tool."
+  ],
+  construction: [
+    "On construction sites, seniority bidding prevents apprentice burnout. Ensure crew leads are assigned to critical shifts first.",
+    "Track overtime exposure during bidding — construction OT can add 20-30% to labor costs. Use the Overtime Calculator to verify.",
+    "Weather delays often create last-minute shift changes. Use shift bidding to fill revised schedules quickly."
+  ],
+  restaurant: [
+    "In restaurants, bid on FOH and BOH separately. Cross-training between stations increases your bidder pool for each shift.",
+    "Weekend shifts are high-value — use seniority weight to ensure fair weekend distribution. Check with the Fairness Auditor.",
+    "Predictive scheduling laws in some states require advance notice. Bidding helps satisfy these requirements by locking schedules early."
+  ],
+  retail: [
+    "Retail peak hours need senior staff. Set seniority weight to 60%+ to ensure experienced employees cover busy periods.",
+    "Seasonal hiring creates large bidder pools. Use this tool to fairly distribute holiday shifts among seasonal and permanent staff.",
+    "Predictive scheduling compliance: some cities require 14-day schedule notice. Bidding locks assignments early."
+  ],
+  manufacturing: [
+    "Manufacturing requires certified operators. Use the Skill Coverage Matrix to verify bidders have the right certifications.",
+    "24/7 operations need careful rotation. Pair shift bidding with the Shift Pattern Optimizer for the best coverage pattern.",
+    "Minimize consecutive night shifts. Set max consecutive days to 5 and minimum rest to 12 hours for safety-critical roles."
+  ],
+  hospitality: [
+    "Hotel operations span departments — bid on front desk, housekeeping, and F&B separately. Use coverage requirements per department.",
+    "Event-driven surges need flexible bidding. Open extra shifts during high-occupancy periods and let staff bid based on availability.",
+    "Weekend and holiday shifts are prime. Set seniority weight to 50% to balance experienced coverage with fairness."
+  ],
+  security: [
+    "Security contracts require minimum staffing levels. Use coverage requirements to ensure contract compliance during bidding.",
+    "Night shifts are high-turnover. Use shift bidding to rotate night shifts fairly and reduce turnover. Check with Turnover Risk Predictor.",
+    "Armed vs unarmed posts require different certifications. Filter bids by certification using the Skill Coverage Matrix."
+  ],
+  warehouse: [
+    "Peak season creates massive shift demand. Use bidding to distribute overtime fairly during Q4 surges.",
+    "Forklift certification may be required for certain shifts. Verify certifications with the Skill Coverage Matrix.",
+    "High turnover makes fairness critical. Track hours equity to prevent newer employees from being overworked."
+  ],
+  "call-center": [
+    "Call volume drives shift needs. Bid on high-volume periods first and ensure your best agents cover peak times.",
+    "Remote agents increase your bidder pool. Use this tool to fairly assign shifts across time zones.",
+    "Schedule adherence is critical. Pair bidding with the Break Coverage Planner to ensure coverage during breaks."
+  ],
+  generic: [
+    "Set seniority weight to 40% for a balance between experienced coverage and hours equity.",
+    "Use the Fairness Auditor after bidding to verify your assignments are equitable across all dimensions.",
+    "Track total cost per assigned shift with the Shift Cost Estimator to identify expensive bid patterns."
+  ]
+};
+
+function sboGoStep(step) {
+  for (var i = 1; i <= 4; i++) {
+    var panel = document.getElementById("sbo-panel-" + i);
+    if (panel) panel.classList.toggle("sbo-hidden", i !== step);
+    var dot = document.getElementById("sbo-step-" + i);
+    if (dot) {
+      dot.classList.toggle("active", i === step);
+      dot.classList.toggle("done", i < step);
+    }
+  }
+  var lines = document.querySelectorAll(".sbo-step-line");
+  for (var j = 0; j < lines.length; j++) {
+    lines[j].classList.toggle("done", j < step - 1);
+  }
+  sboCurrentStep = step;
+  if (step === 3) sboBuildBidsUI();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function sboAddShift() {
+  var container = document.getElementById("sbo-shifts-container");
+  var row = document.createElement("div");
+  row.className = "sbo-item-row";
+  row.innerHTML = '<input type="text" placeholder="Shift name" class="sbo-shift-name" value=""><select class="sbo-shift-day"><option value="Mon">Mon</option><option value="Tue">Tue</option><option value="Wed">Wed</option><option value="Thu">Thu</option><option value="Fri">Fri</option><option value="Sat">Sat</option><option value="Sun">Sun</option></select><input type="number" placeholder="Start (h)" class="sbo-shift-start" value="8" min="0" max="23"><input type="number" placeholder="Length (h)" class="sbo-shift-len" value="8" min="1" max="16"><input type="number" placeholder="Staff needed" class="sbo-shift-need" value="1" min="1" max="20"><button class="sbo-btn sbo-btn-danger sbo-btn-sm" onclick="sboRemoveShift(this)">✕</button>';
+  container.appendChild(row);
+}
+
+function sboRemoveShift(btn) {
+  var container = document.getElementById("sbo-shifts-container");
+  if (container.children.length > 1) {
+    btn.parentElement.remove();
+  }
+}
+
+function sboCollectShifts() {
+  var shifts = [];
+  var rows = document.querySelectorAll("#sbo-shifts-container .sbo-item-row");
+  rows.forEach(function(row, idx) {
+    var name = row.querySelector(".sbo-shift-name").value || ("Shift " + (idx + 1));
+    var day = row.querySelector(".sbo-shift-day").value;
+    var start = parseFloat(row.querySelector(".sbo-shift-start").value) || 8;
+    var len = parseFloat(row.querySelector(".sbo-shift-len").value) || 8;
+    var need = parseInt(row.querySelector(".sbo-shift-need").value) || 1;
+    shifts.push({ id: idx, name: name, day: day, start: start, length: len, need: need, end: start + len });
+  });
+  return shifts;
+}
+
+function sboBuildBidsUI() {
+  sboShifts = sboCollectShifts();
+  var container = document.getElementById("sbo-bids-container");
+  container.innerHTML = "";
+  sboBids = {};
+
+  sboShifts.forEach(function(shift) {
+    var div = document.createElement("div");
+    div.className = "sbo-card";
+    div.style.marginBottom = "1rem";
+    div.innerHTML = "<h3>" + shift.name + " — " + shift.day + " " + sboFormatHour(shift.start) + "-" + sboFormatHour(shift.end) + " (Need: " + shift.need + ")</h3>";
+
+    var bidsDiv = document.createElement("div");
+    bidsDiv.className = "sbo-bids-list";
+    bidsDiv.id = "sbo-bids-" + shift.id;
+    div.appendChild(bidsDiv);
+
+    // Add 2 default bid rows
+    sboAddBidRow(bidsDiv, shift.id);
+    sboAddBidRow(bidsDiv, shift.id);
+
+    var addBtn = document.createElement("button");
+    addBtn.className = "sbo-btn sbo-btn-secondary sbo-btn-sm";
+    addBtn.textContent = "+ Add Bid";
+    addBtn.onclick = function() { sboAddBidRow(bidsDiv, shift.id); };
+    div.appendChild(addBtn);
+
+    container.appendChild(div);
+  });
+}
+
+function sboAddBidRow(container, shiftId) {
+  var row = document.createElement("div");
+  row.className = "sbo-bid-row";
+  row.innerHTML = '<input type="text" placeholder="Employee name" class="sbo-bid-name" value=""><input type="number" placeholder="Seniority (yrs)" class="sbo-bid-seniority" value="1" min="0" max="50 step="0.5"><input type="number" placeholder="Hourly rate $" class="sbo-bid-rate" value="18" min="7" max="100 step="0.50"><input type="number" placeholder="Current hrs" class="sbo-bid-hours" value="0" min="0" max="80"><input type="number" placeholder="Pref (1-5)" class="sbo-bid-pref" value="3" min="1" max="5"><input type="number" placeholder="Days worked" class="sbo-bid-days" value="0" min="0" max="14"><button class="sbo-btn sbo-btn-danger sbo-btn-sm" onclick="sboRemoveBid(this)">✕</button>';
+  container.appendChild(row);
+}
+
+function sboRemoveBid(btn) {
+  var container = btn.parentElement.parentElement;
+  if (container.children.length > 1) {
+    btn.parentElement.remove();
+  }
+}
+
+function sboFormatHour(h) {
+  if (h <= 12) return (h === 0 ? 12 : h) + "am";
+  return (h - 12) + "pm";
+}
+
+function sboCollectBids() {
+  sboBids = {};
+  sboShifts.forEach(function(shift) {
+    var bids = [];
+    var bidRows = document.querySelectorAll("#sbo-bids-" + shift.id + " .sbo-bid-row");
+    bidRows.forEach(function(row) {
+      var name = row.querySelector(".sbo-bid-name").value.trim();
+      if (!name) return;
+      bids.push({
+        name: name,
+        seniority: parseFloat(row.querySelector(".sbo-bid-seniority").value) || 0,
+        rate: parseFloat(row.querySelector(".sbo-bid-rate").value) || 18,
+        currentHours: parseFloat(row.querySelector(".sbo-bid-hours").value) || 0,
+        preference: parseInt(row.querySelector(".sbo-bid-pref").value) || 3,
+        currentDays: parseInt(row.querySelector(".sbo-bid-days").value) || 0
+      });
+    });
+    sboBids[shift.id] = bids;
+  });
+}
+
+function sboOptimize() {
+  sboCollectBids();
+
+  document.getElementById("sbo-loading").style.display = "block";
+  document.getElementById("sbo-results").style.display = "none";
+
+  setTimeout(function() {
+    var seniorityWeight = parseInt(document.getElementById("sbo-seniority-weight").value) || 40;
+    var costWeight = parseInt(document.getElementById("sbo-cost-weight").value) || 20;
+    var maxHours = parseFloat(document.getElementById("sbo-max-hours").value) || 40;
+    var maxConsecutive = parseInt(document.getElementById("sbo-max-consecutive").value) || 6;
+    var minRest = parseFloat(document.getElementById("sbo-min-rest").value) || 10;
+    var fairnessWeight = 100 - seniorityWeight - costWeight;
+    if (fairnessWeight < 0) fairnessWeight = 0;
+
+    // Track employee state across shifts
+    var empState = {};
+    var assignments = [];
+    var gaps = [];
+    var conflicts = [];
+    var totalCost = 0;
+    var totalAssigned = 0;
+    var totalNeeded = 0;
+
+    // Process shifts in chronological order (by day + start time)
+    var dayOrder = { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6, Sun: 7 };
+    var sortedShifts = sboShifts.slice().sort(function(a, b) {
+      if (dayOrder[a.day] !== dayOrder[b.day]) return dayOrder[a.day] - dayOrder[b.day];
+      return a.start - b.start;
+    });
+
+    sortedShifts.forEach(function(shift) {
+      totalNeeded += shift.need;
+      var bids = sboBids[shift.id] || [];
+
+      // Score each bid
+      var scoredBids = bids.map(function(bid) {
+        var empName = bid.name;
+        if (!empState[empName]) {
+          empState[empName] = { hours: bid.currentHours, days: bid.currentDays, shifts: [], lastEnd: null, consecutiveDays: 0, lastDay: null };
+        }
+        var state = empState[empName];
+
+        // Check constraints
+        var violations = [];
+        var projectedHours = state.hours + shift.length;
+        if (projectedHours > maxHours) {
+          violations.push("Max weekly hours exceeded (" + projectedHours + "/" + maxHours + ")");
+        }
+        if (state.lastEnd !== null && state.lastDay === shift.day) {
+          // Same day shift — check rest from previous end
+          var restHours = shift.start - state.lastEnd;
+          if (restHours < 0) restHours += 24;
+          if (restHours < minRest) {
+            violations.push("Insufficient rest (" + restHours + "h < " + minRest + "h min)");
+          }
+        }
+        if (state.lastDay !== null) {
+          var dayDiff = dayOrder[shift.day] - dayOrder[state.lastDay];
+          if (dayDiff === 1) {
+            state.consecutiveDays = (state.consecutiveDays || 0) + 1;
+          } else if (dayDiff > 1) {
+            state.consecutiveDays = 1;
+          }
+        } else {
+          state.consecutiveDays = 1;
+        }
+        if (state.consecutiveDays > maxConsecutive) {
+          violations.push("Max consecutive days (" + state.consecutiveDays + "/" + maxConsecutive + ")");
+        }
+
+        // Score: weighted combination of seniority, fairness, cost, preference
+        var maxSeniority = Math.max.apply(null, bids.map(function(b) { return b.seniority; }));
+        var maxRate = Math.max.apply(null, bids.map(function(b) { return b.rate; }));
+        var minHours = Math.min.apply(null, bids.map(function(b) { return empState[b.name] ? empState[b.name].hours : b.currentHours; }));
+
+        var seniorityScore = maxSeniority > 0 ? (bid.seniority / maxSeniority) * 100 : 50;
+        var fairnessScore = maxHours > 0 ? ((maxHours - state.hours) / maxHours) * 100 : 50;
+        var costScore = maxRate > 0 ? ((maxRate - bid.rate) / maxRate) * 100 : 50;
+        var prefScore = (bid.preference / 5) * 100;
+
+        // Penalty for violations
+        var violationPenalty = violations.length * 30;
+
+        var totalScore = (seniorityScore * seniorityWeight / 100) +
+                         (fairnessScore * fairnessWeight / 100) +
+                         (costScore * costWeight / 100) +
+                         (prefScore * (100 - seniorityWeight - costWeight - fairnessWeight > 0 ? (100 - seniorityWeight - costWeight - fairnessWeight) / 100 : 0.1)) -
+                         violationPenalty;
+
+        return {
+          bid: bid,
+          score: totalScore,
+          violations: violations,
+          projectedHours: projectedHours,
+          cost: shift.length * bid.rate
+        };
+      });
+
+      // Sort by score descending
+      scoredBids.sort(function(a, b) { return b.score - a.score; });
+
+      // Assign top N bids
+      var assigned = [];
+      var dayShiftsAssigned = {};
+
+      for (var i = 0; i < scoredBids.length && assigned.length < shift.need; i++) {
+        var sb = scoredBids[i];
+        if (sb.violations.length > 0 && assigned.length < shift.need) {
+          // Still assign if we need coverage, but flag as conflict
+          conflicts.push({ shift: shift, bid: sb.bid, violations: sb.violations });
+        }
+        assigned.push(sb);
+        var empName = sb.bid.name;
+        empState[empName].hours += shift.length;
+        empState[empName].shifts.push(shift.name + " (" + shift.day + " " + sboFormatHour(shift.start) + ")");
+        empState[empName].lastEnd = shift.end;
+        empState[empName].lastDay = shift.day;
+        totalCost += sb.cost;
+        totalAssigned++;
+      }
+
+      if (assigned.length < shift.need) {
+        gaps.push({ shift: shift, shortage: shift.need - assigned.length });
+      }
+
+      assignments.push({ shift: shift, assigned: assigned });
+    });
+
+    // Calculate fairness metrics
+    var allHours = Object.keys(empState).map(function(n) { return empState[n].hours; });
+    var gini = sboGini(allHours);
+    var maxH = Math.max.apply(null, allHours);
+    var minH = Math.min.apply(null, allHours);
+    var avgH = allHours.reduce(function(a, b) { return a + b; }, 0) / allHours.length;
+    var fairnessScore = Math.round((1 - gini) * 100);
+
+    sboResult = {
+      assignments: assignments,
+      gaps: gaps,
+      conflicts: conflicts,
+      totalCost: totalCost,
+      totalAssigned: totalAssigned,
+      totalNeeded: totalNeeded,
+      coverageRate: totalNeeded > 0 ? Math.round((totalAssigned / totalNeeded) * 100) : 0,
+      fairnessScore: fairnessScore,
+      gini: gini,
+      maxHours: maxH,
+      minHours: minH,
+      avgHours: avgH,
+      empState: empState,
+      seniorityWeight: seniorityWeight,
+      costWeight: costWeight,
+      fairnessWeight: fairnessWeight
+    };
+
+    sboRenderResults();
+    document.getElementById("sbo-loading").style.display = "none";
+    document.getElementById("sbo-results").style.display = "block";
+    document.getElementById("sbo-email-capture").style.display = "block";
+  }, 600);
+}
+
+function sboGini(values) {
+  if (values.length === 0) return 0;
+  var sorted = values.slice().sort(function(a, b) { return a - b; });
+  var n = sorted.length;
+  var sum = 0;
+  for (var i = 0; i < n; i++) {
+    sum += (2 * (i + 1) - n - 1) * sorted[i];
+  }
+  var total = sorted.reduce(function(a, b) { return a + b; }, 0);
+  return total === 0 ? 0 : sum / (n * total);
+}
+
+function sboRenderResults() {
+  var r = sboResult;
+
+  // Stats
+  var statsHtml = "";
+  statsHtml += '<div class="sbo-stat-card"><div class="sbo-stat-value">' + r.totalAssigned + "/" + r.totalNeeded + "</div><div class='sbo-stat-label'>Shifts Filled</div></div>";
+  statsHtml += '<div class="sbo-stat-card"><div class="sbo-stat-value">' + r.coverageRate + "%</div><div class='sbo-stat-label'>Coverage Rate</div></div>";
+  statsHtml += '<div class="sbo-stat-card"><div class="sbo-stat-value">' + r.fairnessScore + "</div><div class='sbo-stat-label'>Fairness Score (0-100)</div></div>";
+  statsHtml += '<div class="sbo-stat-card"><div class="sbo-stat-value">$' + Math.round(r.totalCost) + "</div><div class='sbo-stat-label'>Total Shift Cost</div></div>";
+  statsHtml += '<div class="sbo-stat-card"><div class="sbo-stat-value">' + r.gaps.length + "</div><div class='sbo-stat-label'>Coverage Gaps</div></div>";
+  statsHtml += '<div class="sbo-stat-card"><div class="sbo-stat-value">' + r.conflicts.length + "</div><div class='sbo-stat-label'>Compliance Conflicts</div></div>";
+  document.getElementById("sbo-stats-grid").innerHTML = statsHtml;
+
+  // Alerts
+  var alertsHtml = "";
+  if (r.gaps.length > 0) {
+    alertsHtml += '<div class="sbo-alert sbo-alert-danger"><strong>⚠️ Coverage Gaps:</strong> ' + r.gaps.length + " shift(s) have unfilled positions. You need additional bidders or manual assignment for: " + r.gaps.map(function(g) { return g.shift.name + " (" + g.shortage + " short)"; }).join(", ") + ".</div>";
+  }
+  if (r.conflicts.length > 0) {
+    alertsHtml += '<div class="sbo-alert sbo-alert-warning"><strong>⚠️ Compliance Conflicts:</strong> ' + r.conflicts.length + " assignment(s) violate constraints. Review: " + r.conflicts.map(function(c) { return c.bid.name + " (" + c.violations.join("; ") + ")"; }).join(", ") + ".</div>";
+  }
+  if (r.fairnessScore >= 80) {
+    alertsHtml += '<div class="sbo-alert sbo-alert-success"><strong>✅ Fairness is good.</strong> Hours are well-distributed across your team (Gini=' + r.gini.toFixed(3) + ").</div>";
+  } else if (r.fairnessScore >= 60) {
+    alertsHtml += '<div class="sbo-alert sbo-alert-info"><strong>ℹ️ Fairness is moderate.</strong> Some employees have significantly more hours than others (Gini=' + r.gini.toFixed(3) + "). Consider rebalancing.</div>";
+  } else {
+    alertsHtml += '<div class="sbo-alert sbo-alert-warning"><strong>⚠️ Fairness is low.</strong> Hours are unevenly distributed (Gini=' + r.gini.toFixed(3) + "). This can cause turnover. Review assignments.</div>";
+  }
+  document.getElementById("sbo-alerts").innerHTML = alertsHtml;
+
+  // Assignment table
+  var assignHtml = "<thead><tr><th>Shift</th><th>Day</th><th>Time</th><th>Needed</th><th>Assigned To</th><th>Cost</th><th>Status</th></tr></thead><tbody>";
+  r.assignments.forEach(function(a) {
+    var assignedNames = a.assigned.map(function(s) { return s.bid.name; }).join(", ") || "<em>Unfilled</em>";
+    var assignedCost = a.assigned.reduce(function(sum, s) { return sum + s.cost; }, 0);
+    var status = a.assigned.length >= a.shift.need ? '<span class="sbo-badge sbo-badge-assigned">Filled</span>' : '<span class="sbo-badge sbo-badge-gap">Gap (' + (a.shift.need - a.assigned.length) + ")</span>";
+    assignHtml += "<tr><td>" + a.shift.name + "</td><td>" + a.shift.day + "</td><td>" + sboFormatHour(a.shift.start) + "-" + sboFormatHour(a.shift.end) + "</td><td>" + a.shift.need + "</td><td>" + assignedNames + "</td><td>$" + Math.round(assignedCost) + "</td><td>" + status + "</td></tr>";
+  });
+  assignHtml += "</tbody>";
+  document.getElementById("sbo-assign-table").innerHTML = assignHtml;
+
+  // Fairness
+  var fairColor = r.fairnessScore >= 80 ? "#16a34a" : r.fairnessScore >= 60 ? "#f59e0b" : "#dc2626";
+  var fairHtml = '<div style="margin-bottom:1rem;">';
+  fairHtml += '<div style="display:flex;justify-content:space-between;margin-bottom:0.25rem;"><span style="font-weight:600;">Overall Fairness Score</span><span style="font-weight:700;color:' + fairColor + ';">' + r.fairnessScore + "/100</span></div>";
+  fairHtml += '<div class="sbo-fairness-bar"><div class="sbo-fairness-fill" style="width:' + r.fairnessScore + '%;background:' + fairColor + ';"></div></div>';
+  fairHtml += "</div>";
+
+  fairHtml += '<div class="sbo-row" style="margin-top:1rem;">';
+  fairHtml += '<div><strong>Gini Coefficient:</strong> ' + r.gini.toFixed(3) + " (0=equal, 1=unequal)</div>";
+  fairHtml += '<div><strong>Hours Range:</strong> ' + r.minHours.toFixed(1) + "h - " + r.maxHours.toFixed(1) + "h</div>";
+  fairHtml += '<div><strong>Average Hours:</strong> ' + r.avgHours.toFixed(1) + "h</div>";
+  fairHtml += "</div>";
+
+  fairHtml += '<div style="margin-top:1rem;"><strong>Weight Distribution:</strong> Seniority ' + r.seniorityWeight + "% / Fairness " + r.fairnessWeight + "% / Cost " + r.costWeight + "%</div>";
+
+  document.getElementById("sbo-fairness").innerHTML = fairHtml;
+
+  // Employee summary
+  var empHtml = "<thead><tr><th>Employee</th><th>Total Hours</th><th>Shifts Assigned</th><th>Utilization</th></tr></thead><tbody>";
+  var maxHours = parseFloat(document.getElementById("sbo-max-hours").value) || 40;
+  Object.keys(r.empState).sort(function(a, b) { return r.empState[b].hours - r.empState[a].hours; }).forEach(function(name) {
+    var state = r.empState[name];
+    var util = maxHours > 0 ? Math.round((state.hours / maxHours) * 100) : 0;
+    var utilColor = util > 100 ? "#dc2626" : util > 80 ? "#f59e0b" : "#16a34a";
+    empHtml += "<tr><td>" + name + "</td><td>" + state.hours.toFixed(1) + "h</td><td>" + state.shifts.length + "</td><td style='color:" + utilColor + ";font-weight:600;'>" + util + "%</td></tr>";
+  });
+  empHtml += "</tbody>";
+  document.getElementById("sbo-employee-summary").innerHTML = empHtml;
+
+  // Recommendations
+  var industry = document.getElementById("sbo-industry").value;
+  var recs = INDUSTRY_RECS[industry] || INDUSTRY_RECS.generic;
+  var recHtml = "<ul style='padding-left:1.2rem;line-height:1.8;'>";
+  recs.forEach(function(rec) {
+    recHtml += "<li style='margin-bottom:0.5rem;'>" + rec + "</li>";
+  });
+  recHtml += "</ul>";
+  if (r.gaps.length > 0) {
+    recHtml += '<div class="sbo-alert sbo-alert-info" style="margin-top:1rem;"><strong>Next steps:</strong> For unfilled shifts, consider opening bids to a wider pool, using the <a href="/staffing-calculator">Staffing Calculator</a> to check if you need more staff, or using <a href="/on-call-rotation-generator">On-Call Generator</a> to create a backup rotation.</div>';
+  }
+  recHtml += '<div class="sbo-alert sbo-alert-success" style="margin-top:0.5rem;"><strong>Validate your results:</strong> Run the full <a href="/schedule-fairness-auditor">Schedule Fairness Auditor</a> on your completed schedule for a 6-dimension fairness check, or use the <a href="/shift-cost-estimator">Shift Cost Estimator</a> to drill into per-shift costs.</div>';
+  document.getElementById("sbo-recommendations").innerHTML = recHtml;
+}
+
+function sboExportCSV() {
+  if (!sboResult) return;
+  var csv = "Shift,Day,Start,End,Needed,Assigned To,Cost,Status\n";
+  sboResult.assignments.forEach(function(a) {
+    var names = a.assigned.map(function(s) { return s.bid.name; }).join("; ");
+    var cost = a.assigned.reduce(function(sum, s) { return sum + s.cost; }, 0);
+    var status = a.assigned.length >= a.shift.need ? "Filled" : "Gap";
+    csv += '"' + a.shift.name + '","' + a.shift.day + '","' + a.shift.start + '","' + a.shift.end + '","' + a.shift.need + '","' + names + '","' + Math.round(cost) + '","' + status + '"\n';
+  });
+  csv += "\n\nEmployee Summary\nName,Total Hours,Shifts Assigned,Utilization %\n";
+  var maxHours = parseFloat(document.getElementById("sbo-max-hours").value) || 40;
+  Object.keys(sboResult.empState).forEach(function(name) {
+    var state = sboResult.empState[name];
+    var util = maxHours > 0 ? Math.round((state.hours / maxHours) * 100) : 0;
+    csv += '"' + name + '","' + state.hours.toFixed(1) + '","' + state.shifts.length + '","' + util + '"\n';
+  });
+  csv += "\n\nFairness Metrics\nGini Coefficient," + sboResult.gini.toFixed(4) + "\nFairness Score," + sboResult.fairnessScore + "/100\nTotal Cost,$" + Math.round(sboResult.totalCost) + "\nCoverage Rate," + sboResult.coverageRate + "%\n";
+
+  var blob = new Blob([csv], { type: "text/csv" });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "shift-bidding-results.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function sboSubmitEmail(e) {
+  e.preventDefault();
+  var email = document.getElementById("sbo-email").value;
+  var r = sboResult;
+  var payload = {
+    email: email,
+    tool: "shift-bidding-optimizer",
+    industry: document.getElementById("sbo-industry").value,
+    staff_size: Object.keys(r.empState).length,
+    calculated_cost: Math.round(r.totalCost),
+    pain_point: r.coverageRate < 100 ? "coverage_gaps" : "optimization",
+    extra_data: JSON.stringify({
+      coverageRate: r.coverageRate,
+      fairnessScore: r.fairnessScore,
+      gini: r.gini.toFixed(4),
+      totalAssigned: r.totalAssigned,
+      totalNeeded: r.totalNeeded,
+      gaps: r.gaps.length,
+      conflicts: r.conflicts.length,
+      seniorityWeight: r.seniorityWeight,
+      costWeight: r.costWeight
+    })
+  };
+
+  fetch("/api/leads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  }).then(function(res) {
+    window.location.href = "/thank-you?tool=shift-bidding-optimizer";
+  }).catch(function(err) {
+    window.location.href = "/thank-you?tool=shift-bidding-optimizer";
+  });
+}
+</script>
+<style>
+@media print {
+  nav, .sbo-hero, .sbo-steps, .sbo-email-capture, .tools-grid-section, footer, section[style*="linear-gradient"] { display: none !important; }
+  .sbo-container { max-width: 100% !important; padding: 0 !important; }
+}
+</style>
+</body>
+</html>

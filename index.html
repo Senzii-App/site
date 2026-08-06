@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Senzii — Intelligent Staff Scheduling</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description" content="Automatically match staff to shifts by skills, location, and availability. Built for healthcare, logistics, construction, and field service.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="canonical" href="https://senzii.com">
+  <link rel="stylesheet" href="/css/theme.20fbb461.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Senzii",
+    "url": "https://senzii.com",
+    "logo": "https://senzii.com/favicon.svg",
+    "sameAs": [
+      "https://twitter.com/senzii_app",
+      "https://www.linkedin.com/company/senzii"
+    ],
+    "description": "Intelligent staff scheduling software that matches the right person to every shift — automatically. Built for healthcare, logistics, construction, and field service."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Senzii",
+    "url": "https://senzii.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://senzii.com/?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/" class="nav-logo">
+        <svg class="nav-logo-mark" width="28" height="28" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="700" height="700" rx="155" fill="#16a34a"/>
+          <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+            <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+            <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+            <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+          </g>
+        </svg>
+        Senzii
+      </a>
+      <span class="nav-tagline">Intelligent scheduling</span>
+    </div>
+    <a href="/auth/login" class="nav-sign-in">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Sign In
+    </a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Workforce scheduling, redefined</p>
+      <h1 class="hero-headline">The right person. At the right place. Every shift.</h1>
+      <p class="hero-lede">Senzii is an intelligent scheduling engine that matches staff to shifts based on their skills, proximity to the work site, and availability — then confirms every change with you before it goes live.</p>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-board-row">
+        <div class="schedule-board">
+          <div class="board-header">
+            <span class="board-title">Schedule Board</span>
+            <span class="board-status">Live</span>
+          </div>
+          <div class="board-table-wrap">
+            <table class="board-table">
+              <thead>
+                <tr>
+                  <th>Site</th>
+                  <th>Status</th>
+                  <th>Time</th>
+                  <th>Staffing</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="board-row selected">
+                  <td class="br-site">1407 Oak St, Suite 3</td>
+                  <td><span class="br-badge br-green">Filled (1)</span></td>
+                  <td class="br-time">Today 2:00pm → 10:00pm</td>
+                  <td class="br-staffing">Fully staffed</td>
+                </tr>
+                <tr class="board-row">
+                  <td class="br-site">Apex Logistics, Dock 4</td>
+                  <td><span class="br-badge br-yellow">Open (2 needed)</span></td>
+                  <td class="br-time">Tomorrow 8:00am → 4:00pm</td>
+                  <td class="br-staffing">Click to assign</td>
+                </tr>
+                <tr class="board-row">
+                  <td class="br-site">Greenfield Home Care</td>
+                  <td><span class="br-badge br-yellow">1/2 Staffed</span></td>
+                  <td class="br-time">Thu 6:00pm → 10:00pm</td>
+                  <td class="br-staffing">1/2 assigned</td>
+                </tr>
+                <tr class="board-row">
+                  <td class="br-site">Riverside Warehousing</td>
+                  <td><span class="br-badge br-green">Filled (3)</span></td>
+                  <td class="br-time">Fri 6:00am → 2:00pm</td>
+                  <td class="br-staffing">Fully staffed</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="candidate-panel">
+          <div class="cp-header">
+            <div>
+              <div class="cp-title">Candidates for Shift</div>
+              <div class="cp-sub">1407 Oak St, Suite 3 · Today 2:00pm → 10:00pm · 1/1 staffed · Fully covered</div>
+            </div>
+          </div>
+          <div class="cp-body">
+            <div class="cp-section-title">Ranked Candidates <span class="cp-count">4</span></div>
+            <div class="cp-candidate rank-1 selected">
+              <div class="cp-rank">1</div>
+              <div class="cp-cand-info">
+                <div class="cp-cand-name">Jordan M.</div>
+                <div class="cp-cand-email">jordan.m@staff.com</div>
+                <div class="cp-breakdown">
+                  <span class="cp-chip good">Prox: 98</span>
+                  <span class="cp-chip good">Skills: 100</span>
+                  <span class="cp-chip good">Avail: 100</span>
+                </div>
+              </div>
+              <div class="cp-cand-scores">
+                <div class="cp-score">98</div>
+                <div class="cp-score-bar"><div class="cp-score-fill" style="width:98%"></div></div>
+              </div>
+            </div>
+            <div class="cp-candidate">
+              <div class="cp-rank">2</div>
+              <div class="cp-cand-info">
+                <div class="cp-cand-name">Amara K.</div>
+                <div class="cp-cand-email">amara.k@staff.com</div>
+                <div class="cp-breakdown">
+                  <span class="cp-chip ok">Prox: 72</span>
+                  <span class="cp-chip good">Skills: 100</span>
+                  <span class="cp-chip good">Avail: 100</span>
+                </div>
+              </div>
+              <div class="cp-cand-scores">
+                <div class="cp-score">91</div>
+                <div class="cp-score-bar"><div class="cp-score-fill" style="width:91%"></div></div>
+              </div>
+            </div>
+            <div class="cp-candidate">
+              <div class="cp-rank">3</div>
+              <div class="cp-cand-info">
+                <div class="cp-cand-name">David T.</div>
+                <div class="cp-cand-email">david.t@staff.com</div>
+                <div class="cp-breakdown">
+                  <span class="cp-chip">Prox: 45</span>
+                  <span class="cp-chip good">Skills: 100</span>
+                  <span class="cp-chip good">Avail: 100</span>
+                </div>
+              </div>
+              <div class="cp-cand-scores">
+                <div class="cp-score">74</div>
+                <div class="cp-score-bar"><div class="cp-score-fill" style="width:74%"></div></div>
+              </div>
+            </div>
+            <div class="cp-candidate has-conflict">
+              <div class="cp-rank">4</div>
+              <div class="cp-cand-info">
+                <div class="cp-cand-name">Sarah L. <span class="cp-conflict-badge">Conflict</span></div>
+                <div class="cp-cand-email">sarah.l@staff.com</div>
+                <div class="cp-breakdown">
+                  <span class="cp-chip good">Prox: 85</span>
+                  <span class="cp-chip good">Skills: 100</span>
+                  <span class="cp-chip">Avail: 50</span>
+                </div>
+              </div>
+              <div class="cp-cand-scores">
+                <div class="cp-score">62</div>
+                <div class="cp-score-bar"><div class="cp-score-fill" style="width:62%"></div></div>
+              </div>
+            </div>
+            <div class="cp-hint">Select a candidate, then click Assign &amp; Confirm</div>
+          </div>
+          <div class="cp-footer">
+            <div class="cp-selected-info">
+              <div class="cp-selected-label">Selected</div>
+              <div class="cp-selected-name">Jordan M.</div>
+            </div>
+            <div class="cp-selected-score">98</div>
+            <button class="cp-confirm-btn">Assign &amp; Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero-video">
+  <div class="section-inner">
+    <div class="video-wrap">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/fhLrVVRYW3I?rel=0"
+        title="Senzii — Intelligent Staff Scheduling"
+        frameborder="0"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+
+<section class="engine">
+  <div class="section-inner">
+    <p class="section-eyebrow">The matching engine</p>
+    <h2 class="section-headline">Schedule smarter, not harder</h2>
+    <p class="section-lede">Most scheduling software asks you to drag people onto a calendar. Senzii does the work for you — scoring every available staff member against every open shift and presenting the best match for your approval.</p>
+
+    <div class="factors-grid">
+      <div class="factor-card">
+        <div class="factor-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 3C9.58 3 6 6.58 6 11c0 5.25 8 14 8 14s8-8.75 8-14c0-4.42-3.58-8-8-8zm0 12c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z" fill="#16a34a"/></svg>
+        </div>
+        <h3>Proximity</h3>
+        <p>Staff location is weighted against the work site. Shorter commutes mean lower no-show rates and faster response times.</p>
+      </div>
+      <div class="factor-card">
+        <div class="factor-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M9 4v20M19 4v20M5 9h18M5 19h18" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Skills &amp; Credentials</h3>
+        <p>Every shift's requirements are matched against staff profiles — certifications, trade expertise, language skills, and more.</p>
+      </div>
+      <div class="factor-card">
+        <div class="factor-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="3" y="5" width="22" height="18" rx="3" stroke="#16a34a" stroke-width="2"/><path d="M8 3v5M20 3v5M3 11h22" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Availability</h3>
+        <p>Staff set their windows. Senzii respects them — and learns preferences over time to avoid burnout and overwork.</p>
+      </div>
+      <div class="factor-card">
+        <div class="factor-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M4 14c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10S4 19.52 4 14zm9-3l1.5 3 3.5.5-2.5 2.5.5 3.5L14 18l-3 .5L12 14l3.5-2.5L13 11z" fill="#16a34a"/></svg>
+        </div>
+        <h3>History</h3>
+        <p>If Jordan served Mrs. Chen last week, he's the first candidate for her shift this week. Continuity builds trust.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Checkout modal -->
+<div class="lead-modal" id="checkout-modal">
+  <div class="lead-modal-inner">
+    <button class="lead-modal-close" onclick="document.getElementById('checkout-modal').classList.remove('open')" aria-label="Close">&times;</button>
+    <p class="lead-modal-eyebrow">Start your free trial</p>
+    <h2 class="lead-modal-title">30 days free, then $5/seat/mo</h2>
+    <p class="lead-modal-lede">No credit card required to start. Set up your organization and invite staff after checkout.</p>
+    <form id="checkout-form" class="contact-form">
+      <div style="display:grid;gap:1rem;">
+        <div>
+          <label for="co-org">Organization name</label>
+          <input type="text" id="co-org" name="org_name" required placeholder="Acme Staffing">
+        </div>
+        <div>
+          <label for="co-email">Work email</label>
+          <input type="email" id="co-email" name="email" required placeholder="admin@yourcompany.com">
+        </div>
+        <div>
+          <label for="co-name">Your name (optional)</label>
+          <input type="text" id="co-name" name="name" placeholder="Jordan Smith">
+        </div>
+        <div>
+          <label for="co-seats">Number of staff members</label>
+          <input type="number" id="co-seats" name="seats" min="1" value="10" required>
+          <p id="co-total" style="font-size:0.85rem;color:var(--text-muted);margin-top:0.4rem;">10 × $5/mo = $50/mo after trial</p>
+        </div>
+        <button type="submit" class="btn-pricing btn-pricing--primary" id="co-submit">Start free trial</button>
+      </div>
+    </form>
+    <div id="co-error" class="auth-error" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- Lead intake modal -->
+<div class="lead-modal" id="lead-modal">
+  <div class="lead-modal-inner">
+    <button class="lead-modal-close" onclick="document.getElementById('lead-modal').classList.remove('open')" aria-label="Close">&times;</button>
+    <div id="si-header">
+      <p class="lead-modal-eyebrow">Get Started</p>
+      <h2 class="lead-modal-title">Talk to a scheduling specialist</h2>
+      <p class="lead-modal-lede">Tell us about your team and we'll show you how Senzii can help — no commitment, no credit card.</p>
+    </div>
+    <form id="sales-inquiry-form" class="contact-form">
+      <div style="display:grid;gap:1rem;">
+        <div>
+          <label for="si-name">Full name</label>
+          <input type="text" id="si-name" name="name" required placeholder="Jordan Smith">
+        </div>
+        <div>
+          <label for="si-email">Work email</label>
+          <input type="email" id="si-email" name="email" required placeholder="admin@yourcompany.com">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div>
+            <label for="si-phone">Phone</label>
+            <input type="tel" id="si-phone" name="phone" placeholder="(215) 555-0100">
+          </div>
+          <div>
+            <label for="si-company">Company</label>
+            <input type="text" id="si-company" name="company_name" placeholder="Acme Staffing">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div>
+            <label for="si-staff">Approx. staff count</label>
+            <input type="number" id="si-staff" name="staff_count" min="1" placeholder="25">
+          </div>
+          <div>
+            <label for="si-industry">Industry</label>
+            <select id="si-industry" name="industry">
+              <option value="">Select...</option>
+              <option value="healthcare">Healthcare</option>
+              <option value="construction">Construction</option>
+              <option value="logistics">Logistics</option>
+              <option value="hospitality">Hospitality</option>
+              <option value="retail">Retail</option>
+              <option value="manufacturing">Manufacturing</option>
+              <option value="security">Security</option>
+              <option value="events">Events</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="si-message">What scheduling challenges are you facing? (optional)</label>
+          <textarea id="si-message" name="message" rows="3" placeholder="We're scheduling 40+ staff across 3 locations and..."></textarea>
+        </div>
+        <button type="submit" class="btn-pricing btn-pricing--primary" id="si-submit">Send message</button>
+      </div>
+    </form>
+    <div id="si-error" class="auth-error" style="display:none;"></div>
+    <div id="si-success" style="display:none;background:var(--surface2);border-radius:0.5rem;padding:1.5rem;text-align:center;">
+      <p style="font-weight:700;color:var(--accent);margin-bottom:0.4rem;font-size:1.05rem;">Thanks — your request is in</p>
+      <p style="font-size:0.88rem;color:var(--text-muted);line-height:1.45;">A scheduling specialist will contact you within one business day to book your demo.</p>
+    </div>
+  </div>
+</div>
+
+<section class="workflow">
+  <div class="section-inner">
+    <p class="section-eyebrow">Three parties, one schedule</p>
+    <h2 class="section-headline">Everyone plays their role</h2>
+
+    <div class="roles-row">
+      <div class="role-card">
+        <div class="role-badge role-admin">Admin</div>
+        <h3>Organization Admin</h3>
+        <ul class="role-features">
+          <li>View and approve all proposed assignments</li>
+          <li>Manage staff profiles, clients, and work sites</li>
+          <li>Set shift requirements and client preferences</li>
+          <li>Override any automated assignment</li>
+          <li>Full schedule visibility across all locations</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-badge role-staff">Staff</div>
+        <h3>Field Staff</h3>
+        <ul class="role-features">
+          <li>Update availability from a mobile app</li>
+          <li>Receive real-time shift notifications</li>
+          <li>View shift details and directions to work site</li>
+          <li>Keep profile and certifications current</li>
+          <li>See scheduled shifts and history</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-badge role-client">Client</div>
+        <h3>Client / Customer</h3>
+        <ul class="role-features">
+          <li>Submit and update staffing needs</li>
+          <li>Specify required skills or preferences</li>
+          <li>View assigned staff for upcoming shifts</li>
+          <li>Flag issues or request changes</li>
+          <li>Consistent provider preference supported</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mcp-demo">
+  <div class="section-inner">
+    <p class="section-eyebrow">Talk to your schedule</p>
+    <h2 class="section-headline">Manage schedules by conversation</h2>
+    <p class="section-lede">Ask your AI assistant to find coverage, swap a shift, or check tomorrow's roster — just by asking. Senzii connects to ChatGPT, Claude, and other AI assistants so you can manage scheduling without opening an app.</p>
+
+    <div class="chat-mock">
+      <div class="chat-messages">
+        <div class="chat-msg chat-user">
+          <div class="chat-avatar chat-avatar-user">You</div>
+          <div class="chat-bubble">Can you replace Allen with Jane on Thursday's evening shift at Greenfield Home Care?</div>
+        </div>
+        <div class="chat-msg chat-assistant">
+          <div class="chat-avatar chat-avatar-assistant">✦</div>
+          <div class="chat-bubble">
+            <p>I found Thursday's evening shift at Greenfield Home Care:</p>
+            <div class="chat-shift-detail">
+              <div class="csd-row"><span class="csd-label">Shift</span><span>Thursday 6–10pm, 1407 Oak St Suite 3</span></div>
+              <div class="csd-row"><span class="csd-label">Current</span><span class="csd-staff-old">Allen P. — CNA, 9.3mi</span></div>
+              <div class="csd-row"><span class="csd-label">Replace with</span><span class="csd-staff-new">Jane R. — CNA, 3.1mi, previously assigned to this client</span></div>
+              <div class="csd-row"><span class="csd-label">Match score</span><span class="csd-score">94</span></div>
+            </div>
+            <p>Want me to confirm this change?</p>
+          </div>
+        </div>
+        <div class="chat-msg chat-user">
+          <div class="chat-avatar chat-avatar-user">You</div>
+          <div class="chat-bubble">Yes, confirm it.</div>
+        </div>
+        <div class="chat-msg chat-assistant">
+          <div class="chat-avatar chat-avatar-assistant">✦</div>
+          <div class="chat-bubble">Done — Allen has been removed and Jane is now assigned to Thursday's evening shift at Greenfield Home Care. Jane will be notified.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scenarios">
+  <div class="section-inner">
+    <p class="section-eyebrow">Built for real industries</p>
+    <h2 class="section-headline">One engine, any field service</h2>
+
+    <div class="scenarios-grid">
+      <div class="scenario-card" style="text-decoration:none;display:block;">
+        <div class="scenario-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M4 24l8-8 4 4 12-12v16H4z" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M10 18l4-4" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Construction &amp; Trades</h3>
+        <p>Electricians, plumbers, and laborers routed to sites by trade certification, equipment expertise, and travel zone. Handle last-minute callouts automatically.</p>
+      </div>
+      <div class="scenario-card" style="text-decoration:none;display:block;">
+        <div class="scenario-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="8" width="24" height="16" rx="2" stroke="#16a34a" stroke-width="2.5"/><path d="M4 14h24M10 14v10M16 14v10M22 14v10" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Logistics &amp; Warehousing</h3>
+        <p>Forklift operators, dock workers, and pickers assigned to shifts by certification, site familiarity, and shift history. Minimize overtime and no-shows.</p>
+      </div>
+      <div class="scenario-card" style="text-decoration:none;display:block;">
+        <div class="scenario-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="14" r="6" stroke="#16a34a" stroke-width="2.5"/><path d="M10 26c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Legal &amp; Professional</h3>
+        <p>Attorneys, paralegals, and consultants routed to client briefings by practice area, expertise, and prior relationship. Billable hours tracked in context.</p>
+      </div>
+      <div class="scenario-card" style="text-decoration:none;display:block;">
+        <div class="scenario-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M6 10h20l-2 16H8L6 10z" stroke="#16a34a" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M10 10V6a6 6 0 0 1 12 0v4" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Retail</h3>
+        <p>Store associates and seasonal staff matched to shifts by foot traffic patterns, skill area, and availability. Reduce overtime while keeping shelves staffed.</p>
+      </div>
+      <div class="scenario-card" style="text-decoration:none;display:block;">
+        <div class="scenario-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M8 4v6c0 4 3 6 8 6s8-2 8-6V4M16 4v24M12 28h8" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        </div>
+        <h3>Restaurants &amp; Hospitality</h3>
+        <p>Servers, cooks, and bartenders matched to shifts by station, skill level, and availability. Handle split shifts, doubles, and last-minute swaps without the group text chaos.</p>
+      </div>
+      <div class="scenario-card" style="text-decoration:none;display:block;">
+        <div class="scenario-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M6 26V6l10 5 10-5v20l-10-5-10 5z" stroke="#16a34a" stroke-width="2.5" stroke-linejoin="round" fill="none"/></svg>
+        </div>
+        <h3>Events</h3>
+        <p>Bartenders, security, setup crews, and AV techs assigned to events by role, proximity, and availability. Fill last-minute callouts automatically. No more scrambling when someone calls out 2 hours before doors.</p>
+      </div>
+      <div class="scenario-card" style="text-decoration:none;display:block;">
+        <div class="scenario-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="8" width="24" height="16" rx="2" stroke="#16a34a" stroke-width="2.5"/><path d="M4 14h24M10 14v10M16 14v10M22 14v10" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Manufacturing</h3>
+        <p>Production-line scheduling with certification-aware shift coverage. Prevent coverage gaps that stop the line, control overtime across rotations, and track every operator assignment.</p>
+      </div>
+      <div class="scenario-card" style="text-decoration:none;display:block;">
+        <div class="scenario-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="14" r="6" stroke="#16a34a" stroke-width="2.5"/><path d="M10 26c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Small Business</h3>
+        <p>Senzii scales from 5 employees to 500. Simple setup, transparent $5/seat pricing, no enterprise sales cycle. Perfect for growing teams that need scheduling without complexity.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="closing">
+  <div class="section-inner">
+    <h2 class="closing-headline">Stop building schedules by hand.<br>Start building the business.</h2>
+    <p class="closing-sub">Senzii handles the puzzle so you can focus on delivering the service.</p>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="section-inner">
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary class="faq-question">Are you HIPAA or SOC 2 compliant?</summary>
+        <p class="faq-answer">Senzii is not HIPAA or SOC 2 certified. We do not store PHI (protected health information) or PCI (payment card information). Senzii handles scheduling data — staff names, availability, certifications, and shift assignments — which is PII (personally identifiable information). All PII is encrypted in transit and at rest. Our database provider (Neon) holds SOC 2 Type 2, ISO 27001, and GDPR compliance certifications. If your organization requires PHI handling, use HIPAA-compliant channels for that data and keep Senzii on scheduling only.</p>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-question">Can I cancel at any time?</summary>
+        <p class="faq-answer">Yes. If you cancel during your free trial, you will never be billed. If you cancel during a billing period, your subscription runs through the end of that period and you won't be charged again. Billing periods start on the date of your first payment and end the next month on that day number. After cancellation, we retain your data for 30 days in case you change your mind.</p>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-question">Does Senzii make the schedule and notify staff on my behalf?</summary>
+        <p class="faq-answer">Senzii creates a schedule draft — you confirm it before anything goes live. From the admin dashboard, you can notify all assigned staff with one click. If you connect an AI assistant like Claude or ChatGPT, you can also ask it to send notifications for you.</p>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-question">Is there a mobile app?</summary>
+        <p class="faq-answer">Senzii's staff and client portals are mobile-first web apps — they work in any browser on any phone, no download required. Admins get a full dashboard in the browser as well. No separate app to install or update.</p>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-question">How long does it take to get set up?</summary>
+        <p class="faq-answer">Most admins are scheduling within an hour. The staff and client interfaces are straightforward, and documentation walks through every feature for all three roles.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ── Free Tools ──────────────────────────────────────────── -->
+<section class="closing" style="border-top: 1px solid var(--border);">
+  <div class="section-inner">
+    <p class="section-eyebrow" style="text-align:center;">Free Tools</p>
+    <h2 class="closing-headline">Try Our Free Scheduling Tools</h2>
+    <p class="closing-sub" style="margin-bottom:2.5rem;">No signup required to start — get instant results, then download your personalized report.</p>
+    <div class="scenarios-grid" style="max-width:900px;">
+      <a href="/cost-calculator" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <div class="scenario-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+        </div>
+        <h3>Cost Calculator</h3>
+        <p>Discover how much bad scheduling is actually costing you — in overtime, no-shows, and turnover. Get a dollar figure in 2 minutes.</p>
+      </a>
+      <a href="/scheduling-quiz" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <div class="scenario-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h3>Pain Point Quiz</h3>
+        <p>Answer 7 questions to find your biggest scheduling problem. Get a personalized action plan with specific recommendations.</p>
+      </a>
+      <a href="/template-generator" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <div class="scenario-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        </div>
+        <h3>Template Generator</h3>
+        <p>Configure your shifts and generate a ready-to-use weekly schedule template. Download as CSV — free, no signup to start.</p>
+      </a>
+      <a href="/coverage-analyzer" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <div class="scenario-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7" stroke="#dc2626"/></svg>
+        </div>
+        <h3>Coverage Gap Analyzer</h3>
+        <p>Map your weekly shift coverage and instantly see where you're understaffed. Get a personalized gap report with recommendations.</p>
+      </a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">
+        <svg class="footer-logo-mark" width="20" height="20" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="700" height="700" rx="155" fill="#16a34a"/>
+          <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+            <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+            <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+            <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+          </g>
+        </svg>
+        Senzii
+      </span>
+      <span class="footer-tagline">Intelligent workforce scheduling</span>
+    </div>
+    <div class="footer-links">
+      <a href="/compare">Compare</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/refunds">Refund Policy</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 REPL Made LLC. Built with &hearts;.</div>
+  </div>
+</footer>
+
+<script>
+// ── First-party analytics beacon ──────────────────────────────────────────
+(function() {
+  var ENDPOINT = '/api/track';
+  var queued = [];
+
+  // Parse UTM params from URL
+  var params = new URLSearchParams(window.location.search);
+  var utm = {
+    utm_source:  params.get('utm_source'),
+    utm_medium:  params.get('utm_medium'),
+    utm_campaign: params.get('utm_campaign'),
+    utm_content: params.get('utm_content'),
+    utm_term:    params.get('utm_term')
+  };
+
+  function send(data) {
+    var payload = Object.assign({
+      page: window.location.pathname,
+      referrer: document.referrer || null,
+      screen_width: screen.width,
+      screen_height: screen.height,
+      language: navigator.language
+    }, utm, data);
+
+    // Remove null UTM keys to keep payload small
+    for (var k in utm) { if (!utm[k]) delete payload[k]; }
+
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(ENDPOINT, new Blob([JSON.stringify(payload)], {type: 'application/json'}));
+    } else {
+      fetch(ENDPOINT, {method: 'POST', body: JSON.stringify(payload), headers: {'Content-Type': 'application/json'}, keepalive: true}).catch(function(){});
+    }
+  }
+
+  // 1) Page view on load
+  send({section: null});
+
+  // 2) Section visibility tracking (IntersectionObserver)
+  var sections = document.querySelectorAll('section[id], section.class, .hero, .engine, .workflow, .scenarios, .closing');
+  var seen = new Set();
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && !seen.has(entry.target)) {
+          seen.add(entry.target);
+          var id = entry.target.id || entry.target.className.split(' ')[0] || 'unknown';
+          send({section: id});
+        }
+      });
+    }, {threshold: 0.3});
+    sections.forEach(function(s) { observer.observe(s); });
+  }
+})();
+</script>
+<script>
+(function() {
+  var form = document.getElementById('sales-inquiry-form');
+  var errorDiv = document.getElementById('si-error');
+  var successDiv = document.getElementById('si-success');
+  var submitBtn = document.getElementById('si-submit');
+  var modal = document.getElementById('lead-modal');
+  var header = document.getElementById('si-header');
+
+  // Close on backdrop click
+  modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('open'); });
+  // Close on Escape
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') modal.classList.remove('open'); });
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    errorDiv.style.display = 'none';
+    successDiv.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    var payload = {
+      name: document.getElementById('si-name').value.trim(),
+      email: document.getElementById('si-email').value.trim(),
+      phone: document.getElementById('si-phone').value.trim() || null,
+      company_name: document.getElementById('si-company').value.trim() || null,
+      staff_count: parseInt(document.getElementById('si-staff').value) || null,
+      industry: document.getElementById('si-industry').value || null,
+      message: document.getElementById('si-message').value.trim() || null,
+      page_url: window.location.href
+    };
+
+    try {
+      var res = await fetch('/api/sales-inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      var data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to send message');
+      header.style.display = 'none';
+      form.style.display = 'none';
+      successDiv.style.display = 'block';
+      // Auto-close after 4s and reset for next time
+      setTimeout(function() {
+        modal.classList.remove('open');
+        setTimeout(function() {
+          form.reset();
+          header.style.display = '';
+          form.style.display = '';
+          successDiv.style.display = 'none';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Send message';
+        }, 300);
+      }, 4000);
+    } catch(err) {
+      errorDiv.textContent = err.message;
+      errorDiv.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send message';
+    }
+  });
+})();
+</script>
+<script>
+(function() {
+  var modal = document.getElementById('checkout-modal');
+  var form = document.getElementById('checkout-form');
+  var seatsInput = document.getElementById('co-seats');
+  var totalP = document.getElementById('co-total');
+  var errorDiv = document.getElementById('co-error');
+  var submitBtn = document.getElementById('co-submit');
+
+  // Close on backdrop click
+  modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('open'); });
+  // Close on Escape
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') modal.classList.remove('open'); });
+
+  // Live total calculation
+  function updateTotal() {
+    var seats = parseInt(seatsInput.value) || 1;
+    if (seats < 1) seats = 1;
+    totalP.textContent = seats + ' × $5/mo = $' + (seats * 5) + '/mo after trial';
+  }
+  seatsInput.addEventListener('input', updateTotal);
+  updateTotal();
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    errorDiv.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Redirecting…';
+
+    var payload = {
+      orgName: document.getElementById('co-org').value.trim(),
+      email: document.getElementById('co-email').value.trim(),
+      name: document.getElementById('co-name').value.trim() || null,
+      seats: parseInt(seatsInput.value) || 1
+    };
+
+    try {
+      var res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      var data = await res.json();
+      if (!res.ok) throw new Error(data.error || data.reason || 'Failed to start trial');
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL returned');
+      }
+    } catch(err) {
+      errorDiv.textContent = err.message;
+      errorDiv.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Start free trial';
+    }
+  });
+})();
+</script>
+</body>
+</html>

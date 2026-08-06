@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /auth/
+Disallow: /staff/
+Disallow: /client/
+Disallow: /admin
+Disallow: /api/
+Disallow: /dashboard
+
+Sitemap: https://senzii.com/sitemap.xml

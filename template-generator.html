@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shift Planning Template Generator — Free Custom Scheduling Templates | Senzii</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description" content="Generate custom shift scheduling templates for your industry in seconds. Free download — just enter your email.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/theme.20fbb461.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Shift Planning Template Generator",
+    "description": "Generate custom shift scheduling templates for your industry — free download.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "publisher": { "@type": "Organization", "name": "Senzii", "url": "https://senzii.com" }
+  }
+  </script>
+  <style>
+    .gen-hero { padding: 3rem 0 2rem; text-align: center; border-bottom: 1px solid var(--border); }
+    .gen-hero h1 { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; color: var(--text); letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .gen-hero p { font-size: 1.05rem; color: var(--text-muted); max-width: 560px; margin: 0 auto; }
+
+    .gen-container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+
+    .gen-config { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; }
+    .gen-config h2 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 1.5rem; }
+
+    .gen-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .gen-field { }
+    .gen-field label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+    .gen-field select, .gen-field input { width: 100%; padding: 0.65rem 0.8rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; font-family: var(--font-body); color: var(--text); background: var(--surface); }
+    .gen-field select:focus, .gen-field input:focus { outline: none; border-color: var(--accent); }
+
+    .gen-shifts { margin-top: 1.5rem; }
+    .gen-shifts-label { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+    .gen-shift-row { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center; }
+    .gen-shift-row input { padding: 0.5rem 0.7rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.82rem; font-family: var(--font-body); }
+    .gen-shift-row input:focus { outline: none; border-color: var(--accent); }
+    .gen-shift-remove { width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--coral); cursor: pointer; font-size: 1.1rem; line-height: 1; }
+    .gen-shift-remove:hover { background: var(--coral-dim); }
+    .gen-add-shift { margin-top: 0.5rem; padding: 0.5rem 1rem; border: 1px dashed var(--border); border-radius: 8px; background: transparent; color: var(--accent); font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
+    .gen-add-shift:hover { border-color: var(--accent); background: var(--accent-dim); }
+
+    .gen-generate { margin-top: 1.5rem; width: 100%; padding: 0.85rem; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: var(--font-body); transition: background 0.15s; }
+    .gen-generate:hover { background: #15803d; }
+
+    /* Preview */
+    .gen-preview { display: none; }
+    .gen-preview.show { display: block; }
+    .gen-preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .gen-preview-header h2 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--text); }
+    .gen-download-btn { padding: 0.6rem 1.5rem; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; font-family: var(--font-body); text-decoration: none; }
+    .gen-download-btn:hover { background: #15803d; }
+
+    .template-table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 2rem; }
+    .template-table th { background: var(--surface2); padding: 0.75rem 0.5rem; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); text-align: center; }
+    .template-table th:first-child { text-align: left; padding-left: 1rem; }
+    .template-table td { padding: 0.6rem 0.5rem; font-size: 0.85rem; color: var(--text); border-bottom: 1px solid var(--border); text-align: center; }
+    .template-table td:first-child { text-align: left; padding-left: 1rem; font-weight: 600; }
+    .template-table tr:last-child td { border-bottom: none; }
+    .shift-cell { font-size: 0.78rem; padding: 0.3rem 0.4rem; border-radius: 4px; display: inline-block; }
+    .shift-cell.morning { background: rgba(22, 163, 74, 0.1); color: #16a34a; }
+    .shift-cell.evening { background: rgba(217, 119, 6, 0.1); color: #d97706; }
+    .shift-cell.night { background: rgba(99, 102, 241, 0.1); color: #6366f1; }
+    .shift-cell.custom { background: var(--surface2); color: var(--text-muted); }
+
+    /* Email gate */
+    .email-gate { background: linear-gradient(135deg, var(--accent-dim), rgba(22, 163, 74, 0.03)); border: 1px solid rgba(22, 163, 74, 0.2); border-radius: 14px; padding: 2rem; text-align: center; margin-bottom: 2rem; }
+    .email-gate h3 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .email-gate p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem; max-width: 420px; margin-left: auto; margin-right: auto; }
+    .email-gate .email-form { display: flex; gap: 0.5rem; max-width: 400px; margin: 0 auto; }
+    .email-gate .email-form input { flex: 1; padding: 0.7rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; font-family: var(--font-body); }
+    .email-gate .email-form input:focus { outline: none; border-color: var(--accent); }
+    .email-gate .email-form button { padding: 0.7rem 1.5rem; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font-body); white-space: nowrap; }
+    .email-gate .email-form button:hover { background: #15803d; }
+    .email-gate .email-success { display: none; margin-top: 1rem; }
+    .email-gate .email-success.show { display: block; }
+    .email-gate .email-success p { color: var(--accent); font-weight: 600; margin-bottom: 1rem; }
+    .download-confirmed { display: inline-block; padding: 0.7rem 1.5rem; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font-body); text-decoration: none; }
+    .download-confirmed:hover { background: #15803d; }
+
+    .result-cta { text-align: center; margin-bottom: 1.5rem; }
+    .result-cta a { display: inline-block; padding: 0.85rem 2.5rem; background: var(--accent); color: #fff; border-radius: 8px; font-size: 1rem; font-weight: 700; text-decoration: none; font-family: var(--font-body); transition: background 0.15s; }
+    .result-cta a:hover { background: #15803d; }
+
+    @media (max-width: 600px) {
+      .gen-row { grid-template-columns: 1fr; }
+      .gen-shift-row { grid-template-columns: 1fr 1fr; }
+      .gen-shift-row .gen-shift-remove { grid-column: span 2; width: 100%; }
+      .template-table { font-size: 0.75rem; }
+      .template-table th, .template-table td { padding: 0.4rem 0.3rem; }
+    }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/" class="nav-logo">
+        <svg class="nav-logo-mark" width="28" height="28" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="700" height="700" rx="155" fill="#16a34a"/>
+          <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+            <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+            <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+            <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+          </g>
+        </svg>
+        Senzii
+      </a>
+      <span class="nav-tagline">Intelligent scheduling</span>
+    </div>
+    <a href="/auth/login" class="nav-sign-in">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Sign In
+    </a>
+  </div>
+</nav>
+
+<section class="gen-hero">
+  <div class="section-inner">
+    <p class="section-eyebrow">Free Tool</p>
+    <h1>Shift Planning Template Generator</h1>
+    <p>Configure your shifts, generate a ready-to-use weekly schedule template, and download it as CSV — free.</p>
+  </div>
+</section>
+
+<div class="gen-container">
+  <div class="gen-config">
+    <h2>Configure Your Schedule Template</h2>
+    <div class="gen-row">
+      <div class="gen-field">
+        <label>Industry</label>
+        <select id="industry" onchange="loadPreset()">
+          <option value="custom">Custom</option>
+          <option value="healthcare">Home Healthcare</option>
+          <option value="construction">Construction</option>
+          <option value="logistics">Logistics / Warehouse</option>
+          <option value="retail">Retail</option>
+          <option value="restaurant">Restaurant</option>
+        </select>
+      </div>
+      <div class="gen-field">
+        <label>Business Name</label>
+        <input type="text" id="bizName" placeholder="Your Business Name" value="My Business">
+      </div>
+    </div>
+    <div class="gen-row">
+      <div class="gen-field">
+        <label>Number of Staff</label>
+        <input type="number" id="staffNum" min="1" max="100" value="8" placeholder="8">
+      </div>
+      <div class="gen-field">
+        <label>Week Starting</label>
+        <input type="text" id="weekStart" placeholder="Mon, Jan 6" value="Mon, Jan 6">
+      </div>
+    </div>
+
+    <div class="gen-shifts">
+      <div class="gen-shifts-label">Shift Definitions</div>
+      <div id="shiftRows"></div>
+      <button class="gen-add-shift" onclick="addShiftRow()">+ Add Shift Type</button>
+    </div>
+
+    <button class="gen-generate" onclick="generateTemplate()">Generate Template →</button>
+  </div>
+
+  <div class="gen-preview" id="preview">
+    <div class="gen-preview-header">
+      <h2>Your Schedule Template</h2>
+    </div>
+    <div id="tableContainer"></div>
+
+    <div class="email-gate" id="emailGate">
+      <h3>📧 Download your template (CSV)</h3>
+      <p>Enter your email to download the full template as a CSV file — ready to open in Excel, Google Sheets, or import into any scheduling tool.</p>
+      <form class="email-form" id="emailForm" onsubmit="return unlockDownload(event)">
+        <input type="email" id="emailInput" placeholder="your@work-email.com" required>
+        <button type="submit">Unlock Download</button>
+      </form>
+      <div class="email-success" id="emailSuccess">
+        <p>✓ Download unlocked! Click below to get your template.</p>
+        <a href="#" class="download-confirmed" id="downloadLink" onclick="downloadCSV(event)">Download CSV Template</a>
+      </div>
+    </div>
+
+    <div class="result-cta">
+      <a href="/">Want this automated? Try Senzii →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const presets = {
+    healthcare: [
+      { name: 'Morning Visit', start: '07:00', end: '15:00' },
+      { name: 'Evening Visit', start: '15:00', end: '23:00' },
+    ],
+    construction: [
+      { name: 'Day Shift', start: '06:00', end: '14:30' },
+      { name: 'Swing Shift', start: '14:00', end: '22:30' },
+    ],
+    logistics: [
+      { name: 'Shift A', start: '06:00', end: '14:00' },
+      { name: 'Shift B', start: '14:00', end: '22:00' },
+      { name: 'Shift C', start: '22:00', end: '06:00' },
+    ],
+    retail: [
+      { name: 'Open', start: '09:00', end: '15:00' },
+      { name: 'Mid', start: '12:00', end: '18:00' },
+      { name: 'Close', start: '15:00', end: '21:00' },
+    ],
+    restaurant: [
+      { name: 'FOH Open', start: '10:00', end: '16:00' },
+      { name: 'BOH Prep', start: '14:00', end: '22:00' },
+      { name: 'Dinner', start: '16:00', end: '23:00' },
+    ],
+    custom: [
+      { name: 'Morning', start: '08:00', end: '16:00' },
+      { name: 'Evening', start: '16:00', end: '00:00' },
+    ],
+  };
+
+  let shifts = [...presets.custom];
+  let generatedData = null;
+
+  function renderShiftRows() {
+    const container = document.getElementById('shiftRows');
+    container.innerHTML = shifts.map((s, i) => `
+      <div class="gen-shift-row">
+        <input type="text" value="${s.name}" placeholder="Shift name" onchange="updateShift(${i}, 'name', this.value)">
+        <input type="time" value="${s.start}" onchange="updateShift(${i}, 'start', this.value)">
+        <input type="time" value="${s.end}" onchange="updateShift(${i}, 'end', this.value)">
+        <button class="gen-shift-remove" onclick="removeShift(${i})" title="Remove">×</button>
+      </div>
+    `).join('');
+  }
+
+  function addShiftRow() {
+    shifts.push({ name: 'Custom Shift', start: '10:00', end: '18:00' });
+    renderShiftRows();
+  }
+
+  function removeShift(i) {
+    if (shifts.length > 1) { shifts.splice(i, 1); renderShiftRows(); }
+  }
+
+  function updateShift(i, field, value) {
+    shifts[i][field] = value;
+  }
+
+  function loadPreset() {
+    const ind = document.getElementById('industry').value;
+    shifts = JSON.parse(JSON.stringify(presets[ind] || presets.custom));
+    renderShiftRows();
+  }
+
+  renderShiftRows();
+
+  function classifyShift(start, end) {
+    const startHour = parseInt(start.split(':')[0]);
+    if (startHour < 6) return 'night';
+    if (startHour < 12) return 'morning';
+    if (startHour < 17) return 'evening';
+    return 'night';
+  }
+
+  function generateTemplate() {
+    const bizName = document.getElementById('bizName').value || 'Schedule';
+    const staffNum = parseInt(document.getElementById('staffNum').value) || 8;
+    const weekStart = document.getElementById('weekStart').value || 'Mon';
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+    // Generate staff names
+    const staffNames = [];
+    for (let i = 1; i <= staffNum; i++) {
+      staffNames.push(`Staff ${i}`);
+    }
+
+    // Build schedule data
+    const schedule = [];
+    staffNames.forEach((name, idx) => {
+      const row = { staff: name };
+      days.forEach(day => {
+        // Assign shifts in rotation
+        const shiftIdx = (idx + days.indexOf(day)) % shifts.length;
+        const s = shifts[shiftIdx];
+        row[day] = `${s.name} (${s.start}-${s.end})`;
+      });
+      schedule.push(row);
+    });
+
+    generatedData = { bizName, weekStart, staffNames, days, shifts, schedule };
+
+    // Render table
+    let html = `<table class="template-table"><thead><tr><th>Staff Member</th>`;
+    days.forEach(d => { html += `<th>${d}</th>`; });
+    html += `</tr></thead><tbody>`;
+    schedule.forEach(row => {
+      html += `<tr><td>${row.staff}</td>`;
+      days.forEach(d => {
+        const cellVal = row[d];
+        const s = shifts.find(sh => cellVal.startsWith(sh.name));
+        const cls = s ? classifyShift(s.start, s.end) : 'custom';
+        html += `<td><span class="shift-cell ${cls}">${cellVal}</span></td>`;
+      });
+      html += `</tr>`;
+    });
+    html += `</tbody></table>`;
+
+    document.getElementById('tableContainer').innerHTML = html;
+    document.getElementById('preview').classList.add('show');
+
+    // Reset email gate
+    document.getElementById('emailForm').style.display = 'flex';
+    document.getElementById('emailSuccess').classList.remove('show');
+  }
+
+  function unlockDownload(event) {
+    event.preventDefault();
+    const email = document.getElementById('emailInput').value;
+    const payload = {
+      email,
+      tool: 'template-generator',
+      extra_data: {
+        bizName: generatedData?.bizName,
+        staffCount: generatedData?.staffNames.length,
+        timestamp: new Date().toISOString()
+      }
+    };
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function(r) {
+      window.location.href = '/thank-you?tool=template-generator';
+    }).catch(function(e) {
+      try { localStorage.setItem('senzii_template_lead_' + Date.now(), JSON.stringify(payload)); } catch(e) {}
+      window.location.href = '/thank-you?tool=template-generator';
+    });
+    document.getElementById('emailForm').style.display = 'none';
+    document.getElementById('emailSuccess').classList.add('show');
+    return false;
+  }
+
+  function downloadCSV(event) {
+    event.preventDefault();
+    if (!generatedData) return;
+    const { bizName, days, schedule } = generatedData;
+    let csv = 'Staff Member,' + days.join(',') + '\n';
+    schedule.forEach(row => {
+      csv += `"${row.staff}",` + days.map(d => `"${row[d]}"`).join(',') + '\n';
+    });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${bizName.replace(/\s+/g, '_')}_schedule_template.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+</script>
+
+<!-- ── More Free Tools ───────────────────────────────────── -->
+<section class="scenarios" style="border-top: 1px solid var(--border);">
+  <div class="section-inner">
+    <p class="section-eyebrow">Explore</p>
+    <h2 class="section-headline">More Free Scheduling Tools</h2>
+    <div class="scenarios-grid">
+      <a href="/cost-calculator" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <h3>Cost Calculator</h3>
+        <p>See how much bad scheduling is costing you — in overtime, no-shows, and turnover.</p>
+      </a>
+      <a href="/scheduling-quiz" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <h3>Pain Point Quiz</h3>
+        <p>Answer 7 questions to find your biggest scheduling problem.</p>
+      </a>
+      <a href="/coverage-analyzer" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <h3>Coverage Gap Analyzer</h3>
+        <p>Map your weekly shift coverage and instantly see where you're understaffed.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">
+        <svg class="footer-logo-mark" width="20" height="20" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="700" height="700" rx="155" fill="#16a34a"/>
+          <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+            <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+            <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+            <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+          </g>
+        </svg>
+        Senzii
+      </span>
+      <span class="footer-tagline">Intelligent workforce scheduling</span>
+    </div>
+    <div class="footer-links">
+      <a href="/#pricing">Pricing</a>
+      <a href="/compare">Compare</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/refunds">Refund Policy</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 REPL Made LLC. Built with &hearts;.</div>
+  </div>
+</footer>
+
+</body>
+</html>

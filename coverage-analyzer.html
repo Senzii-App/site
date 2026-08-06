@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shift Coverage Gap Analyzer — Find Your Staffing Gaps | Senzii</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description" content="Free interactive tool: map your shift coverage across the week and instantly see where you're understaffed. Get a personalized gap report — enter your email.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/theme.20fbb461.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Shift Coverage Gap Analyzer",
+    "description": "Map your shift coverage across the week and instantly identify understaffed time slots.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "publisher": { "@type": "Organization", "name": "Senzii", "url": "https://senzii.com" }
+  }
+  </script>
+  <style>
+    /* Coverage analyzer styles */
+    .cov-hero { padding: 3rem 0 2rem; text-align: center; border-bottom: 1px solid var(--border); }
+    .cov-hero h1 { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; color: var(--text); letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .cov-hero p { font-size: 1.05rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+
+    .cov-container { max-width: 960px; margin: 0 auto; padding: 2rem; }
+
+    /* Setup form */
+    .cov-setup { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; }
+    .cov-setup h2 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+    .cov-setup-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .cov-input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+    .cov-input-group input, .cov-input-group select {
+      width: 100%; padding: 0.75rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text); font-family: var(--font-body); font-size: 1rem; transition: border-color 0.15s;
+    }
+    .cov-input-group input:focus, .cov-input-group select:focus { outline: none; border-color: var(--accent); }
+
+    /* Shift definitions */
+    .shift-defs { margin-bottom: 1.5rem; }
+    .shift-defs h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text); }
+    .shift-def-row { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 0.75rem; margin-bottom: 0.75rem; align-items: center; }
+    .shift-def-row input { padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; }
+    .shift-def-row button { padding: 0.5rem 0.75rem; background: var(--coral-dim); color: var(--coral); border: 1px solid transparent; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
+    .shift-def-row button:hover { background: var(--coral); color: #fff; }
+    .add-shift-btn { padding: 0.5rem 1rem; background: var(--surface2); color: var(--accent); border: 1px solid var(--accent); border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; font-family: var(--font-body); }
+    .add-shift-btn:hover { background: var(--accent-dim); }
+
+    /* Coverage grid */
+    .cov-grid-wrapper { display: none; margin-bottom: 2rem; }
+    .cov-grid-wrapper.show { display: block; }
+    .cov-grid-wrapper h2 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .cov-grid-wrapper .hint { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; }
+
+    .cov-grid { display: grid; grid-template-columns: 100px repeat(7, 1fr); gap: 2px; background: var(--border); border-radius: 10px; overflow: hidden; }
+    .cov-grid-header { background: var(--surface2); padding: 0.5rem; text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--text); }
+    .cov-grid-label { background: var(--surface2); padding: 0.5rem; font-size: 0.75rem; font-weight: 600; color: var(--text); display: flex; align-items: center; }
+    .cov-cell { background: var(--surface); padding: 0.4rem; text-align: center; cursor: pointer; transition: background 0.15s; min-height: 40px; display: flex; align-items: center; justify-content: center; }
+    .cov-cell:hover { background: var(--surface2); }
+    .cov-cell input { width: 50px; padding: 0.25rem; text-align: center; border: 1px solid var(--border); border-radius: 4px; font-size: 0.8rem; color: var(--text); background: transparent; }
+    .cov-cell input:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+    .cov-cell.under { background: rgba(220, 38, 38, 0.08); }
+    .cov-cell.over { background: rgba(22, 163, 74, 0.08); }
+    .cov-cell.gap { background: rgba(220, 38, 38, 0.15); border: 2px solid var(--coral); }
+
+    /* Analysis results */
+    .cov-results { display: none; margin-top: 2rem; }
+    .cov-results.show { display: block; }
+    .cov-results h2 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; }
+
+    .gap-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .gap-stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; text-align: center; }
+    .gap-stat-value { font-family: var(--font-display); font-size: 2rem; font-weight: 800; }
+    .gap-stat-value.danger { color: var(--coral); }
+    .gap-stat-value.safe { color: var(--accent); }
+    .gap-stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+    .gap-list { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
+    .gap-list h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .gap-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+    .gap-item:last-child { border-bottom: none; }
+    .gap-badge { padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
+    .gap-badge.critical { background: rgba(220, 38, 38, 0.15); color: var(--coral); }
+    .gap-badge.warning { background: rgba(251, 146, 60, 0.15); color: #ea580c; }
+    .gap-badge.ok { background: var(--accent-dim); color: var(--accent); }
+    .gap-text { font-size: 0.9rem; color: var(--text); }
+    .gap-text strong { color: var(--text); }
+
+    /* Email capture */
+    .email-capture { background: linear-gradient(135deg, var(--accent-dim), rgba(22, 163, 74, 0.03)); border: 1px solid rgba(22, 163, 74, 0.2); border-radius: 14px; padding: 2rem; text-align: center; margin-bottom: 2rem; }
+    .email-capture h3 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .email-capture p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+    .email-form { display: flex; gap: 0.5rem; max-width: 400px; margin: 0 auto; }
+    .email-form input { flex: 1; padding: 0.7rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; font-family: var(--font-body); }
+    .email-form input:focus { outline: none; border-color: var(--accent); }
+    .email-form button { padding: 0.7rem 1.5rem; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font-body); white-space: nowrap; }
+    .email-form button:hover { background: #15803d; }
+    .email-success { display: none; color: var(--accent); font-weight: 600; margin-top: 1rem; font-size: 0.9rem; }
+    .email-success.show { display: block; }
+
+    /* Buttons */
+    .cov-btn { padding: 0.75rem 1.75rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; font-family: var(--font-body); transition: all 0.15s; }
+    .cov-btn-primary { background: var(--accent); color: #fff; }
+    .cov-btn-primary:hover { background: #15803d; }
+    .cov-btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .cov-btn-secondary:hover { border-color: var(--accent); }
+    .cov-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+
+    /* Nav */
+    .cov-nav { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+    .cov-nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; }
+    .cov-nav a { color: var(--accent); text-decoration: none; font-weight: 800; font-size: 1.4rem; font-family: var(--font-display); letter-spacing: -0.02em; }
+    .cov-nav-links { display: flex; gap: 1.5rem; }
+    .cov-nav-links a { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); }
+
+    /* Footer */
+    .cov-footer { border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; }
+    .cov-footer p { font-size: 0.8rem; color: var(--text-dim); }
+
+    @media (max-width: 700px) {
+      .cov-setup-row { grid-template-columns: 1fr; }
+      .shift-def-row { grid-template-columns: 1fr 1fr; }
+      .gap-summary { grid-template-columns: 1fr; }
+      .cov-grid { grid-template-columns: 70px repeat(7, 1fr); }
+      .cov-grid-header { font-size: 0.65rem; padding: 0.3rem; }
+      .cov-grid-label { font-size: 0.65rem; }
+      .cov-cell input { width: 36px; font-size: 0.7rem; }
+      .email-form { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="cov-nav">
+  <div class="cov-nav-inner">
+    <a href="/">Senzii</a>
+    <div class="cov-nav-links">
+      <a href="/#pricing">Pricing</a>
+      <a href="/compare">Compare</a>      <a href="/scheduling-quiz">Quiz</a>
+    </div>
+  </div>
+</nav>
+
+<div class="cov-hero">
+  <h1>Shift Coverage Gap Analyzer</h1>
+  <p>Map your weekly shift coverage and instantly see where you're understaffed. Free — get a personalized gap report emailed to you.</p>
+</div>
+
+<div class="cov-container">
+
+  <!-- Step 1: Setup -->
+  <div class="cov-setup" id="setupPanel">
+    <h2>1. Tell us about your operation</h2>
+    <div class="cov-setup-row">
+      <div class="cov-input-group">
+        <label for="industry">Industry</label>
+        <select id="industry">
+          <option value="home-healthcare">Home Healthcare</option>
+          <option value="construction">Construction</option>
+          <option value="logistics">Logistics / Warehousing</option>
+          <option value="restaurant">Restaurant</option>
+          <option value="retail">Retail</option>
+          <option value="legal">Legal / Professional Services</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="cov-input-group">
+        <label for="staffCount">Total staff you schedule</label>
+        <input type="number" id="staffCount" value="20" min="1" max="500">
+      </div>
+    </div>
+
+    <div class="shift-defs" id="shiftDefs">
+      <h3>2. Define your shift types</h3>
+      <div id="shiftRows">
+        <div class="shift-def-row">
+          <input type="text" placeholder="Shift name" value="Morning" class="shift-name">
+          <input type="time" value="06:00" class="shift-start">
+          <input type="time" value="14:00" class="shift-end">
+          <button onclick="removeShiftRow(this)">Remove</button>
+        </div>
+        <div class="shift-def-row">
+          <input type="text" placeholder="Shift name" value="Evening" class="shift-name">
+          <input type="time" value="14:00" class="shift-start">
+          <input type="time" value="22:00" class="shift-end">
+          <button onclick="removeShiftRow(this)">Remove</button>
+        </div>
+        <div class="shift-def-row">
+          <input type="text" placeholder="Shift name" value="Night" class="shift-name">
+          <input type="time" value="22:00" class="shift-start">
+          <input type="time" value="06:00" class="shift-end">
+          <button onclick="removeShiftRow(this)">Remove</button>
+        </div>
+      </div>
+      <button class="add-shift-btn" onclick="addShiftRow()">+ Add Shift</button>
+    </div>
+
+    <div class="cov-input-group">
+      <label for="minPerShift">Minimum staff needed per shift</label>
+      <input type="number" id="minPerShift" value="3" min="1" max="50" style="max-width: 120px;">
+    </div>
+
+    <div class="cov-actions">
+      <button class="cov-btn cov-btn-primary" onclick="buildGrid()">Build Coverage Grid →</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Coverage Grid -->
+  <div class="cov-grid-wrapper" id="gridWrapper">
+    <h2>3. Enter how many staff you have for each shift</h2>
+    <p class="hint">Click a cell and type the number. Red = understaffed (below your minimum). Green = well-covered.</p>
+    <div class="cov-grid" id="coverageGrid"></div>
+
+    <div class="cov-actions">
+      <button class="cov-btn cov-btn-secondary" onclick="goBack()">← Back to Setup</button>
+      <button class="cov-btn cov-btn-primary" onclick="analyzeGaps()">Analyze Gaps →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Results -->
+  <div class="cov-results" id="resultsPanel">
+    <h2>Your Coverage Analysis</h2>
+    <div id="resultsContent"></div>
+  </div>
+
+</div>
+
+<!-- ── More Free Tools ───────────────────────────────────── -->
+<section class="scenarios" style="border-top: 1px solid var(--border);">
+  <div class="section-inner">
+    <p class="section-eyebrow">Explore</p>
+    <h2 class="section-headline">More Free Scheduling Tools</h2>
+    <div class="scenarios-grid">
+      <a href="/cost-calculator" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <h3>Cost Calculator</h3>
+        <p>See how much bad scheduling is costing you — in overtime, no-shows, and turnover.</p>
+      </a>
+      <a href="/scheduling-quiz" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <h3>Pain Point Quiz</h3>
+        <p>Answer 7 questions to find your biggest scheduling problem.</p>
+      </a>
+      <a href="/template-generator" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <h3>Template Generator</h3>
+        <p>Generate a ready-to-use weekly schedule template. Download as CSV.</p>
+      </a>
+</div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">
+        <svg class="footer-logo-mark" width="20" height="20" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="700" height="700" rx="155" fill="#16a34a"/>
+          <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+            <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+            <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+            <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+          </g>
+        </svg>
+        Senzii
+      </span>
+      <span class="footer-tagline">Intelligent workforce scheduling</span>
+    </div>
+    <div class="footer-links">
+      <a href="/#pricing">Pricing</a>
+      <a href="/compare">Compare</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/refunds">Refund Policy</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 REPL Made LLC. Built with &hearts;.</div>
+  </div>
+</footer>
+
+<script>
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  let shifts = [];
+  let coverage = {};
+
+  function addShiftRow() {
+    const row = document.createElement('div');
+    row.className = 'shift-def-row';
+    row.innerHTML = `
+      <input type="text" placeholder="Shift name" class="shift-name" value="">
+      <input type="time" value="08:00" class="shift-start">
+      <input type="time" value="16:00" class="shift-end">
+      <button onclick="removeShiftRow(this)">Remove</button>
+    `;
+    document.getElementById('shiftRows').appendChild(row);
+  }
+
+  function removeShiftRow(btn) {
+    const rows = document.querySelectorAll('.shift-def-row');
+    if (rows.length > 1) {
+      btn.closest('.shift-def-row').remove();
+    }
+  }
+
+  function buildGrid() {
+    // Collect shift definitions
+    shifts = [];
+    document.querySelectorAll('.shift-def-row').forEach(row => {
+      const name = row.querySelector('.shift-name').value || 'Shift';
+      const start = row.querySelector('.shift-start').value;
+      const end = row.querySelector('.shift-end').value;
+      shifts.push({ name, start, end });
+    });
+
+    if (shifts.length === 0) {
+      alert('Please define at least one shift type.');
+      return;
+    }
+
+    coverage = {};
+    shifts.forEach(s => {
+      coverage[s.name] = {};
+      days.forEach(d => { coverage[s.name][d] = 0; });
+    });
+
+    // Hide setup, show grid
+    document.getElementById('setupPanel').style.display = 'none';
+    const wrapper = document.getElementById('gridWrapper');
+    wrapper.classList.add('show');
+
+    renderGrid();
+  }
+
+  function renderGrid() {
+    const minPerShift = parseInt(document.getElementById('minPerShift').value) || 1;
+    const grid = document.getElementById('coverageGrid');
+    let html = '';
+
+    // Header row
+    html += '<div class="cov-grid-header"></div>';
+    days.forEach(d => { html += `<div class="cov-grid-header">${d}</div>`; });
+
+    // Shift rows
+    shifts.forEach(s => {
+      html += `<div class="cov-grid-label">${s.name}<br><span style="font-size:0.65rem;color:var(--text-dim);font-weight:400">${s.start}–${s.end}</span></div>`;
+      days.forEach(d => {
+        const val = coverage[s.name]?.[d] || 0;
+        const cls = val === 0 ? 'gap' : (val < minPerShift ? 'under' : (val >= minPerShift * 1.5 ? 'over' : ''));
+        html += `<div class="cov-cell ${cls}" data-shift="${s.name}" data-day="${d}">
+          <input type="number" min="0" max="50" value="${val}" onchange="updateCell(this, '${s.name}', '${d}', ${minPerShift})">
+        </div>`;
+      });
+    });
+
+    grid.innerHTML = html;
+  }
+
+  function updateCell(input, shiftName, day, minRequired) {
+    const val = parseInt(input.value) || 0;
+    coverage[shiftName][day] = val;
+    const cell = input.closest('.cov-cell');
+    cell.classList.remove('gap', 'under', 'over');
+    if (val === 0) cell.classList.add('gap');
+    else if (val < minRequired) cell.classList.add('under');
+    else if (val >= minRequired * 1.5) cell.classList.add('over');
+  }
+
+  function goBack() {
+    document.getElementById('setupPanel').style.display = 'block';
+    document.getElementById('gridWrapper').classList.remove('show');
+  }
+
+  function analyzeGaps() {
+    const minPerShift = parseInt(document.getElementById('minPerShift').value) || 1;
+    const industry = document.getElementById('industry').value;
+    const staffCount = parseInt(document.getElementById('staffCount').value) || 0;
+
+    let totalSlots = 0;
+    let filledSlots = 0;
+    let gapSlots = 0;
+    let gaps = [];
+    let overstaffed = [];
+
+    shifts.forEach(s => {
+      days.forEach(d => {
+        const val = coverage[s.name]?.[d] || 0;
+        totalSlots++;
+        if (val > 0) filledSlots++;
+        if (val < minPerShift) {
+          gapSlots++;
+          const severity = val === 0 ? 'critical' : 'warning';
+          const deficit = minPerShift - val;
+          gaps.push({ shift: s.name, day: d, current: val, needed: minPerShift, deficit, severity, time: `${s.start}–${s.end}` });
+        } else if (val > minPerShift * 1.5) {
+          overstaffed.push({ shift: s.name, day: d, current: val, needed: minPerShift, excess: val - minPerShift });
+        }
+      });
+    });
+
+    const coverageRate = totalSlots > 0 ? Math.round((filledSlots / totalSlots) * 100) : 0;
+    const gapRate = totalSlots > 0 ? Math.round((gapSlots / totalSlots) * 100) : 0;
+
+    let html = `
+      <div class="gap-summary">
+        <div class="gap-stat">
+          <div class="gap-stat-value ${gapRate > 20 ? 'danger' : 'safe'}">${gapRate}%</div>
+          <div class="gap-stat-label">Coverage Gaps</div>
+        </div>
+        <div class="gap-stat">
+          <div class="gap-stat-value ${coverageRate < 60 ? 'danger' : 'safe'}">${coverageRate}%</div>
+          <div class="gap-stat-label">Slots Filled</div>
+        </div>
+        <div class="gap-stat">
+          <div class="gap-stat-value danger">${gaps.length}</div>
+          <div class="gap-stat-label">Understaffed Shifts</div>
+        </div>
+      </div>
+    `;
+
+    if (gaps.length > 0) {
+      gaps.sort((a, b) => b.deficit - a.deficit);
+      html += `<div class="gap-list">
+        <h3>⚠️ Coverage Gaps (${gaps.length} found)</h3>
+        ${gaps.map(g => `
+          <div class="gap-item">
+            <span class="gap-badge ${g.severity}">${g.severity === 'critical' ? 'EMPTY' : 'SHORT'}</span>
+            <span class="gap-text"><strong>${g.day} ${g.shift}</strong> (${g.time}) — have ${g.current}, need ${g.needed} — <strong style="color:var(--coral)">${g.deficit} short</strong></span>
+          </div>
+        `).join('')}
+      </div>`;
+    }
+
+    if (overstaffed.length > 0) {
+      html += `<div class="gap-list">
+        <h3>✓ Overstaffed Shifts (${overstaffed.length} found)</h3>
+        ${overstaffed.map(o => `
+          <div class="gap-item">
+            <span class="gap-badge ok">OVER</span>
+            <span class="gap-text"><strong>${o.day} ${o.shift}</strong> — have ${o.current}, need ${o.needed} — ${o.excess} extra (potential overtime cost)</span>
+          </div>
+        `).join('')}
+      </div>`;
+    }
+
+    if (gaps.length === 0 && overstaffed.length === 0) {
+      html += `<div class="gap-list"><h3>✅ All shifts are adequately covered</h3><p style="color:var(--text-muted);font-size:0.9rem;">Your coverage looks balanced. Consider using Senzii to automate shift assignment and prevent future gaps.</p></div>`;
+    }
+
+    // Recommendations
+    const industryLabels = {
+      'home-healthcare': 'Home Healthcare',
+      'construction': 'Construction',
+      'logistics': 'Logistics',
+      'restaurant': 'Restaurant',
+      'retail': 'Retail',
+      'legal': 'Legal Services',
+      'other': 'Your operation'
+    };
+    const indLabel = industryLabels[industry] || 'Your operation';
+    html += `<div class="gap-list">
+      <h3>Recommendations for ${indLabel}</h3>
+      <ul style="padding-left:1.25rem; font-size:0.9rem; color:var(--text); line-height:1.8;">
+        ${gaps.length > 5 ? `<li>You have ${gaps.length} understaffed shifts — this suggests a systematic staffing shortage. ${indLabel} operations typically need ${Math.ceil(staffCount * 0.15)}+ buffer staff for coverage.</li>` : ''}
+        ${gaps.length > 0 && gaps.length <= 5 ? `<li>You have ${gaps.length} targeted gaps — these can likely be closed with better shift distribution or a small pool of flexible/on-call staff.</li>` : ''}
+        ${overstaffed.length > 3 ? `<li>${overstaffed.length} overstaffed shifts suggest you may be over-scheduling on peak days. Redistributing staff to gap shifts could save overtime costs.</li>` : ''}
+        <li>Automated shift-matching (what Senzii does) can redistribute ${overstaffed.length > 0 ? overstaffed.length + ' overstaffed' : 'available'} slots to ${gaps.length} gap slots without hiring more staff.</li>
+        <li>Each unfilled shift in ${indLabel.toLowerCase()} typically costs $${Math.round((staffCount * 25)).toLocaleString()}+ in lost productivity or overtime per week.</li>
+      </ul>
+    </div>`;
+
+    // Email capture
+    html += `
+      <div class="email-capture">
+        <h3>Get Your Full Gap Report</h3>
+        <p>We'll email you a detailed breakdown with your coverage heatmap, specific gap-closing recommendations for ${indLabel.toLowerCase()}, and a free template to fix these gaps this week.</p>
+        <form class="email-form" id="emailForm" onsubmit="return captureEmail(event)">
+          <input type="email" id="emailInput" placeholder="your@work-email.com" required>
+          <button type="submit">Get My Report</button>
+        </form>
+        <div class="email-success" id="emailSuccess">✓ Your gap report is on its way!</div>
+      </div>
+    `;
+
+    document.getElementById('resultsContent').innerHTML = html;
+    document.getElementById('resultsPanel').classList.add('show');
+    document.getElementById('gridWrapper').classList.remove('show');
+  }
+
+  function captureEmail(event) {
+    event.preventDefault();
+    const email = document.getElementById('emailInput').value;
+    const minPerShift = parseInt(document.getElementById('minPerShift').value) || 1;
+    const industry = document.getElementById('industry').value;
+    const staffCount = parseInt(document.getElementById('staffCount').value) || 0;
+
+    // Count gaps for summary
+    let gapCount = 0;
+    let totalSlots = 0;
+    shifts.forEach(s => {
+      days.forEach(d => {
+        totalSlots++;
+        if ((coverage[s.name]?.[d] || 0) < minPerShift) gapCount++;
+      });
+    });
+
+    const payload = {
+      email,
+      tool: 'coverage-analyzer',
+      industry: industry,
+      staff_size: staffCount,
+      extra_data: {
+        gapCount,
+        totalSlots,
+        shifts: shifts.map(s => s.name),
+        minPerShift,
+        coverage: coverage,
+        timestamp: new Date().toISOString()
+      }
+    };
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function(r) {
+      window.location.href = '/thank-you?tool=coverage-analyzer';
+    }).catch(function(e) {
+      try { localStorage.setItem('senzii_coverage_lead_' + Date.now(), JSON.stringify(payload)); } catch(e) {}
+      window.location.href = '/thank-you?tool=coverage-analyzer';
+    });
+    document.getElementById('emailForm').style.display = 'none';
+    document.getElementById('emailSuccess').classList.add('show');
+    return false;
+  }
+</script>
+
+</body>
+</html>

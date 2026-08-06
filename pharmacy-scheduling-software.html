@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Scheduling Software | Pharmacist & Technician Scheduling — Senzii</title>
+    <meta name="description" content="Senzii is pharmacy scheduling software that manages pharmacist rotations, technician shifts, 24/7 coverage, and on-call schedules. Built for retail and hospital pharmacies. $5/seat/month. Start free.">
+    <meta name="keywords" content="pharmacy scheduling software, pharmacy staff scheduling, pharmacist scheduling, pharmacy technician scheduling, pharmacy shift scheduling, 24/7 pharmacy scheduling, retail pharmacy scheduling, hospital pharmacy scheduling, pharmacy rota management, pharmacy workforce scheduling, pharmacy on-call scheduling, pharmacy staff scheduling system">
+    
+    <meta property="og:title" content="Pharmacy Scheduling Software | Pharmacist & Technician Scheduling — Senzii">
+    <meta property="og:description" content="Schedule pharmacist rotations, technician shifts, and 24/7 coverage for any pharmacy. Automatic conflict detection and compliance tracking. $5/seat/month.">
+    <meta property="og:url" content="https://senzii.com/pharmacy-scheduling-software">
+    <meta property="og:type" content="website">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pharmacy Scheduling Software | Senzii">
+    <meta name="twitter:description" content="Manage pharmacist rotations, technician shifts, and 24/7 coverage automatically.">
+    
+    <link rel="canonical" href="https://senzii.com/pharmacy-scheduling-software">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/theme.20fbb461.css">
+    
+    <!-- SoftwareApplication Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Senzii Pharmacy Scheduling Software",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web, iOS, Android",
+      "description": "Pharmacy scheduling software that manages pharmacist rotations, technician shifts, 24/7 coverage, on-call schedules, and regulatory compliance tracking. Built for retail pharmacies, hospital pharmacies, and multi-location pharmacy chains.",
+      "url": "https://senzii.com/pharmacy-scheduling-software",
+      "offers": {
+        "@type": "Offer",
+        "price": "5.00",
+        "priceCurrency": "USD",
+        "priceValidUntil": "2026-12-31",
+        "availability": "https://schema.org/InStock"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "156"
+      },
+      "featureList": "Pharmacist rotation management, Technician shift scheduling, 24/7 coverage planning, On-call rotation scheduling, Lunch break coverage automation, Immunization clinic scheduling, Regulatory compliance tracking, Float pharmacist pool management, Cross-coverage between pharmacy locations, Automatic conflict detection, Staff notifications and reminders, Multi-location coordination"
+    }
+    </script>
+    
+    <!-- FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does Senzii handle 24/7 pharmacy scheduling with overlapping shifts?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Senzii supports continuous 24/7 coverage with overlapping shift patterns. You can define day, evening, and overnight shifts with handoff buffer times. The system automatically checks that every hour of every day has a scheduled pharmacist and technician, and flags any coverage gaps before they happen. Overlapping shifts ensure smooth handoffs between incoming and outgoing staff."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can Senzii manage float pharmacist pools across multiple pharmacy locations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Senzii lets you create a float pharmacist pool and assign float staff to cover gaps at any location. The system tracks which float pharmacists are available, their home store assignments, and their travel times between locations. When a location has a staffing gap, Senzii suggests the nearest available float pharmacist and calculates travel time to ensure they arrive before the gap starts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does Senzii pharmacy scheduling software cost?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Senzii costs $5 per seat per month with no base fees, no tiered plans, and no annual contracts. A 10-person pharmacy pays $50/month total. Every feature is included — pharmacist rotations, technician shift scheduling, 24/7 coverage, on-call management, immunization clinic scheduling, compliance tracking, and float pool management."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Senzii track regulatory compliance for pharmacist staffing ratios?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Senzii tracks state-specific pharmacist-to-technician ratios and flags schedules that violate regulations. You can configure your state's ratio requirements, and the system warns you when a shift has too many technicians without a supervising pharmacist. It also tracks break compliance, overtime limits, and required rest periods between shifts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can Senzii schedule immunization clinics and off-site vaccination events?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Senzii handles immunization clinic scheduling with dedicated time blocks that don't interfere with regular pharmacy operations. You can schedule off-site vaccination events (flu clinics, COVID-19 drives, school programs) and assign pharmacists to those events. The system tracks which pharmacists are certified to administer vaccines and ensures only qualified staff are assigned."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Senzii integrate with pharmacy management systems like PioneerRx or BestRx?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Senzii integrates with Google Calendar, Outlook Calendar, and Slack for notifications. For PioneerRx, BestRx, RxConnect, or other pharmacy management systems, you can use our CSV import/export to sync staff data or connect via Zapier to keep schedules aligned with your dispensing system."
+          }
+        }
+      ]
+    }
+    </script>
+    
+    <style>
+    .pharmacy-hero { padding: 5rem 0 4rem; border-bottom: 1px solid var(--border); background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%); }
+    .pharmacy-hero-content { max-width: 1100px; margin: 0 auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .pharmacy-hero h1 { font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; color: var(--text); margin-bottom: 1.5rem; }
+    .pharmacy-hero .hero-eyebrow { font-family: var(--font-display); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .pharmacy-hero .hero-lede { font-size: 1.05rem; color: var(--text-muted); line-height: 1.75; max-width: 480px; margin-bottom: 2rem; }
+    .pharmacy-hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary { display: inline-block; background: var(--accent); color: #fff; font-weight: 600; font-size: 0.95rem; padding: 0.85rem 1.75rem; border-radius: 8px; text-decoration: none; transition: background 0.15s ease; }
+    .btn-primary:hover { background: #15803d; }
+    .btn-secondary { display: inline-block; background: var(--surface); color: var(--text); font-weight: 600; font-size: 0.95rem; padding: 0.85rem 1.75rem; border-radius: 8px; text-decoration: none; border: 1px solid var(--border); transition: border-color 0.15s ease; }
+    .btn-secondary:hover { border-color: var(--accent); }
+    
+    .shift-visual { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+    .shift-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-top: 1rem; }
+    .shift-slot { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; font-size: 0.8rem; }
+    .shift-slot.filled { border-color: var(--accent); background: var(--accent-dim); }
+    .shift-slot.oncall { border-color: var(--coral); background: var(--coral-dim); }
+    .shift-time { font-weight: 700; color: var(--text); font-size: 0.75rem; }
+    .shift-role { color: var(--text-muted); font-size: 0.7rem; margin-top: 0.25rem; }
+    .shift-name { color: var(--accent); font-size: 0.7rem; font-weight: 600; margin-top: 0.25rem; }
+    .shift-oncall-tag { color: var(--coral); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    .features { padding: 5rem 0; border-bottom: 1px solid var(--border); }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
+    .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; }
+    .feature-card h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; }
+    .feature-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.65; }
+    .feature-icon { width: 40px; height: 40px; border-radius: 8px; background: var(--accent-dim); color: var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; font-size: 1.2rem; }
+    
+    .use-cases { padding: 5rem 0; border-bottom: 1px solid var(--border); background: var(--surface2); }
+    .use-cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
+    .use-case-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; }
+    .use-case-card h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .use-case-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+    .use-case-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    
+    .comparison { padding: 5rem 0; border-bottom: 1px solid var(--border); }
+    .comparison-table { width: 100%; border-collapse: collapse; margin-top: 2rem; font-size: 0.9rem; }
+    .comparison-table th { text-align: left; padding: 1rem; background: var(--surface2); border: 1px solid var(--border); font-weight: 700; color: var(--text); }
+    .comparison-table td { padding: 1rem; border: 1px solid var(--border); color: var(--text-muted); }
+    .comparison-table td.senzii { background: var(--accent-dim); color: var(--text); font-weight: 500; }
+    .comparison-table .check { color: var(--accent); font-weight: 700; }
+    .comparison-table .cross { color: var(--text-dim); }
+    
+    .stats { padding: 4rem 0; border-bottom: 1px solid var(--border); background: var(--surface2); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; text-align: center; }
+    .stat-number { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; color: var(--accent); }
+    .stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; }
+    
+    .free-tools { padding: 5rem 0; border-bottom: 1px solid var(--border); }
+    .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
+    .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; text-decoration: none; transition: border-color 0.15s ease, transform 0.15s ease; }
+    .tool-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .tool-card h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .tool-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+    .tool-card .tool-tag { display: inline-block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); background: var(--accent-dim); padding: 0.2rem 0.6rem; border-radius: 20px; margin-bottom: 0.75rem; }
+    
+    .related { padding: 5rem 0; border-bottom: 1px solid var(--border); background: var(--surface2); }
+    .related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; }
+    .related-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; text-decoration: none; transition: border-color 0.15s ease; }
+    .related-card:hover { border-color: var(--accent); }
+    .related-card h3 { font-family: var(--font-display); font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.25rem; }
+    .related-card p { font-size: 0.75rem; color: var(--text-muted); }
+    
+    .blog-links { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+    .blog-links ul { list-style: none; margin-top: 1.5rem; }
+    .blog-links li { padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+    .blog-links li:last-child { border-bottom: none; }
+    .blog-links a { color: var(--accent); text-decoration: none; font-weight: 500; font-size: 0.9rem; }
+    .blog-links a:hover { text-decoration: underline; }
+    .blog-links .blog-meta { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem; }
+    
+    .cta-section { padding: 5rem 0; text-align: center; background: var(--accent-dim); }
+    .cta-section h2 { font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: var(--text); margin-bottom: 1rem; }
+    .cta-section p { font-size: 1.05rem; color: var(--text-muted); max-width: 500px; margin: 0 auto 2rem; }
+    
+    footer { padding: 3rem 0; border-top: 1px solid var(--border); }
+    .footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 2rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+    .footer-col h4 { font-family: var(--font-display); font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.4rem; }
+    .footer-col a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; }
+    .footer-col a:hover { color: var(--accent); }
+    
+    @media (max-width: 768px) {
+        .pharmacy-hero-content { grid-template-columns: 1fr; }
+        .features-grid, .use-cases-grid, .tools-grid { grid-template-columns: 1fr; }
+        .stats-grid { grid-template-columns: 1fr 1fr; }
+        .related-grid { grid-template-columns: 1fr 1fr; }
+        .footer-inner { grid-template-columns: 1fr 1fr; }
+        .shift-grid { grid-template-columns: 1fr; }
+    }
+    </style>
+</head>
+<body>
+<nav class="nav">
+    <div class="nav-inner">
+        <div class="nav-left">
+            <a href="/" class="nav-logo">
+                <svg class="nav-logo-mark" width="28" height="28" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="700" height="700" rx="155" fill="#16a34a"/>
+                    <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+                        <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+                        <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+                        <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+                    </g>
+                </svg>
+                Senzii
+            </a>
+            <span class="nav-tagline">Pharmacy scheduling</span>
+        </div>
+        <a href="/auth/login" class="nav-sign-in">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Sign In
+        </a>
+    </div>
+</nav>
+
+<section class="pharmacy-hero">
+    <div class="pharmacy-hero-content">
+        <div class="hero-text">
+            <p class="hero-eyebrow">Pharmacy staff scheduling</p>
+            <h1>Pharmacy scheduling<br>that keeps every shift<br>covered.</h1>
+            <p class="hero-lede">Senzii automates pharmacist rotations, technician shift scheduling, 24/7 coverage, and on-call management for retail and hospital pharmacies. Regulatory compliance tracking and float pool coordination — all for $5 per seat per month.</p>
+            <div class="pharmacy-hero-cta">
+                <a href="/#pricing" class="btn-primary">View Pricing</a>
+                <a href="/cost-calculator" class="btn-secondary">Calculate Your Savings</a>
+            <a href="/team-capacity-planner" class="tool-card">
+                <span class="tool-tag">Planner</span>
+                <h3>Team Capacity Planner</h3>
+                <p>Compare team capacity vs weekly demand. Spot gaps and surpluses with visual bars and cost impact estimates.</p>
+            </a>
+            <a href="/scheduling-scorecard" class="tool-card">
+                <span class="tool-tag">Scorecard</span>
+                <h3>Scheduling Scorecard</h3>
+                <p>8-dimension scheduling efficiency scorecard with letter grade, dimension breakdown, and prioritized improvement playbook.</p>
+            </a>
+            <a href="/labor-budget-planner" class="tool-card">
+                <span class="tool-tag">Budget</span>
+                <h3>Labor Budget Planner</h3>
+                <p>Set your monthly labor budget, add shifts, and see if your schedule fits. Daily cost breakdown, overrun alerts, overtime analysis.</p>
+            </a>
+            <a href="/shift-pattern-optimizer" class="tool-card">
+                <span class="tool-tag">Comparator</span>
+                <h3>Shift Pattern Optimizer</h3>
+                <p>Compare 6 common shift patterns (5x8, 4x10, 3x12, 2-2-3 Panama, DuPont, Pit) side by side: cost, coverage, overtime, satisfaction, compliance.</p>
+            </a>
+
+            </div>
+        </div>
+        <div class="shift-visual">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+                <span style="font-weight: 700; font-size: 0.9rem; color: var(--text);">Today's Shift Board</span>
+                <span style="font-size: 0.7rem; color: var(--accent); font-weight: 600; background: var(--accent-dim); padding: 0.2rem 0.6rem; border-radius: 20px;">24/7 covered</span>
+            </div>
+            <div class="shift-grid">
+                <div class="shift-slot filled">
+                    <div class="shift-time">7:00 AM — 3:00 PM</div>
+                    <div class="shift-role">Pharmacist — Day shift</div>
+                    <div class="shift-name">Dr. Sarah Kim</div>
+                </div>
+                <div class="shift-slot filled">
+                    <div class="shift-time">7:00 AM — 3:00 PM</div>
+                    <div class="shift-role">Tech 1 — Day shift</div>
+                    <div class="shift-name">Mike Rodriguez</div>
+                </div>
+                <div class="shift-slot filled">
+                    <div class="shift-time">9:00 AM — 1:00 PM</div>
+                    <div class="shift-role">Tech 2 — Lunch coverage</div>
+                    <div class="shift-name">Jenny Park</div>
+                </div>
+                <div class="shift-slot filled">
+                    <div class="shift-time">3:00 PM — 11:00 PM</div>
+                    <div class="shift-role">Pharmacist — Evening</div>
+                    <div class="shift-name">Dr. Alan Chen</div>
+                </div>
+                <div class="shift-slot filled">
+                    <div class="shift-time">3:00 PM — 11:00 PM</div>
+                    <div class="shift-role">Tech 1 — Evening</div>
+                    <div class="shift-name">Tom Walsh</div>
+                </div>
+                <div class="shift-slot oncall">
+                    <div class="shift-time">11:00 PM — 7:00 AM</div>
+                    <div class="shift-oncall-tag">On-Call</div>
+                    <div class="shift-role">Pharmacist — Overnight</div>
+                    <div class="shift-name">Dr. Lisa Patel</div>
+                </div>
+            </div>
+            <div style="margin-top: 1rem; padding: 0.75rem; background: var(--accent-dim); border-radius: 8px; font-size: 0.75rem; color: var(--text);">
+                <strong style="color: var(--accent);">Coverage check:</strong> All 24 hours staffed. Lunch break coverage scheduled 11 AM — 2 PM. State ratio compliance: ✓
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="section-inner">
+        <p class="section-eyebrow">Why Senzii for pharmacies</p>
+        <h2 class="section-headline">Everything a pharmacy needs to schedule staff efficiently</h2>
+        <p class="section-lede">From pharmacist rotations to 24/7 coverage planning, Senzii handles the scheduling complexity so your pharmacy manager can focus on patient care.</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💊</div>
+                <h3>Pharmacist Rotation Management</h3>
+                <p>Schedule pharmacist rotations across day, evening, and overnight shifts. Senzii balances workload fairly, tracks hours to prevent burnout, and ensures every shift has a licensed pharmacist on duty.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🕐</div>
+                <h3>Technician Shift Scheduling</h3>
+                <p>Create technician shifts that align with pharmacist coverage. Assign techs to dispensing, inventory, and counter roles. Track certifications and ensure only qualified techs handle specific tasks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌙</div>
+                <h3>24/7 Coverage Planning</h3>
+                <p>Ensure continuous coverage for 24-hour pharmacies. Senzii maps every hour of the week to a scheduled pharmacist and technician, flagging any gaps before they happen. Overlapping shifts for smooth handoffs.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📞</div>
+                <h3>On-Call Rotation</h3>
+                <p>Manage on-call pharmacist schedules for after-hours emergencies. Senzii rotates on-call duty fairly, tracks response times, and sends automatic alerts to the on-call pharmacist when they're needed.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🍽️</div>
+                <h3>Lunch Break Coverage</h3>
+                <p>Automatically schedule lunch break coverage so the pharmacy counter is never left unattended. Senzii staggers break times, assigns coverage techs, and ensures a pharmacist is always available during breaks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💉</div>
+                <h3>Immunization Clinic Scheduling</h3>
+                <p>Schedule dedicated immunization clinic blocks without disrupting regular pharmacy operations. Assign certified pharmacists to vaccine clinics, track certifications, and manage off-site vaccination events.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📋</div>
+                <h3>Regulatory Compliance Tracking</h3>
+                <p>Track state-specific pharmacist-to-technician ratios, break requirements, and overtime limits. Senzii flags schedules that violate regulations before they're published, keeping your pharmacy audit-ready.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏊</div>
+                <h3>Float Pharmacist Pool Management</h3>
+                <p>Create a float pharmacist pool to cover staffing gaps across multiple locations. Senzii tracks float availability, travel times, and home store assignments to suggest the best float for each gap.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏪</div>
+                <h3>Cross-Coverage Between Locations</h3>
+                <p>Coordinate staff who work across multiple pharmacy locations. Senzii tracks which pharmacist is at which store on which days, prevents travel-time conflicts, and balances cross-coverage assignments fairly.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="stats">
+    <div class="section-inner">
+        <div class="stats-grid">
+            <div>
+                <div class="stat-number">40%</div>
+                <div class="stat-label">Reduction in coverage gaps</div>
+            </div>
+            <div>
+                <div class="stat-number">55%</div>
+                <div class="stat-label">Less time spent building schedules</div>
+            </div>
+            <div>
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Compliance with state staffing ratios</div>
+            </div>
+            <div>
+                <div class="stat-number">$5</div>
+                <div class="stat-label">Per seat per month — no base fee</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="use-cases">
+    <div class="section-inner">
+        <p class="section-eyebrow">Built for every pharmacy setting</p>
+        <h2 class="section-headline">From single-store pharmacies to multi-location chains</h2>
+        <p class="section-lede">Senzii adapts to your pharmacy type, whether you run a single retail pharmacy or a multi-location hospital pharmacy network.</p>
+        
+        <div class="use-cases-grid">
+            <div class="use-case-card">
+                <div class="use-case-icon">🏪</div>
+                <h3>Retail Chain Pharmacies</h3>
+                <p>Schedule pharmacists and technicians across multiple store locations. Manage float pools, cross-coverage assignments, and per-store staffing ratios. Senzii handles transfer requests and travel time between stores.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">🏥</div>
+                <h3>Hospital Pharmacies</h3>
+                <p>Coordinate inpatient pharmacy staff with clinical rounds, IV admixture schedules, and cart-fill times. Manage 24/7 coverage with on-call pharmacists for emergency medication orders and code responses.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">🏪</div>
+                <h3>Independent Community Pharmacies</h3>
+                <p>Schedule a small team of pharmacists and techs with fair rotations. Track lunch break coverage, manage part-time staff, and ensure your pharmacy is always staffed during business hours without overpaying.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">🌙</div>
+                <h3>24-Hour Pharmacies</h3>
+                <p>Plan continuous 24/7 coverage with day, evening, and overnight shifts. Senzii ensures smooth shift handoffs, tracks overnight on-call availability, and prevents gaps in pharmacist coverage during low-traffic hours.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">🏭</div>
+                <h3>Specialty & Compounding Pharmacies</h3>
+                <p>Schedule staff for compounding shifts that require specific certifications. Track which pharmacists are certified for sterile compounding, hazardous drug handling, and specialty medication dispensing.</p>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">📡</div>
+                <h3>Mail-Order & Central Fill</h3>
+                <p>Coordinate high-volume fulfillment staff across picking, packing, verification, and shipping roles. Schedule around prescription volume peaks and manage shift patterns for 24-hour central fill operations.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="comparison">
+    <div class="section-inner">
+        <p class="section-eyebrow">How Senzii compares</p>
+        <h2 class="section-headline">Senzii vs. other pharmacy scheduling tools</h2>
+        <p class="section-lede">Most pharmacy management systems charge per location or require expensive annual contracts. Senzii is $5/seat with every scheduling feature included.</p>
+        
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Senzii</th>
+                    <th>PioneerRx</th>
+                    <th>RxConnect</th>
+                    <th>BestRx</th>
+                    <th>Liberty Software</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Price model</td>
+                    <td class="senzii">$5/seat/month</td>
+                    <td>Per-location license + fees</td>
+                    <td>Per-location license</td>
+                    <td>Per-store license + add-ons</td>
+                    <td>Per-location license</td>
+                </tr>
+                <tr>
+                    <td>No base fees</td>
+                    <td class="senzii"><span class="check">✓</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+                <tr>
+                    <td>No annual contracts</td>
+                    <td class="senzii"><span class="check">✓</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+                <tr>
+                    <td>Pharmacist rotation scheduling</td>
+                    <td class="senzii"><span class="check">✓</span></td>
+                    <td>Limited</td>
+                    <td><span class="cross">✗</span></td>
+                    <td>Basic</td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+                <tr>
+                    <td>24/7 coverage planning</td>
+                    <td class="senzii"><span class="check">✓</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+                <tr>
+                    <td>On-call rotation management</td>
+                    <td class="senzii"><span class="check">✓</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+                <tr>
+                    <td>Lunch break coverage automation</td>
+                    <td class="senzii"><span class="check">✓</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+                <tr>
+                    <td>Regulatory compliance tracking</td>
+                    <td class="senzii"><span class="check">✓</span></td>
+                    <td>Add-on</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td>Basic</td>
+                </tr>
+                <tr>
+                    <td>Float pharmacist pool management</td>
+                    <td class="senzii"><span class="check">✓</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+                <tr>
+                    <td>Immunization clinic scheduling</td>
+                    <td class="senzii"><span class="check">✓</span></td>
+                    <td>Add-on</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+                <tr>
+                    <td>Cross-coverage between locations</td>
+                    <td class="senzii"><span class="check">✓</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+                <tr>
+                    <td>Free trial, no credit card</td>
+                    <td class="senzii"><span class="check">✓</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="free-tools">
+    <div class="section-inner">
+        <p class="section-eyebrow">Free scheduling tools</p>
+        <h2 class="section-headline">Try these free tools — no signup required</h2>
+        <p class="section-lede">Get instant value with our interactive scheduling tools. Built for pharmacies and any healthcare operation that needs to optimize staff scheduling.</p>
+        
+        <div class="tools-grid">
+<a href="/cost-calculator" class="tool-card"><strong>Cost Calculator</strong><span>Free tool →</span></a>
+<a href="/scheduling-quiz" class="tool-card"><strong>Pain Point Quiz</strong><span>Free tool →</span></a>
+<a href="/template-generator" class="tool-card"><strong>Template Generator</strong><span>Free tool →</span></a>
+<a href="/coverage-analyzer" class="tool-card"><strong>Coverage Gap Analyzer</strong><span>Free tool →</span></a>
+</div>
+    </div>
+</section>
+
+<section class="related">
+    <div class="section-inner">
+        <p class="section-eyebrow">Related solutions</p>
+        <h2 class="section-headline">Explore scheduling software for every healthcare setting</h2>
+        
+        <div class="related-grid">
+            <a href="/appointment-scheduling-software" class="related-card">
+                <h3>Appointment Scheduling Software</h3>
+                <p>Client booking and calendar management</p>
+            </a>
+<a href="/labor-cost-benchmarker" class="tool-card"><h4>Labor Cost Benchmarker</h4><p>Benchmark your labor costs vs industry averages</p></a>
+<a href="/weekly-schedule-generator" class="tool-card"><h4>Weekly Schedule Generator →</h4><p>Auto-generate balanced weekly schedules from your roster</p></a>
+<a href="/scheduling-roi-estimator" style="color:#a0aec0;font-size:0.85rem;text-decoration:none;">ROI Estimator</a>
+<a href="/shift-bidding-optimizer" class="tool-card"><h4>Shift Bidding Optimizer →</h4><p>Optimize open shift assignments</p></a>
+            <a href="/caregiver-scheduling-software" class="related-card">
+                <h3>Caregiver Scheduling Software</h3>
+                <p>Home healthcare staff coordination</p>
+            </a>
+            <a href="/on-call-scheduling-software" class="related-card">
+                <h3>On-Call Scheduling Software</h3>
+                <p>Emergency and on-call rotation management</p>
+            </a>
+            <a href="/dental-office-scheduling-software" class="related-card">
+                <h3>Dental Office Scheduling</h3>
+                <p>Chair assignments and hygienist rotations</p>
+            </a>
+            <a href="/call-center-scheduling-software" class="related-card">
+                <h3>Call Center Scheduling</h3>
+                <p>Agent shift planning and coverage</p>
+            </a>
+            <a href="/multi-location-scheduling-software" class="related-card">
+                <h3>Multi-Location Scheduling</h3>
+                <p>Coordinate staff across multiple sites</p>
+            </a>
+            <a href="/scheduling-software" class="related-card">
+                <h3>All Scheduling Software</h3>
+                <p>Browse all scheduling solutions</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="blog-links">
+    <div class="section-inner">
+        <p class="section-eyebrow">Related guides</p>
+        <h2 class="section-headline">Learn more about pharmacy staff scheduling</h2>
+        
+        <ul>
+            <li>
+                <div class="blog-meta">10 proven strategies to reduce coverage gaps and maintain compliance in pharmacy staffing</div>
+            </li>
+            
+            <li>
+                <div class="blog-meta">How to keep pharmacist and technician hours under control and avoid unnecessary overtime</div>
+            </li>
+            
+        </ul>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="section-inner">
+        <h2>Ready to keep every shift covered?</h2>
+        <p>Join pharmacies using Senzii to eliminate coverage gaps, maintain compliance, and save hours on scheduling. $5 per seat per month. No base fees. No annual contracts. Start free.</p>
+        <a href="/#pricing" class="btn-primary">View Pricing</a>
+    </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">
+        <svg class="footer-logo-mark" width="20" height="20" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="700" height="700" rx="155" fill="#16a34a"/>
+          <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+            <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+            <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+            <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+          </g>
+        </svg>
+        Senzii
+      </span>
+      <span class="footer-tagline">Intelligent workforce scheduling</span>
+    </div>
+    <div class="footer-links">
+      <a href="/#pricing">Pricing</a>
+      <a href="/compare">Compare</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/refunds">Refund Policy</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 REPL Made LLC. Built with &hearts;.</div>
+  </div>
+</footer>
+</body>
+</html>

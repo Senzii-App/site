@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scheduling Pain Point Quiz — Find Out What's Hurting Your Business | Senzii</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description" content="Free 2-minute quiz: discover your biggest scheduling pain point and get a personalized action plan to fix it.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/theme.20fbb461.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Scheduling Pain Point Quiz",
+    "description": "Find your biggest scheduling pain point with a free 2-minute quiz and get a personalized action plan.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "publisher": { "@type": "Organization", "name": "Senzii", "url": "https://senzii.com" }
+  }
+  </script>
+  <style>
+    .quiz-hero { padding: 3rem 0 2rem; text-align: center; border-bottom: 1px solid var(--border); }
+    .quiz-hero h1 { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; color: var(--text); letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .quiz-hero p { font-size: 1.05rem; color: var(--text-muted); max-width: 560px; margin: 0 auto; }
+
+    .quiz-container { max-width: 700px; margin: 0 auto; padding: 2rem; }
+
+    .quiz-progress-bar { height: 6px; background: var(--border); border-radius: 3px; margin-bottom: 0.75rem; overflow: hidden; }
+    .quiz-progress-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.3s ease; width: 0%; }
+    .quiz-progress-label { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 2rem; }
+
+    .quiz-question { display: none; }
+    .quiz-question.active { display: block; }
+    .quiz-q-text { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 1.5rem; line-height: 1.35; }
+
+    .quiz-answers { display: flex; flex-direction: column; gap: 0.75rem; }
+    .quiz-answer { background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 0.75rem; }
+    .quiz-answer:hover { border-color: var(--accent); background: var(--accent-dim); }
+    .quiz-answer.selected { border-color: var(--accent); background: var(--accent-dim); }
+    .quiz-answer-letter { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: var(--text-muted); flex-shrink: 0; transition: all 0.15s; }
+    .quiz-answer.selected .quiz-answer-letter { border-color: var(--accent); background: var(--accent); color: #fff; }
+    .quiz-answer-text { font-size: 0.95rem; color: var(--text); line-height: 1.4; }
+
+    .quiz-nav { display: flex; justify-content: space-between; margin-top: 2rem; }
+    .quiz-btn { padding: 0.75rem 1.75rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; font-family: var(--font-body); transition: all 0.15s; }
+    .quiz-btn-primary { background: var(--accent); color: #fff; }
+    .quiz-btn-primary:hover { background: #15803d; }
+    .quiz-btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .quiz-btn-secondary:hover { border-color: var(--accent); }
+    .quiz-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Results */
+    .quiz-result { display: none; }
+    .quiz-result.show { display: block; }
+    .result-badge { display: inline-block; background: var(--coral-dim); color: var(--coral); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.75rem; border-radius: 20px; margin-bottom: 1rem; }
+    .result-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: var(--text); margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .result-summary { font-size: 1rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 1.5rem; }
+
+    .result-scores { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .result-scores h3 { font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
+    .score-bar-row { margin-bottom: 0.75rem; }
+    .score-bar-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.3rem; }
+    .score-bar-label span:first-child { color: var(--text); font-weight: 500; }
+    .score-bar-label span:last-child { color: var(--text-muted); font-weight: 700; }
+    .score-bar-bg { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .score-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+    .score-bar-fill.high { background: var(--coral); }
+    .score-bar-fill.med { background: #f59e0b; }
+    .score-bar-fill.low { background: var(--accent); }
+
+    .result-actions { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .result-actions h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; }
+    .result-actions ol { padding-left: 1.25rem; }
+    .result-actions li { font-size: 0.92rem; color: var(--text-muted); margin-bottom: 0.6rem; line-height: 1.6; }
+    .result-actions li strong { color: var(--text); }
+
+    .email-capture { background: linear-gradient(135deg, var(--accent-dim), rgba(22, 163, 74, 0.03)); border: 1px solid rgba(22, 163, 74, 0.2); border-radius: 14px; padding: 2rem; text-align: center; margin-bottom: 2rem; }
+    .email-capture h3 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .email-capture p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem; max-width: 420px; margin-left: auto; margin-right: auto; }
+    .email-form { display: flex; gap: 0.5rem; max-width: 400px; margin: 0 auto; }
+    .email-form input { flex: 1; padding: 0.7rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; font-family: var(--font-body); }
+    .email-form input:focus { outline: none; border-color: var(--accent); }
+    .email-form button { padding: 0.7rem 1.5rem; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font-body); white-space: nowrap; }
+    .email-form button:hover { background: #15803d; }
+    .email-success { display: none; color: var(--accent); font-weight: 600; margin-top: 1rem; font-size: 0.9rem; }
+    .email-success.show { display: block; }
+
+    .result-cta { text-align: center; margin-bottom: 1.5rem; }
+    .result-cta a { display: inline-block; padding: 0.85rem 2.5rem; background: var(--accent); color: #fff; border-radius: 8px; font-size: 1rem; font-weight: 700; text-decoration: none; font-family: var(--font-body); transition: background 0.15s; }
+    .result-cta a:hover { background: #15803d; }
+
+    @media (max-width: 600px) {
+      .email-form { flex-direction: column; }
+      .quiz-container { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/" class="nav-logo">
+        <svg class="nav-logo-mark" width="28" height="28" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="700" height="700" rx="155" fill="#16a34a"/>
+          <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+            <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+            <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+            <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+          </g>
+        </svg>
+        Senzii
+      </a>
+      <span class="nav-tagline">Intelligent scheduling</span>
+    </div>
+    <a href="/auth/login" class="nav-sign-in">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Sign In
+    </a>
+  </div>
+</nav>
+
+<section class="quiz-hero">
+  <div class="section-inner">
+    <p class="section-eyebrow">Free Tool · 2 minutes</p>
+    <h1>Find Your Scheduling Pain Point</h1>
+    <p>Answer 7 quick questions. We'll identify your biggest scheduling problem and give you a personalized action plan.</p>
+  </div>
+</section>
+
+<div class="quiz-container">
+  <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="progressFill"></div></div>
+  <div class="quiz-progress-label" id="progressLabel">Question 1 of 7</div>
+
+  <div id="quizContent">
+    <!-- Questions injected by JS -->
+  </div>
+</div>
+
+<script>
+  const questions = [
+    {
+      q: "How do you currently schedule your staff?",
+      answers: [
+        { text: "Spreadsheets (Excel, Google Sheets)", scores: { manual: 3, automation: 0, communication: 0, cost: 1, compliance: 0 } },
+        { text: "Paper and pen / whiteboard", scores: { manual: 3, automation: 0, communication: 2, cost: 0, compliance: 1 } },
+        { text: "A general scheduling app (When I Work, Deputy, etc.)", scores: { manual: 1, automation: 1, communication: 0, cost: 1, compliance: 0 } },
+        { text: "Text messages, phone calls, group chats", scores: { manual: 2, automation: 0, communication: 3, cost: 1, compliance: 1 } },
+        { text: "A dedicated industry-specific tool", scores: { manual: 0, automation: 2, communication: 0, cost: 0, compliance: 0 } },
+      ]
+    },
+    {
+      q: "How often do scheduled staff no-show or call out at the last minute?",
+      answers: [
+        { text: "Rarely — it's under 5% of shifts", scores: { manual: 0, automation: 0, communication: 0, cost: 0, compliance: 0 } },
+        { text: "Sometimes — about 1 in 10 shifts", scores: { manual: 1, automation: 0, communication: 1, cost: 1, compliance: 0 } },
+        { text: "Often — 15-20% of shifts are affected", scores: { manual: 1, automation: 1, communication: 2, cost: 2, compliance: 0 } },
+        { text: "Constantly — it's a weekly crisis", scores: { manual: 2, automation: 1, communication: 3, cost: 3, compliance: 1 } },
+      ]
+    },
+    {
+      q: "When a shift needs to be filled last-minute, how long does it take?",
+      answers: [
+        { text: "Under 30 minutes — we have a system", scores: { manual: 0, automation: 0, communication: 0, cost: 0, compliance: 0 } },
+        { text: "1-2 hours of calling and texting", scores: { manual: 1, automation: 0, communication: 2, cost: 1, compliance: 0 } },
+        { text: "Several hours — often the shift goes unfilled", scores: { manual: 2, automation: 1, communication: 2, cost: 2, compliance: 1 } },
+        { text: "We don't even try anymore — we just absorb the cost", scores: { manual: 2, automation: 2, communication: 1, cost: 3, compliance: 1 } },
+      ]
+    },
+    {
+      q: "How much overtime are you paying each week?",
+      answers: [
+        { text: "Very little — overtime is well-controlled", scores: { manual: 0, automation: 0, communication: 0, cost: 0, compliance: 0 } },
+        { text: "Some — maybe 5-10% of total hours", scores: { manual: 1, automation: 1, communication: 0, cost: 1, compliance: 0 } },
+        { text: "A lot — overtime is a recurring problem", scores: { manual: 1, automation: 2, communication: 0, cost: 3, compliance: 0 } },
+        { text: "Too much — we're often surprised by overtime bills", scores: { manual: 2, automation: 3, communication: 0, cost: 3, compliance: 1 } },
+      ]
+    },
+    {
+      q: "How do your staff find out about their schedules?",
+      answers: [
+        { text: "They get an automatic notification on their phone", scores: { manual: 0, automation: 2, communication: 0, cost: 0, compliance: 0 } },
+        { text: "We post it and they check a shared board/app", scores: { manual: 1, automation: 0, communication: 1, cost: 0, compliance: 0 } },
+        { text: "We text or call them individually", scores: { manual: 2, automation: 0, communication: 3, cost: 1, compliance: 0 } },
+        { text: "They ask or we tell them in person", scores: { manual: 3, automation: 0, communication: 3, cost: 0, compliance: 1 } },
+      ]
+    },
+    {
+      q: "What's your annual staff turnover like?",
+      answers: [
+        { text: "Low — under 20% per year", scores: { manual: 0, automation: 0, communication: 0, cost: 0, compliance: 0 } },
+        { text: "Moderate — 20-40% per year", scores: { manual: 1, automation: 0, communication: 1, cost: 1, compliance: 0 } },
+        { text: "High — 40-70% per year", scores: { manual: 2, automation: 1, communication: 2, cost: 2, compliance: 0 } },
+        { text: "Very high — we're constantly hiring", scores: { manual: 2, automation: 1, communication: 2, cost: 3, compliance: 1 } },
+      ]
+    },
+    {
+      q: "How much time do managers spend on scheduling per week?",
+      answers: [
+        { text: "Less than 2 hours — scheduling runs itself", scores: { manual: 0, automation: 0, communication: 0, cost: 0, compliance: 0 } },
+        { text: "2-5 hours", scores: { manual: 1, automation: 0, communication: 0, cost: 1, compliance: 0 } },
+        { text: "5-10 hours — it's a significant time sink", scores: { manual: 3, automation: 1, communication: 0, cost: 2, compliance: 0 } },
+        { text: "10+ hours — scheduling is a full-time job", scores: { manual: 3, automation: 2, communication: 1, cost: 3, compliance: 0 } },
+      ]
+    },
+  ];
+
+  const painProfiles = {
+    manual: {
+      badge: "Manual Scheduling Overhead",
+      title: "You're Drowning in Manual Scheduling",
+      summary: "Your managers are spending far too much time on scheduling that could be automated. Every hour spent building schedules by hand is an hour not spent on growing the business, coaching staff, or serving clients. The good news: this is the easiest problem to fix.",
+      actions: [
+        { title: "Switch to skill-based auto-matching", detail: "Tools like Senzii automatically match staff to shifts based on skills, location, and availability — cutting scheduling time by up to 80%." },
+        { title: "Set up auto-confirmation workflows", detail: "Instead of calling 10 people to fill one shift, let the system cascade through available staff automatically." },
+        { title: "Use templates for recurring schedules", detail: "For shifts that repeat weekly, create templates that generate schedules with one click — then adjust exceptions." },
+        { title: "Track scheduling time before and after", detail: "Measure hours spent on scheduling now, then again after switching to an automated tool. Most businesses see ROI within 30 days." },
+      ]
+    },
+    automation: {
+      badge: "Lack of Automation",
+      title: "You Need More Automation in Your Scheduling",
+      summary: "You're doing things manually that could — and should — be automated. Overtime, fill rates, and turnover are all worse when scheduling isn't automated. Intelligent auto-matching can fix most of these issues.",
+      actions: [
+        { title: "Implement intelligent auto-matching", detail: "Senzii matches staff to shifts based on skills, proximity, and availability — no manual matching needed." },
+        { title: "Set up overtime alerts and caps", detail: "Get warned before a shift assignment would push someone into overtime, and cap OT hours automatically." },
+        { title: "Automate last-minute fill workflows", detail: "When someone calls out, the system should automatically cascade through eligible staff until the shift is filled." },
+        { title: "Use analytics to optimize", detail: "Track fill rates, overtime %, and shift acceptance rates to find bottlenecks in your scheduling process." },
+      ]
+    },
+    communication: {
+      badge: "Communication Breakdown",
+      title: "Your Scheduling Communication Is Breaking Down",
+      summary: "Staff not knowing their schedules, last-minute changes going uncommunicated, and phone-tag to fill shifts — these are all signs of a communication breakdown. When staff can't see their schedules in real-time, everything cascades into no-shows and frustration.",
+      actions: [
+        { title: "Give staff a mobile app for schedules", detail: "Staff should see their schedule, accept shifts, swap with teammates, and get push notifications — all from their phone." },
+        { title: "Enable shift swapping with approval", detail: "Let staff post shifts they can't cover. Coworkers can claim them, and you approve with one tap — no phone calls needed." },
+        { title: "Set up automated reminders", detail: "Send staff a reminder 24 hours and 1 hour before each shift. This alone reduces no-shows by 30-50%." },
+        { title: "Create a single source of truth", detail: "Stop using texts, calls, and group chats for scheduling. One app = one schedule everyone trusts." },
+      ]
+    },
+    cost: {
+      badge: "Scheduling Is Bleeding Money",
+      title: "Your Scheduling Is Costing You a Fortune",
+      summary: "Between overtime, unfilled shifts, and the cost of replacing churned staff, your scheduling problems are hitting your bottom line hard. But these costs are largely avoidable with the right tools and processes.",
+      actions: [
+        { title: "Run the cost calculator", detail: "Get a precise dollar figure for your scheduling costs — then share it with your team. Awareness drives action." },
+        { title: "Cap overtime with alerts", detail: "Set automatic warnings before any assignment pushes a staff member into overtime. Senzii does this by default." },
+        { title: "Reduce unfilled shifts with auto-fill", detail: "When a shift opens up, an automated cascade contacts eligible staff instantly — filling shifts 3x faster." },
+        { title: "Cut turnover with better scheduling", detail: "Predictable schedules, fair shift distribution, and advance notice reduce turnover by up to 25%. This is a massive cost saver." },
+      ]
+    },
+    compliance: {
+      badge: "Compliance Risk",
+      title: "Your Scheduling Has Compliance Gaps",
+      summary: "Between labor law compliance, break requirements, and documentation gaps, your current scheduling process carries regulatory risk. This can lead to fines, lawsuits, or failed audits.",
+      actions: [
+        { title: "Automate break and rest compliance", detail: "Modern scheduling tools enforce break requirements, rest periods between shifts, and maximum hour rules automatically." },
+        { title: "Keep an audit trail of all changes", detail: "Every schedule change, shift swap, and approval should be logged with who, what, and when — for compliance and disputes." },
+        { title: "Enforce certification requirements", detail: "Only schedule staff with the right certifications for each shift. Prevents compliance violations and client issues." },
+        { title: "Generate compliance reports on demand", detail: "Be ready for any audit with one-click reports on hours worked, breaks taken, and certification status." },
+      ]
+    },
+  };
+
+  let currentQ = 0;
+  let answers = [];
+  let totalScores = { manual: 0, automation: 0, communication: 0, cost: 0, compliance: 0 };
+
+  function renderQuestion() {
+    const content = document.getElementById('quizContent');
+    if (currentQ >= questions.length) { showResult(); return; }
+
+    const q = questions[currentQ];
+    const progressPct = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPct + '%';
+    document.getElementById('progressLabel').textContent = `Question ${currentQ + 1} of ${questions.length}`;
+
+    let html = `<div class="quiz-question active" id="q${currentQ}">`;
+    html += `<div class="quiz-q-text">${q.q}</div><div class="quiz-answers">`;
+    q.answers.forEach((a, i) => {
+      const letter = String.fromCharCode(65 + i);
+      html += `<div class="quiz-answer" onclick="selectAnswer(${currentQ}, ${i})" data-q="${currentQ}" data-a="${i}">
+        <div class="quiz-answer-letter">${letter}</div>
+        <div class="quiz-answer-text">${a.text}</div>
+      </div>`;
+    });
+    html += `</div><div class="quiz-nav">`;
+    if (currentQ > 0) html += `<button class="quiz-btn quiz-btn-secondary" onclick="prevQuestion()">← Back</button>`;
+    else html += `<div></div>`;
+    html += `<button class="quiz-btn quiz-btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button></div></div>`;
+
+    content.innerHTML = html;
+  }
+
+  function selectAnswer(qIdx, aIdx) {
+    document.querySelectorAll(`.quiz-answer[data-q="${qIdx}"]`).forEach(a => a.classList.remove('selected'));
+    document.querySelector(`.quiz-answer[data-q="${qIdx}"][data-a="${aIdx}"]`).classList.add('selected');
+    answers[qIdx] = aIdx;
+    document.getElementById('nextBtn').disabled = false;
+    if (currentQ === questions.length - 1) document.getElementById('nextBtn').textContent = 'See Results →';
+  }
+
+  function nextQuestion() {
+    if (answers[currentQ] === undefined) return;
+    currentQ++;
+    renderQuestion();
+  }
+
+  function prevQuestion() {
+    if (currentQ > 0) { currentQ--; renderQuestion(); }
+  }
+
+  function showResult() {
+    // Calculate scores
+    totalScores = { manual: 0, automation: 0, communication: 0, cost: 0, compliance: 0 };
+    answers.forEach((aIdx, qIdx) => {
+      const scores = questions[qIdx].answers[aIdx].scores;
+      Object.keys(scores).forEach(k => { totalScores[k] += scores[k]; });
+    });
+
+    // Find top pain point
+    let topPain = 'manual';
+    let topScore = 0;
+    Object.keys(totalScores).forEach(k => {
+      if (totalScores[k] > topScore) { topScore = totalScores[k]; topPain = k; }
+    });
+
+    const profile = painProfiles[topPain];
+
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('progressLabel').textContent = 'Complete!';
+
+    let html = `<div class="quiz-result show">`;
+    html += `<div class="result-badge">${profile.badge}</div>`;
+    html += `<div class="result-title">${profile.title}</div>`;
+    html += `<div class="result-summary">${profile.summary}</div>`;
+
+    // Score bars
+    html += `<div class="result-scores"><h3>Your Pain Point Scores</h3>`;
+    const painLabels = { manual: 'Manual Overhead', automation: 'Lack of Automation', communication: 'Communication Gaps', cost: 'Financial Impact', compliance: 'Compliance Risk' };
+    const maxScore = Math.max(...Object.values(totalScores), 1);
+    Object.keys(totalScores).forEach(k => {
+      const pct = (totalScores[k] / maxScore) * 100;
+      let cls = 'low';
+      if (totalScores[k] >= maxScore * 0.7) cls = 'high';
+      else if (totalScores[k] >= maxScore * 0.4) cls = 'med';
+      html += `<div class="score-bar-row">
+        <div class="score-bar-label"><span>${painLabels[k]}</span><span>${totalScores[k]}/${maxScore}</span></div>
+        <div class="score-bar-bg"><div class="score-bar-fill ${cls}" style="width:${pct}%"></div></div>
+      </div>`;
+    });
+    html += `</div>`;
+
+    // Action plan
+    html += `<div class="result-actions"><h3>Your Personal Action Plan</h3><ol>`;
+    profile.actions.forEach(a => {
+      html += `<li><strong>${a.title}</strong> — ${a.detail}</li>`;
+    });
+    html += `</ol></div>`;
+
+    // Email capture
+    html += `<div class="email-capture">
+      <h3>📧 Get your full action plan + recommended tools</h3>
+      <p>We'll send your complete results, personalized tool recommendations, and a free scheduling audit checklist.</p>
+      <form class="email-form" id="emailForm" onsubmit="return captureEmail(event)">
+        <input type="email" id="emailInput" placeholder="your@work-email.com" required>
+        <button type="submit">Send My Plan</button>
+      </form>
+      <div class="email-success" id="emailSuccess">✓ Your action plan is on its way!</div>
+    </div>`;
+
+    html += `<div class="result-cta"><a href="/">Explore how Senzii fixes this →</a></div></div>`;
+
+    document.getElementById('quizContent').innerHTML = html;
+  }
+
+  function captureEmail(event) {
+    event.preventDefault();
+    const email = document.getElementById('emailInput').value;
+    const topPainPoint = Object.keys(totalScores).reduce((a, b) => totalScores[a] > totalScores[b] ? a : b);
+    const payload = {
+      email,
+      tool: 'pain-point-quiz',
+      pain_point: topPainPoint,
+      quiz_scores: totalScores,
+      extra_data: { scores: totalScores, timestamp: new Date().toISOString() }
+    };
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function(r) {
+      window.location.href = '/thank-you?tool=pain-point-quiz';
+    }).catch(function(e) {
+      try { localStorage.setItem('senzii_quiz_lead_' + Date.now(), JSON.stringify(payload)); } catch(e) {}
+      window.location.href = '/thank-you?tool=pain-point-quiz';
+    });
+    document.getElementById('emailForm').style.display = 'none';
+    document.getElementById('emailSuccess').classList.add('show');
+    return false;
+  }
+
+  renderQuestion();
+</script>
+
+<!-- ── More Free Tools ───────────────────────────────────── -->
+<section class="scenarios" style="border-top: 1px solid var(--border);">
+  <div class="section-inner">
+    <p class="section-eyebrow">Explore</p>
+    <h2 class="section-headline">More Free Scheduling Tools</h2>
+    <div class="scenarios-grid">
+      <a href="/cost-calculator" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <h3>Cost Calculator</h3>
+        <p>See how much bad scheduling is costing you — in overtime, no-shows, and turnover.</p>
+      </a>
+      <a href="/template-generator" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <h3>Template Generator</h3>
+        <p>Generate a ready-to-use weekly schedule template. Download as CSV.</p>
+      </a>
+      <a href="/coverage-analyzer" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <h3>Coverage Gap Analyzer</h3>
+        <p>Map your weekly shift coverage and instantly see where you're understaffed.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">
+        <svg class="footer-logo-mark" width="20" height="20" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="700" height="700" rx="155" fill="#16a34a"/>
+          <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+            <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+            <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+            <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+          </g>
+        </svg>
+        Senzii
+      </span>
+      <span class="footer-tagline">Intelligent workforce scheduling</span>
+    </div>
+    <div class="footer-links">
+      <a href="/#pricing">Pricing</a>
+      <a href="/compare">Compare</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/refunds">Refund Policy</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 REPL Made LLC. Built with &hearts;.</div>
+  </div>
+</footer>
+
+</body>
+</html>

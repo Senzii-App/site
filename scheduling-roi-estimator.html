@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scheduling ROI Estimator — Calculate Your Savings from Better Scheduling | Senzii</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description" content="Free interactive ROI calculator: estimate how much your business could save by implementing proper employee scheduling software. See projected reductions in overtime, no-shows, turnover, admin time, and compliance costs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/theme.20fbb461.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Scheduling ROI Estimator",
+    "description": "Estimate how much your business could save by implementing proper employee scheduling software. Projects savings across overtime, no-shows, turnover, admin time, and compliance costs with payback period analysis.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "publisher": { "@type": "Organization", "name": "Senzii", "url": "https://senzii.com" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "How does the scheduling ROI estimator calculate potential savings?", "acceptedAnswer": { "@type": "Answer", "text": "Enter your team size, hourly rate, current overtime percentage, no-show rate, annual turnover rate, weekly admin hours, and any compliance violation costs. The estimator uses industry research benchmarks to project how much each area could improve with proper scheduling software, then calculates monthly and annual savings with a payback period." } },
+      { "@type": "Question", "name": "What industry benchmarks does the estimator use?", "acceptedAnswer": { "@type": "Answer", "text": "The estimator references published industry research showing that automated scheduling tools typically reduce overtime by 20-40%, no-shows by 30-50%, turnover by 15-25%, scheduling admin time by 60-80%, and compliance violations by 70-90%. You can adjust the improvement rates to match your expectations." } },
+      { "@type": "Question", "name": "How is the payback period calculated?", "acceptedAnswer": { "@type": "Answer", "text": "The payback period divides the estimated monthly cost of scheduling software ($5 per employee per month) by the total monthly savings. For most teams of 10 or more, the payback period is under 1 month." } },
+      { "@type": "Question", "name": "Can I customize the improvement rates?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. After seeing the initial estimates, you can adjust the improvement sliders for each of the 5 savings categories to model conservative, moderate, or optimistic scenarios. The results update in real time." } },
+      { "@type": "Question", "name": "Can I export the ROI report?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The complete ROI breakdown, including current costs, projected savings, payback period, and 12-month projection, can be downloaded as a CSV file or printed directly as a business case document for decision-makers." } },
+      { "@type": "Question", "name": "Is this tool free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, completely free. Enter your email to receive your personalized ROI report with detailed breakdown. No signup required." } }
+    ]
+  }
+  </script>
+  <style>
+    .roi-hero { padding: 3rem 0 2rem; text-align: center; border-bottom: 1px solid var(--border); }
+    .roi-hero h1 { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; color: var(--text); letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .roi-hero p { font-size: 1.05rem; color: var(--text-muted); max-width: 620px; margin: 0 auto; }
+    .roi-container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+    .roi-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; }
+    .roi-section h2 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .roi-section .roi-subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+    .roi-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .roi-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+    @media (max-width: 700px) { .roi-grid-2, .roi-grid-3 { grid-template-columns: 1fr; } }
+    .roi-input-group { margin-bottom: 1.25rem; }
+    .roi-input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+    .roi-input-group .roi-hint { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.35rem; }
+    .roi-input-group input, .roi-input-group select { width: 100%; padding: 0.7rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--font-body); font-size: 1rem; transition: border-color 0.15s; }
+    .roi-input-group input:focus, .roi-input-group select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+    .roi-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 2rem; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-family: var(--font-body); font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+    .roi-btn:hover { background: #15803d; }
+    .roi-btn-secondary { background: var(--surface); color: var(--accent); border: 1px solid var(--accent); }
+    .roi-btn-secondary:hover { background: var(--accent-dim); }
+    .roi-results { display: none; }
+    .roi-results.active { display: block; }
+    .roi-hero-stat { text-align: center; padding: 2rem; background: linear-gradient(135deg, var(--accent-dim), rgba(22,163,74,0.03)); border-radius: 12px; margin-bottom: 1.5rem; }
+    .roi-hero-stat .roi-hero-label { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.3rem; }
+    .roi-hero-stat .roi-hero-value { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
+    .roi-hero-stat .roi-hero-sub { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem; }
+    .roi-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .roi-stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; text-align: center; }
+    .roi-stat-card .roi-stat-value { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+    .roi-stat-card .roi-stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+    .roi-savings-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    .roi-savings-table th { text-align: left; padding: 0.75rem 1rem; background: var(--surface2); font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 2px solid var(--border); }
+    .roi-savings-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    .roi-savings-table td.roi-amount { font-weight: 700; color: var(--accent); text-align: right; }
+    .roi-savings-table tr:last-child td { border-bottom: none; }
+    .roi-savings-table tfoot td { font-weight: 800; font-size: 1.1rem; border-top: 2px solid var(--border); padding-top: 1rem; }
+    .roi-bar-chart { margin-bottom: 1.5rem; }
+    .roi-bar-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+    .roi-bar-label { width: 180px; font-size: 0.85rem; font-weight: 600; color: var(--text); flex-shrink: 0; }
+    .roi-bar-track { flex: 1; height: 28px; background: var(--surface2); border-radius: 6px; position: relative; overflow: hidden; }
+    .roi-bar-fill { height: 100%; border-radius: 6px; transition: width 0.6s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 0.5rem; font-size: 0.78rem; font-weight: 700; color: #fff; }
+    .roi-bar-fill.green { background: linear-gradient(90deg, #16a34a, #22c55e); }
+    .roi-bar-fill.amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+    .roi-bar-fill.red { background: linear-gradient(90deg, #dc2626, #ef4444); }
+    .roi-slider-row { margin-bottom: 1rem; }
+    .roi-slider-row .roi-slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem; }
+    .roi-slider-row .roi-slider-label { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    .roi-slider-row .roi-slider-value { font-size: 0.85rem; font-weight: 700; color: var(--accent); }
+    .roi-slider-row input[type="range"] { width: 100%; height: 6px; background: var(--surface2); border-radius: 3px; -webkit-appearance: none; appearance: none; outline: none; }
+    .roi-slider-row input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    .roi-slider-row input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    .roi-payback { text-align: center; padding: 1.5rem; background: linear-gradient(135deg, rgba(22,163,74,0.06), rgba(22,163,74,0.02)); border-radius: 12px; margin-bottom: 1.5rem; }
+    .roi-payback .roi-payback-value { font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: var(--accent); }
+    .roi-payback .roi-payback-label { font-size: 0.9rem; color: var(--text-muted); }
+    .roi-projection-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    .roi-projection-table th { text-align: left; padding: 0.6rem 1rem; background: var(--surface2); font-size: 0.8rem; font-weight: 700; color: var(--text-muted); border-bottom: 2px solid var(--border); }
+    .roi-projection-table td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    .roi-projection-table td.roi-amount { font-weight: 700; color: var(--accent); text-align: right; }
+    .roi-projection-table tfoot td { font-weight: 800; border-top: 2px solid var(--border); padding-top: 0.8rem; }
+    .roi-alert { padding: 1rem 1.25rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; }
+    .roi-alert-success { background: var(--accent-dim); border-left: 4px solid var(--accent); color: var(--text); }
+    .roi-alert-info { background: rgba(59,130,246,0.08); border-left: 4px solid #3b82f6; color: var(--text); }
+    .roi-alert-warning { background: rgba(245,158,11,0.08); border-left: 4px solid #f59e0b; color: var(--text); }
+    .roi-email-capture { background: linear-gradient(135deg, var(--accent-dim), rgba(22,163,74,0.03)); border: 1px solid var(--accent); border-radius: 12px; padding: 2rem; text-align: center; margin: 2rem 0; }
+    .roi-email-capture h3 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .roi-email-capture p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+    .roi-email-form { display: flex; gap: 0.75rem; max-width: 400px; margin: 0 auto; }
+    .roi-email-form input { flex: 1; padding: 0.7rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; }
+    @media (max-width: 500px) { .roi-email-form { flex-direction: column; } }
+    .tools-grid-section { padding: 3rem 0; border-top: 1px solid var(--border); }
+    .tools-grid-section h2 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: var(--text); text-align: center; margin-bottom: 0.5rem; }
+    .tools-grid-section .tools-subtitle { text-align: center; font-size: 0.95rem; color: var(--text-muted); margin-bottom: 2rem; }
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
+    .tool-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; text-decoration: none; color: var(--text); transition: border-color 0.15s, box-shadow 0.15s; }
+    .tool-card:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .tool-card .tool-card-title { font-size: 0.9rem; font-weight: 700; color: var(--accent); margin-bottom: 0.3rem; }
+    .tool-card .tool-card-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+    .related-solutions { padding: 2rem; max-width: 900px; margin: 0 auto; }
+    .related-solutions h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; }
+    .related-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+    .related-link { display: block; padding: 0.6rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; color: var(--text); text-decoration: none; transition: border-color 0.15s; }
+    .related-link:hover { border-color: var(--accent); color: var(--accent); }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-left">
+      <span class="nav-logo"><span class="nav-logo-mark"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#16a34a"/><path d="M8 14l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Senzii</span>
+      <span class="nav-tagline">$5/seat scheduling</span>
+    </a>
+    <a href="/cost-calculator" class="nav-sign-in">Get Started</a>
+  </div>
+</nav>
+
+<section class="roi-hero">
+  <h1>Scheduling ROI Estimator</h1>
+  <p>See how much your business could save by switching from spreadsheets to proper scheduling software. Get a board-ready business case in 2 minutes.</p>
+</section>
+
+<div class="roi-container">
+  <div class="roi-section" id="roi-input-section">
+    <h2>Tell us about your team</h2>
+    <p class="roi-subtitle">Enter your current numbers. The estimator uses industry benchmarks to project your potential savings.</p>
+    <div class="roi-grid-2">
+      <div class="roi-input-group"><label for="roi-industry">Industry</label><select id="roi-industry">
+        <option value="generic">General / Other</option><option value="home_healthcare">Home Healthcare</option><option value="restaurant">Restaurant</option><option value="retail">Retail</option><option value="construction">Construction</option><option value="manufacturing">Manufacturing</option><option value="hospitality">Hospitality / Hotel</option><option value="healthcare">Healthcare / Hospital</option><option value="call_center">Call Center</option><option value="security">Security</option><option value="warehouse">Warehouse / Logistics</option><option value="gym">Fitness / Gym</option><option value="salon">Salon / Spa</option><option value="cleaning">Cleaning Service</option></select></div>
+      <div class="roi-input-group"><label for="roi-team-size">Number of employees</label><input type="number" id="roi-team-size" value="25" min="1" max="5000"></div>
+    </div>
+    <div class="roi-grid-2">
+      <div class="roi-input-group"><label for="roi-hourly-rate">Average hourly rate ($)</label><input type="number" id="roi-hourly-rate" value="18" min="7.25" max="200" step="0.50"></div>
+      <div class="roi-input-group"><label for="roi-weekly-hours">Average hours per employee per week</label><input type="number" id="roi-weekly-hours" value="35" min="1" max="80"></div>
+    </div>
+    <div class="roi-grid-3">
+      <div class="roi-input-group"><label for="roi-overtime-pct">Overtime as % of total payroll</label><div class="roi-hint">Typical: 5-15%. Industry avg: 8%</div><input type="number" id="roi-overtime-pct" value="10" min="0" max="50" step="0.5"></div>
+      <div class="roi-input-group"><label for="roi-noshow-rate">No-show rate (%)</label><div class="roi-hint">Typical: 2-8%. Healthcare: 5-12%</div><input type="number" id="roi-noshow-rate" value="5" min="0" max="30" step="0.5"></div>
+      <div class="roi-input-group"><label for="roi-turnover-rate">Annual turnover rate (%)</label><div class="roi-hint">Typical: 30-80%. Healthcare: 40-60%</div><input type="number" id="roi-turnover-rate" value="45" min="0" max="200" step="1"></div>
+    </div>
+    <div class="roi-grid-2">
+      <div class="roi-input-group"><label for="roi-admin-hours">Hours/week spent on scheduling admin</label><div class="roi-hint">Spreadsheets, calls, texts, fixing conflicts</div><input type="number" id="roi-admin-hours" value="12" min="0" max="80" step="0.5"></div>
+      <div class="roi-input-group"><label for="roi-compliance-cost">Annual compliance violation costs ($)</label><div class="roi-hint">Fines, lawsuits, back pay, settlements</div><input type="number" id="roi-compliance-cost" value="2000" min="0" max="500000" step="100"></div>
+    </div>
+    <div style="text-align:center; margin-top:1.5rem;"><button class="roi-btn" onclick="roiCalculate()">Calculate My ROI →</button></div>
+  </div>
+
+  <div class="roi-results" id="roi-results">
+    <div class="roi-hero-stat">
+      <div class="roi-hero-label">Estimated Annual Savings</div>
+      <div class="roi-hero-value" id="roi-annual-savings">$0</div>
+      <div class="roi-hero-sub" id="roi-monthly-savings-sub">$0/month saved with better scheduling</div>
+    </div>
+    <div class="roi-stat-grid">
+      <div class="roi-stat-card"><div class="roi-stat-value" id="roi-stat-ot">$0</div><div class="roi-stat-label">Overtime Savings</div></div>
+      <div class="roi-stat-card"><div class="roi-stat-value" id="roi-stat-noshow">$0</div><div class="roi-stat-label">No-Show Savings</div></div>
+      <div class="roi-stat-card"><div class="roi-stat-value" id="roi-stat-turnover">$0</div><div class="roi-stat-label">Turnover Savings</div></div>
+      <div class="roi-stat-card"><div class="roi-stat-value" id="roi-stat-admin">$0</div><div class="roi-stat-label">Admin Time Savings</div></div>
+      <div class="roi-stat-card"><div class="roi-stat-value" id="roi-stat-compliance">$0</div><div class="roi-stat-label">Compliance Savings</div></div>
+    </div>
+    <div class="roi-section"><h2>Savings Breakdown</h2><p class="roi-subtitle">Where your money is leaking — and how much scheduling software can recover.</p><div class="roi-bar-chart" id="roi-bar-chart"></div></div>
+    <div class="roi-section"><h2>Detailed Business Case</h2><p class="roi-subtitle">Current costs vs. projected costs after implementing scheduling software.</p><table class="roi-savings-table" id="roi-detail-table"></table></div>
+    <div class="roi-section">
+      <h2>Adjust Your Scenario</h2>
+      <p class="roi-subtitle">Not sure about the improvement rates? Adjust the sliders to model conservative, moderate, or optimistic outcomes.</p>
+      <div class="roi-slider-row"><div class="roi-slider-header"><span class="roi-slider-label">Overtime reduction</span><span class="roi-slider-value" id="roi-slider-ot-val">25%</span></div><input type="range" id="roi-slider-ot" min="10" max="50" value="25" oninput="roiSliderUpdate()"></div>
+      <div class="roi-slider-row"><div class="roi-slider-header"><span class="roi-slider-label">No-show reduction</span><span class="roi-slider-value" id="roi-slider-noshow-val">35%</span></div><input type="range" id="roi-slider-noshow" min="15" max="60" value="35" oninput="roiSliderUpdate()"></div>
+      <div class="roi-slider-row"><div class="roi-slider-header"><span class="roi-slider-label">Turnover reduction</span><span class="roi-slider-value" id="roi-slider-turnover-val">20%</span></div><input type="range" id="roi-slider-turnover" min="5" max="40" value="20" oninput="roiSliderUpdate()"></div>
+      <div class="roi-slider-row"><div class="roi-slider-header"><span class="roi-slider-label">Admin time reduction</span><span class="roi-slider-value" id="roi-slider-admin-val">70%</span></div><input type="range" id="roi-slider-admin" min="30" max="90" value="70" oninput="roiSliderUpdate()"></div>
+      <div class="roi-slider-row"><div class="roi-slider-header"><span class="roi-slider-label">Compliance violation reduction</span><span class="roi-slider-value" id="roi-slider-compliance-val">80%</span></div><input type="range" id="roi-slider-compliance" min="30" max="95" value="80" oninput="roiSliderUpdate()"></div>
+    </div>
+    <div class="roi-payback" id="roi-payback-section"></div>
+    <div class="roi-section"><h2>12-Month Projection</h2><p class="roi-subtitle">Cumulative savings over the first year, accounting for $5/seat/month software cost.</p><table class="roi-projection-table" id="roi-projection-table"></table></div>
+    <div id="roi-alerts"></div>
+    <div style="text-align:center; margin: 1.5rem 0;">
+      <button class="roi-btn roi-btn-secondary" onclick="roiExportCSV()" style="margin-right:0.5rem;">Export CSV</button>
+      <button class="roi-btn roi-btn-secondary" onclick="window.print()">Print Business Case</button>
+    </div>
+    <div class="roi-email-capture">
+      <h3>Get your personalized ROI report</h3>
+      <p>Enter your email to save your results and receive scheduling optimization tips tailored to your industry.</p>
+      <form class="roi-email-form" onsubmit="roiSubmitEmail(event)">
+        <input type="email" id="roi-email" placeholder="you@company.com" required>
+        <button type="submit" class="roi-btn">Get Report</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="related-solutions">
+    <h3>Related Solutions</h3>
+    <div class="related-links">
+      <a href="/#pricing" class="related-link">Pricing - $5/seat</a>
+      <a href="/compare" class="related-link">Compare vs Competitors</a>
+      <a href="/cost-calculator" class="related-link">Cost Calculator</a>
+      <a href="/overtime-calculator" class="related-link">Overtime Calculator</a>
+      <a href="/no-show-impact-calculator" class="related-link">No-Show Impact</a>
+      <a href="/turnover-risk-predictor" class="related-link">Turnover Risk Predictor</a>
+      <a href="/labor-cost-benchmarker" class="related-link">Labor Cost Benchmarker</a>
+      <a href="/scheduling-scorecard" class="related-link">Scheduling Scorecard</a>
+      <a href="/scheduling-maturity-assessment" class="related-link">Maturity Assessment</a>
+      <a href="/faq" class="related-link">FAQ</a>
+      <a href="/alternatives" class="related-link">Alternatives</a>
+    </div>
+  </div>
+</div>
+
+<!-- More Free Scheduling Tools -->
+<section class="tools-grid-section">
+  <h2>More Free Scheduling Tools</h2>
+  <p class="tools-subtitle">29 free interactive tools to optimize your workforce scheduling. No signup required.</p>
+  <div class="tools-grid">
+<a href="/cost-calculator" class="tool-card"><strong>Cost Calculator</strong><span>Free tool →</span></a>
+<a href="/scheduling-quiz" class="tool-card"><strong>Pain Point Quiz</strong><span>Free tool →</span></a>
+<a href="/template-generator" class="tool-card"><strong>Template Generator</strong><span>Free tool →</span></a>
+<a href="/coverage-analyzer" class="tool-card"><strong>Coverage Gap Analyzer</strong><span>Free tool →</span></a>
+</div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">
+        <svg class="footer-logo-mark" width="20" height="20" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="700" height="700" rx="155" fill="#16a34a"/>
+          <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+            <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+            <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+            <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+          </g>
+        </svg>
+        Senzii
+      </span>
+      <span class="footer-tagline">Intelligent workforce scheduling</span>
+    </div>
+    <div class="footer-links">
+      <a href="/#pricing">Pricing</a>
+      <a href="/compare">Compare</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/refunds">Refund Policy</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 REPL Made LLC. Built with &hearts;.</div>
+  </div>
+</footer>
+
+<script>
+var INDUSTRY_BENCHMARKS = {
+  home_healthcare: { otReduction: 30, noshowReduction: 45, turnoverReduction: 25, adminReduction: 75, complianceReduction: 85, replacementCost: 3500, avgRevenuePerHour: 45 },
+  restaurant: { otReduction: 25, noshowReduction: 40, turnoverReduction: 20, adminReduction: 65, complianceReduction: 70, replacementCost: 1500, avgRevenuePerHour: 25 },
+  retail: { otReduction: 20, noshowReduction: 35, turnoverReduction: 18, adminReduction: 70, complianceReduction: 75, replacementCost: 2000, avgRevenuePerHour: 22 },
+  construction: { otReduction: 35, noshowReduction: 30, turnoverReduction: 15, adminReduction: 60, complianceReduction: 80, replacementCost: 4000, avgRevenuePerHour: 55 },
+  manufacturing: { otReduction: 30, noshowReduction: 25, turnoverReduction: 18, adminReduction: 65, complianceReduction: 85, replacementCost: 3000, avgRevenuePerHour: 40 },
+  hospitality: { otReduction: 25, noshowReduction: 35, turnoverReduction: 22, adminReduction: 70, complianceReduction: 75, replacementCost: 1800, avgRevenuePerHour: 30 },
+  healthcare: { otReduction: 28, noshowReduction: 40, turnoverReduction: 22, adminReduction: 72, complianceReduction: 88, replacementCost: 4500, avgRevenuePerHour: 50 },
+  call_center: { otReduction: 22, noshowReduction: 38, turnoverReduction: 20, adminReduction: 78, complianceReduction: 80, replacementCost: 2500, avgRevenuePerHour: 28 },
+  security: { otReduction: 30, noshowReduction: 28, turnoverReduction: 18, adminReduction: 62, complianceReduction: 82, replacementCost: 2200, avgRevenuePerHour: 20 },
+  warehouse: { otReduction: 28, noshowReduction: 30, turnoverReduction: 18, adminReduction: 68, complianceReduction: 78, replacementCost: 2800, avgRevenuePerHour: 32 },
+  gym: { otReduction: 20, noshowReduction: 35, turnoverReduction: 22, adminReduction: 72, complianceReduction: 70, replacementCost: 1600, avgRevenuePerHour: 24 },
+  salon: { otReduction: 18, noshowReduction: 32, turnoverReduction: 20, adminReduction: 70, complianceReduction: 72, replacementCost: 1400, avgRevenuePerHour: 35 },
+  cleaning: { otReduction: 25, noshowReduction: 30, turnoverReduction: 18, adminReduction: 65, complianceReduction: 75, replacementCost: 1800, avgRevenuePerHour: 28 },
+  generic: { otReduction: 25, noshowReduction: 35, turnoverReduction: 20, adminReduction: 70, complianceReduction: 80, replacementCost: 2500, avgRevenuePerHour: 30 }
+};
+
+var INDUSTRY_RECS = {
+  home_healthcare: ["Use GPS check-in to verify caregiver arrivals and reduce no-shows by 40%+", "Implement caregiver-client matching to improve retention and reduce turnover costs", "Use automated compliance alerts for labor law violations", "Track visit verification to prevent missed-visit penalties from payers"],
+  restaurant: ["Use shift trading to let staff swap shifts without manager bottleneck", "Set up station-aware scheduling (FOH/BOH) to avoid understaffing key roles", "Implement weather-triggered adjustments for outdoor/patio staffing", "Use sales forecast integration to match staffing to predicted demand"],
+  retail: ["Implement predictive scheduling to comply with fair scheduling laws", "Use seasonal surge planning with提前 hiring recommendations", "Set up cross-training tracking to ensure coverage flexibility", "Use foot traffic data to optimize shift start/end times"],
+  construction: ["Use weather-triggered schedule adjustments to avoid wasted mobilization costs", "Implement crew-based scheduling with certifications tracking", "Track prevailing wage compliance automatically", "Use project-phase scheduling to match crew size to construction timeline"],
+  generic: ["Start with automated shift generation to cut admin time by 60%+", "Implement shift trading to reduce no-shows and improve employee satisfaction", "Use compliance alerts to catch labor law violations before they become fines", "Track scheduling fairness to reduce turnover from inequitable assignments"]
+};
+
+var roiResult = null;
+
+function roiCalculate() {
+  var industry = document.getElementById("roi-industry").value;
+  var teamSize = parseFloat(document.getElementById("roi-team-size").value) || 25;
+  var hourlyRate = parseFloat(document.getElementById("roi-hourly-rate").value) || 18;
+  var weeklyHours = parseFloat(document.getElementById("roi-weekly-hours").value) || 35;
+  var overtimePct = parseFloat(document.getElementById("roi-overtime-pct").value) || 0;
+  var noshowRate = parseFloat(document.getElementById("roi-noshow-rate").value) || 0;
+  var turnoverRate = parseFloat(document.getElementById("roi-turnover-rate").value) || 0;
+  var adminHours = parseFloat(document.getElementById("roi-admin-hours").value) || 0;
+  var complianceCost = parseFloat(document.getElementById("roi-compliance-cost").value) || 0;
+
+  var bench = INDUSTRY_BENCHMARKS[industry] || INDUSTRY_BENCHMARKS.generic;
+
+  // Set sliders to industry defaults
+  document.getElementById("roi-slider-ot").value = bench.otReduction;
+  document.getElementById("roi-slider-noshow").value = bench.noshowReduction;
+  document.getElementById("roi-slider-turnover").value = bench.turnoverReduction;
+  document.getElementById("roi-slider-admin").value = bench.adminReduction;
+  document.getElementById("roi-slider-compliance").value = bench.complianceReduction;
+
+  roiCompute(bench, teamSize, hourlyRate, weeklyHours, overtimePct, noshowRate, turnoverRate, adminHours, complianceCost, industry);
+}
+
+function roiSliderUpdate() {
+  if (!roiResult) return;
+  var otReduction = parseFloat(document.getElementById("roi-slider-ot").value);
+  var noshowReduction = parseFloat(document.getElementById("roi-slider-noshow").value);
+  var turnoverReduction = parseFloat(document.getElementById("roi-slider-turnover").value);
+  var adminReduction = parseFloat(document.getElementById("roi-slider-admin").value);
+  var complianceReduction = parseFloat(document.getElementById("roi-slider-compliance").value);
+
+  document.getElementById("roi-slider-ot-val").textContent = otReduction + "%";
+  document.getElementById("roi-slider-noshow-val").textContent = noshowReduction + "%";
+  document.getElementById("roi-slider-turnover-val").textContent = turnoverReduction + "%";
+  document.getElementById("roi-slider-admin-val").textContent = adminReduction + "%";
+  document.getElementById("roi-slider-compliance-val").textContent = complianceReduction + "%";
+
+  var r = roiResult;
+  var otSavings = r.currentOTCost * otReduction / 100;
+  var noshowSavings = r.currentNoShowCost * noshowReduction / 100;
+  var turnoverSavings = r.currentTurnoverCost * turnoverReduction / 100;
+  var adminSavings = r.currentAdminCost * adminReduction / 100;
+  var complianceSavings = r.currentComplianceCost * complianceReduction / 100;
+
+  var totalAnnual = otSavings + noshowSavings + turnoverSavings + adminSavings + complianceSavings;
+  var totalMonthly = totalAnnual / 12;
+  var softwareMonthlyCost = r.teamSize * 5;
+  var netMonthly = totalMonthly - softwareMonthlyCost;
+  var paybackDays = netMonthly > 0 ? Math.ceil((softwareMonthlyCost / netMonthly) * 30) : 999;
+
+  // Update hero stat
+  document.getElementById("roi-annual-savings").textContent = "$" + Math.round(totalAnnual).toLocaleString();
+  document.getElementById("roi-monthly-savings-sub").textContent = "$" + Math.round(totalMonthly).toLocaleString() + "/month saved with better scheduling";
+
+  // Update stat cards
+  document.getElementById("roi-stat-ot").textContent = "$" + Math.round(otSavings).toLocaleString();
+  document.getElementById("roi-stat-noshow").textContent = "$" + Math.round(noshowSavings).toLocaleString();
+  document.getElementById("roi-stat-turnover").textContent = "$" + Math.round(turnoverSavings).toLocaleString();
+  document.getElementById("roi-stat-admin").textContent = "$" + Math.round(adminSavings).toLocaleString();
+  document.getElementById("roi-stat-compliance").textContent = "$" + Math.round(complianceSavings).toLocaleString();
+
+  // Update bar chart
+  var maxSavings = Math.max(otSavings, noshowSavings, turnoverSavings, adminSavings, complianceSavings, 1);
+  var bars = [
+    { label: "Overtime", value: otSavings, pct: (otSavings / maxSavings * 100) },
+    { label: "No-Shows", value: noshowSavings, pct: (noshowSavings / maxSavings * 100) },
+    { label: "Turnover", value: turnoverSavings, pct: (turnoverSavings / maxSavings * 100) },
+    { label: "Admin Time", value: adminSavings, pct: (adminSavings / maxSavings * 100) },
+    { label: "Compliance", value: complianceSavings, pct: (complianceSavings / maxSavings * 100) }
+  ];
+  var chartHtml = "";
+  bars.forEach(function(b) {
+    var color = b.value > maxSavings * 0.6 ? "green" : b.value > maxSavings * 0.3 ? "amber" : "red";
+    chartHtml += '<div class="roi-bar-row"><div class="roi-bar-label">' + b.label + '</div><div class="roi-bar-track"><div class="roi-bar-fill ' + color + '" style="width:' + b.pct + '%;">$' + Math.round(b.value).toLocaleString() + '</div></div></div>';
+  });
+  document.getElementById("roi-bar-chart").innerHTML = chartHtml;
+
+  // Update detail table
+  var detailHtml = "<thead><tr><th>Category</th><th>Current Annual Cost</th><th>Reduction</th><th style='text-align:right;'>Annual Savings</th></tr></thead><tbody>";
+  detailHtml += "<tr><td>Overtime</td><td>$" + Math.round(r.currentOTCost).toLocaleString() + "</td><td>" + otReduction + "%</td><td class='roi-amount'>$" + Math.round(otSavings).toLocaleString() + "</td></tr>";
+  detailHtml += "<tr><td>No-shows</td><td>$" + Math.round(r.currentNoShowCost).toLocaleString() + "</td><td>" + noshowReduction + "%</td><td class='roi-amount'>$" + Math.round(noshowSavings).toLocaleString() + "</td></tr>";
+  detailHtml += "<tr><td>Turnover</td><td>$" + Math.round(r.currentTurnoverCost).toLocaleString() + "</td><td>" + turnoverReduction + "%</td><td class='roi-amount'>$" + Math.round(turnoverSavings).toLocaleString() + "</td></tr>";
+  detailHtml += "<tr><td>Admin time</td><td>$" + Math.round(r.currentAdminCost).toLocaleString() + "</td><td>" + adminReduction + "%</td><td class='roi-amount'>$" + Math.round(adminSavings).toLocaleString() + "</td></tr>";
+  detailHtml += "<tr><td>Compliance</td><td>$" + Math.round(r.currentComplianceCost).toLocaleString() + "</td><td>" + complianceReduction + "%</td><td class='roi-amount'>$" + Math.round(complianceSavings).toLocaleString() + "</td></tr>";
+  detailHtml += "</tbody><tfoot><tr><td colspan='3'>Total Annual Savings</td><td class='roi-amount'>$" + Math.round(totalAnnual).toLocaleString() + "</td></tr></tfoot>";
+  document.getElementById("roi-detail-table").innerHTML = detailHtml;
+
+  // Update payback
+  var paybackHtml = "";
+  if (paybackDays <= 30) {
+    paybackHtml = '<div class="roi-payback-value">' + paybackDays + ' days</div><div class="roi-payback-label">Payback period — software pays for itself in under a month</div>';
+  } else if (paybackDays <= 90) {
+    paybackHtml = '<div class="roi-payback-value">' + Math.round(paybackDays) + ' days</div><div class="roi-payback-label">Payback period — software pays for itself in ' + Math.ceil(paybackDays/30) + ' months</div>';
+  } else {
+    paybackHtml = '<div class="roi-payback-value">' + Math.ceil(paybackDays/30) + ' months</div><div class="roi-payback-label">Payback period — software pays for itself in ' + Math.ceil(paybackDays/30) + ' months</div>';
+  }
+  document.getElementById("roi-payback-section").innerHTML = paybackHtml;
+
+  // Update 12-month projection
+  var projHtml = "<thead><tr><th>Month</th><th>Gross Savings</th><th>Software Cost</th><th style='text-align:right;'>Net Savings</th><th style='text-align:right;'>Cumulative</th></tr></thead><tbody>";
+  var cumulative = 0;
+  for (var m = 1; m <= 12; m++) {
+    cumulative += netMonthly;
+    projHtml += "<tr><td>Month " + m + "</td><td>$" + Math.round(totalMonthly).toLocaleString() + "</td><td>$" + softwareMonthlyCost.toLocaleString() + "</td><td class='roi-amount'>$" + Math.round(netMonthly).toLocaleString() + "</td><td class='roi-amount'>$" + Math.round(cumulative).toLocaleString() + "</td></tr>";
+  }
+  projHtml += "</tbody><tfoot><tr><td colspan='4'>Year 1 Total Net Savings</td><td class='roi-amount'>$" + Math.round(cumulative).toLocaleString() + "</td></tr></tfoot>";
+  document.getElementById("roi-projection-table").innerHTML = projHtml;
+
+  // Update alerts
+  var alertsHtml = "";
+  if (totalAnnual > 50000) {
+    alertsHtml += '<div class="roi-alert roi-alert-success"><strong>High-impact opportunity:</strong> Your estimated annual savings exceed $50,000. Implementing scheduling software should be a priority initiative.</div>';
+  } else if (totalAnnual > 10000) {
+    alertsHtml += '<div class="roi-alert roi-alert-info"><strong>Meaningful savings:</strong> Your estimated annual savings of $' + Math.round(totalAnnual).toLocaleString() + ' represent a strong return on a $' + softwareMonthlyCost + '/month investment.</div>';
+  } else {
+    alertsHtml += '<div class="roi-alert roi-alert-warning"><strong>Moderate savings:</strong> Your current scheduling costs are relatively low. Consider focusing on the highest-impact category above first.</div>';
+  }
+  if (r.currentOTCost > r.currentNoShowCost && r.currentOTCost > r.currentTurnoverCost) {
+    alertsHtml += '<div class="roi-alert roi-alert-info"><strong>Biggest leak: Overtime.</strong> Use the <a href="/overtime-calculator">Overtime Calculator</a> to drill into specific overtime drivers, or the <a href="/shift-pattern-optimizer">Shift Pattern Optimizer</a> to find a pattern that reduces OT exposure.</div>';
+  } else if (r.currentNoShowCost > r.currentTurnoverCost) {
+    alertsHtml += '<div class="roi-alert roi-alert-info"><strong>Biggest leak: No-shows.</strong> Use the <a href="/no-show-impact-calculator">No-Show Impact Calculator</a> for a detailed breakdown, or implement shift trading with the <a href="/shift-swap-manager">Shift Swap Manager</a>.</div>';
+  } else {
+    alertsHtml += '<div class="roi-alert roi-alert-info"><strong>Biggest leak: Turnover.</strong> Use the <a href="/turnover-risk-predictor">Turnover Risk Predictor</a> to identify at-risk employees, or the <a href="/schedule-fairness-auditor">Schedule Fairness Auditor</a> to check if unfair scheduling is driving people away.</div>';
+  }
+  alertsHtml += '<div class="roi-alert roi-alert-success"><strong>Next steps:</strong> Run the <a href="/scheduling-maturity-assessment">Scheduling Maturity Assessment</a> to see where your scheduling process stands today, then use the <a href="/scheduling-scorecard">Scheduling Scorecard</a> for a detailed 8-dimension efficiency score.</div>';
+  document.getElementById("roi-alerts").innerHTML = alertsHtml;
+
+  // Store updated result
+  roiResult.otSavings = otSavings;
+  roiResult.noshowSavings = noshowSavings;
+  roiResult.turnoverSavings = turnoverSavings;
+  roiResult.adminSavings = adminSavings;
+  roiResult.complianceSavings = complianceSavings;
+  roiResult.totalAnnual = totalAnnual;
+  roiResult.totalMonthly = totalMonthly;
+  roiResult.softwareMonthlyCost = softwareMonthlyCost;
+  roiResult.netMonthly = netMonthly;
+  roiResult.paybackDays = paybackDays;
+}
+
+function roiCompute(bench, teamSize, hourlyRate, weeklyHours, overtimePct, noshowRate, turnoverRate, adminHours, complianceCost, industry) {
+  // Current annual costs
+  var annualPayroll = teamSize * hourlyRate * weeklyHours * 52;
+  var currentOTCost = annualPayroll * overtimePct / 100 * 0.5; // OT premium is 0.5x on the OT portion
+  var bench2 = INDUSTRY_BENCHMARKS[industry] || INDUSTRY_BENCHMARKS.generic;
+
+  // No-show cost: lost revenue + replacement cost
+  var annualShifts = teamSize * weeklyHours / 8 * 52; // approximate 8-hour shifts
+  var noshowShifts = annualShifts * noshowRate / 100;
+  var currentNoShowCost = noshowShifts * (hourlyRate * 8 * 1.5 + bench2.avgRevenuePerHour * 4); // OT replacement + lost revenue
+
+  // Turnover cost: replacement cost per employee who leaves
+  var annualDepartures = teamSize * turnoverRate / 100;
+  var currentTurnoverCost = annualDepartures * bench2.replacementCost;
+
+  // Admin cost: hours * rate * 52 (assume admin done by manager at ~1.5x hourly)
+  var currentAdminCost = adminHours * hourlyRate * 1.5 * 52;
+
+  // Compliance cost (direct input)
+  var currentComplianceCost = complianceCost;
+
+  roiResult = {
+    teamSize: teamSize, hourlyRate: hourlyRate, weeklyHours: weeklyHours,
+    currentOTCost: currentOTCost, currentNoShowCost: currentNoShowCost,
+    currentTurnoverCost: currentTurnoverCost, currentAdminCost: currentAdminCost,
+    currentComplianceCost: currentComplianceCost, industry: industry
+  };
+
+  // Show results
+  document.getElementById("roi-input-section").style.display = "none";
+  document.getElementById("roi-results").classList.add("active");
+  document.getElementById("roi-results").scrollIntoView({ behavior: "smooth" });
+
+  // Run initial calculation with industry defaults
+  roiSliderUpdate();
+}
+
+function roiExportCSV() {
+  if (!roiResult) return;
+  var r = roiResult;
+  var csv = "Scheduling ROI Report\n\n";
+  csv += "Team Size," + r.teamSize + "\n";
+  csv += "Hourly Rate,$" + r.hourlyRate + "\n";
+  csv += "Weekly Hours," + r.weeklyHours + "\n\n";
+
+  csv += "Category,Current Annual Cost,Reduction %,Annual Savings\n";
+  csv += "Overtime,$" + Math.round(r.currentOTCost) + "," + document.getElementById("roi-slider-ot").value + "%,$" + Math.round(r.otSavings || 0) + "\n";
+  csv += "No-shows,$" + Math.round(r.currentNoShowCost) + "," + document.getElementById("roi-slider-noshow").value + "%,$" + Math.round(r.noshowSavings || 0) + "\n";
+  csv += "Turnover,$" + Math.round(r.currentTurnoverCost) + "," + document.getElementById("roi-slider-turnover").value + "%,$" + Math.round(r.turnoverSavings || 0) + "\n";
+  csv += "Admin Time,$" + Math.round(r.currentAdminCost) + "," + document.getElementById("roi-slider-admin").value + "%,$" + Math.round(r.adminSavings || 0) + "\n";
+  csv += "Compliance,$" + Math.round(r.currentComplianceCost) + "," + document.getElementById("roi-slider-compliance").value + "%,$" + Math.round(r.complianceSavings || 0) + "\n";
+  csv += "\nTotal Annual Savings,$" + Math.round(r.totalAnnual || 0) + "\n";
+  csv += "Monthly Savings,$" + Math.round(r.totalMonthly || 0) + "\n";
+  csv += "Software Cost (Monthly),$" + r.softwareMonthlyCost + "\n";
+  csv += "Net Monthly Savings,$" + Math.round(r.netMonthly || 0) + "\n";
+  csv += "Payback Period (days)," + r.paybackDays + "\n";
+  csv += "\n12-Month Projection\nMonth,Gross Savings,Software Cost,Net Savings,Cumulative\n";
+
+  for (var m = 1; m <= 12; m++) {
+    var net = r.netMonthly || 0;
+    var cum = net * m;
+    csv += "Month " + m + ",$" + Math.round(r.totalMonthly || 0) + ",$" + r.softwareMonthlyCost + ",$" + Math.round(net) + ",$" + Math.round(cum) + "\n";
+  }
+
+  var blob = new Blob([csv], { type: "text/csv" });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "scheduling-roi-report.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function roiSubmitEmail(e) {
+  e.preventDefault();
+  var email = document.getElementById("roi-email").value;
+  var r = roiResult;
+  var payload = {
+    email: email,
+    tool: "scheduling-roi-estimator",
+    industry: r.industry,
+    staff_size: r.teamSize,
+    calculated_cost: Math.round(r.totalAnnual || 0),
+    pain_point: r.currentOTCost > r.currentNoShowCost ? "overtime" : "no-shows",
+    extra_data: JSON.stringify({
+      annualSavings: Math.round(r.totalAnnual || 0),
+      monthlySavings: Math.round(r.totalMonthly || 0),
+      softwareCost: r.softwareMonthlyCost,
+      paybackDays: r.paybackDays,
+      otSavings: Math.round(r.otSavings || 0),
+      noshowSavings: Math.round(r.noshowSavings || 0),
+      turnoverSavings: Math.round(r.turnoverSavings || 0),
+      adminSavings: Math.round(r.adminSavings || 0),
+      complianceSavings: Math.round(r.complianceSavings || 0)
+    })
+  };
+
+  fetch("/api/leads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  }).then(function(res) {
+    window.location.href = "/thank-you?tool=scheduling-roi-estimator";
+  }).catch(function(err) {
+    window.location.href = "/thank-you?tool=scheduling-roi-estimator";
+  });
+}
+</script>
+<style>
+@media print {
+  nav, .roi-hero, .roi-email-capture, .tools-grid-section, footer, .related-solutions, .roi-btn { display: none !important; }
+  .roi-container { max-width: 100% !important; padding: 0 !important; }
+}
+</style>
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scheduling Cost Calculator — How Much Is Bad Scheduling Costing You? | Senzii</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description" content="Free interactive calculator: discover how much poor staff scheduling costs your business in overtime, no-shows, turnover, and lost productivity.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/theme.20fbb461.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Scheduling Cost Calculator",
+    "description": "Calculate how much bad staff scheduling costs your business in overtime, no-shows, and turnover.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "publisher": { "@type": "Organization", "name": "Senzii", "url": "https://senzii.com" }
+  }
+  </script>
+  <style>
+    /* Calculator-specific styles */
+    .calc-hero { padding: 3rem 0 2rem; text-align: center; border-bottom: 1px solid var(--border); }
+    .calc-hero h1 { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; color: var(--text); letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .calc-hero p { font-size: 1.05rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+
+    .calc-container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+
+    .calc-step { display: none; }
+    .calc-step.active { display: block; }
+
+    .calc-progress { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
+    .progress-dot { flex: 1; height: 6px; background: var(--border); border-radius: 3px; transition: background 0.2s; }
+    .progress-dot.active { background: var(--accent); }
+    .progress-dot.done { background: var(--accent); }
+
+    .calc-question { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .calc-hint { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+    .calc-input-group { margin-bottom: 1.5rem; }
+    .calc-input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+    .calc-input-group input, .calc-input-group select {
+      width: 100%; padding: 0.75rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text); font-family: var(--font-body); font-size: 1rem; transition: border-color 0.15s;
+    }
+    .calc-input-group input:focus, .calc-input-group select:focus { outline: none; border-color: var(--accent); }
+    .calc-input-prefix { position: relative; }
+    .calc-input-prefix::before { content: '$'; position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-weight: 600; }
+    .calc-input-prefix input { padding-left: 2rem; }
+    .calc-input-suffix { position: relative; }
+    .calc-input-suffix::after { content: attr(data-suffix); position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; }
+    .calc-input-suffix input { padding-right: 3.5rem; }
+
+    .calc-slider-row { display: flex; align-items: center; gap: 1rem; }
+    .calc-slider-row input[type="range"] { flex: 1; accent-color: var(--accent); }
+    .calc-slider-value { font-size: 1.1rem; font-weight: 700; color: var(--accent); min-width: 60px; text-align: right; }
+
+    .calc-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .calc-option { background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 1.25rem; cursor: pointer; transition: all 0.15s; }
+    .calc-option:hover { border-color: var(--accent); }
+    .calc-option.selected { border-color: var(--accent); background: var(--accent-dim); }
+    .calc-option-title { font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 0.25rem; }
+    .calc-option-desc { font-size: 0.8rem; color: var(--text-muted); }
+
+    .calc-nav { display: flex; justify-content: space-between; margin-top: 2rem; }
+    .calc-btn { padding: 0.75rem 1.75rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; font-family: var(--font-body); transition: all 0.15s; }
+    .calc-btn-primary { background: var(--accent); color: #fff; }
+    .calc-btn-primary:hover { background: #15803d; }
+    .calc-btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .calc-btn-secondary:hover { border-color: var(--accent); }
+
+    /* Results */
+    .calc-results { display: none; }
+    .calc-results.show { display: block; }
+    .result-hero { text-align: center; margin-bottom: 2rem; }
+    .result-hero h2 { font-family: var(--font-display); font-size: 1.2rem; color: var(--text-muted); font-weight: 500; margin-bottom: 0.5rem; }
+    .result-big-number { font-family: var(--font-display); font-size: clamp(2.8rem, 6vw, 4.5rem); font-weight: 800; color: var(--coral); letter-spacing: -0.03em; }
+    .result-big-label { font-size: 1rem; color: var(--text-muted); margin-top: 0.25rem; }
+    .result-monthly { font-size: 1.1rem; color: var(--text); margin-top: 0.75rem; }
+    .result-monthly strong { color: var(--coral); }
+
+    .result-breakdown { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
+    .result-breakdown h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; }
+    .breakdown-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .breakdown-row:last-child { border-bottom: none; font-weight: 700; }
+    .breakdown-label { color: var(--text-muted); font-size: 0.9rem; }
+    .breakdown-value { color: var(--text); font-weight: 600; font-size: 0.9rem; }
+
+    /* Email capture */
+    .email-capture { background: linear-gradient(135deg, var(--accent-dim), rgba(22, 163, 74, 0.03)); border: 1px solid rgba(22, 163, 74, 0.2); border-radius: 14px; padding: 2rem; text-align: center; margin-bottom: 2rem; }
+    .email-capture h3 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .email-capture p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+    .email-form { display: flex; gap: 0.5rem; max-width: 400px; margin: 0 auto; }
+    .email-form input { flex: 1; padding: 0.7rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; font-family: var(--font-body); }
+    .email-form input:focus { outline: none; border-color: var(--accent); }
+    .email-form button { padding: 0.7rem 1.5rem; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font-body); white-space: nowrap; }
+    .email-form button:hover { background: #15803d; }
+    .email-success { display: none; color: var(--accent); font-weight: 600; margin-top: 1rem; font-size: 0.9rem; }
+    .email-success.show { display: block; }
+
+    .result-cta { text-align: center; margin-bottom: 1.5rem; }
+    .result-cta a { display: inline-block; padding: 0.85rem 2.5rem; background: var(--accent); color: #fff; border-radius: 8px; font-size: 1rem; font-weight: 700; text-decoration: none; font-family: var(--font-body); transition: background 0.15s; }
+    .result-cta a:hover { background: #15803d; }
+
+    @media (max-width: 600px) {
+      .calc-options { grid-template-columns: 1fr; }
+      .email-form { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/" class="nav-logo">
+        <svg class="nav-logo-mark" width="28" height="28" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="700" height="700" rx="155" fill="#16a34a"/>
+          <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+            <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+            <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+            <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+          </g>
+        </svg>
+        Senzii
+      </a>
+      <span class="nav-tagline">Intelligent scheduling</span>
+    </div>
+    <a href="/auth/login" class="nav-sign-in">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Sign In
+    </a>
+  </div>
+</nav>
+
+<section class="calc-hero">
+  <div class="section-inner">
+    <p class="section-eyebrow">Free Tool</p>
+    <h1>How Much Is Bad Scheduling Costing You?</h1>
+    <p>Answer a few quick questions about your scheduling. We'll calculate your true cost of poor scheduling — and show you how to fix it.</p>
+  </div>
+</section>
+
+<div class="calc-container">
+  <div class="calc-progress" id="progress">
+    <div class="progress-dot active"></div>
+    <div class="progress-dot"></div>
+    <div class="progress-dot"></div>
+    <div class="progress-dot"></div>
+    <div class="progress-dot"></div>
+  </div>
+
+  <!-- Step 1: Industry -->
+  <div class="calc-step active" id="step1">
+    <div class="calc-question">What industry are you in?</div>
+    <div class="calc-hint">This helps us benchmark your costs against industry averages.</div>
+    <div class="calc-options" id="industryOptions">
+      <div class="calc-option" data-value="healthcare" data-no-show-rate="0.12" data-turnover-rate="0.55" data-overtime-rate="0.08">
+        <div class="calc-option-title">Home Healthcare</div>
+        <div class="calc-option-desc">CNA, caregiver, skilled nursing visits</div>
+      </div>
+      <div class="calc-option" data-value="construction" data-no-show-rate="0.06" data-turnover-rate="0.45" data-overtime-rate="0.12">
+        <div class="calc-option-title">Construction</div>
+        <div class="calc-option-desc">Job sites, crews, subcontractors</div>
+      </div>
+      <div class="calc-option" data-value="logistics" data-no-show-rate="0.09" data-turnover-rate="0.65" data-overtime-rate="0.10">
+        <div class="calc-option-title">Logistics</div>
+        <div class="calc-option-desc">Warehouse, delivery, fulfillment</div>
+      </div>
+      <div class="calc-option" data-value="retail" data-no-show-rate="0.07" data-turnover-rate="0.60" data-overtime-rate="0.06">
+        <div class="calc-option-title">Retail</div>
+        <div class="calc-option-desc">Stores, restaurants, hospitality</div>
+      </div>
+      <div class="calc-option" data-value="professional" data-no-show-rate="0.04" data-turnover-rate="0.30" data-overtime-rate="0.07">
+        <div class="calc-option-title">Professional Services</div>
+        <div class="calc-option-desc">Legal, accounting, consulting</div>
+      </div>
+      <div class="calc-option" data-value="other" data-no-show-rate="0.08" data-turnover-rate="0.50" data-overtime-rate="0.08">
+        <div class="calc-option-title">Other</div>
+        <div class="calc-option-desc">Field service, maintenance, etc.</div>
+      </div>
+    </div>
+    <div class="calc-nav">
+      <div></div>
+      <button class="calc-btn calc-btn-primary" onclick="nextStep(1)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Team size -->
+  <div class="calc-step" id="step2">
+    <div class="calc-question">How many staff do you schedule?</div>
+    <div class="calc-hint">Total employees who get scheduled for shifts or jobs.</div>
+    <div class="calc-input-group">
+      <label for="staffCount">Number of staff</label>
+      <div class="calc-input-suffix" data-suffix="people">
+        <input type="number" id="staffCount" min="1" max="5000" value="20" placeholder="20">
+      </div>
+    </div>
+    <div class="calc-input-group">
+      <label for="avgWage">Average hourly wage</label>
+      <div class="calc-input-prefix">
+        <input type="number" id="avgWage" min="7.25" max="200" value="22" step="0.50" placeholder="22">
+      </div>
+    </div>
+    <div class="calc-input-group">
+      <label for="hoursPerWeek">Average hours per staff per week</label>
+      <div class="calc-input-suffix" data-suffix="hrs">
+        <input type="number" id="hoursPerWeek" min="1" max="80" value="32" placeholder="32">
+      </div>
+    </div>
+    <div class="calc-nav">
+      <button class="calc-btn calc-btn-secondary" onclick="prevStep(2)">← Back</button>
+      <button class="calc-btn calc-btn-primary" onclick="nextStep(2)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: No-shows -->
+  <div class="calc-step" id="step3">
+    <div class="calc-question">How often do scheduled staff no-show or call out?</div>
+    <div class="calc-hint">An industry average is pre-filled based on your industry. Adjust if you know your actual rate.</div>
+    <div class="calc-input-group">
+      <label for="noShowRate">No-show / call-out rate</label>
+      <div class="calc-slider-row">
+        <input type="range" id="noShowSlider" min="0" max="30" value="8" step="1">
+        <span class="calc-slider-value" id="noShowValue">8%</span>
+      </div>
+    </div>
+    <div class="calc-input-group">
+      <label for="fillTime">Hours to find a replacement (average)</label>
+      <div class="calc-input-suffix" data-suffix="hrs">
+        <input type="number" id="fillTime" min="0" max="24" value="3" step="0.5" placeholder="3">
+      </div>
+    </div>
+    <div class="calc-input-group">
+      <label for="replacementCost">Cost per unfilled shift (lost revenue, penalty, etc.)</label>
+      <div class="calc-input-prefix">
+        <input type="number" id="replacementCost" min="0" max="10000" value="150" step="10" placeholder="150">
+      </div>
+    </div>
+    <div class="calc-nav">
+      <button class="calc-btn calc-btn-secondary" onclick="prevStep(3)">← Back</button>
+      <button class="calc-btn calc-btn-primary" onclick="nextStep(3)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Step 4: Overtime & Turnover -->
+  <div class="calc-step" id="step4">
+    <div class="calc-question">What's your overtime and turnover situation?</div>
+    <div class="calc-hint">These are major hidden costs of poor scheduling.</div>
+    <div class="calc-input-group">
+      <label for="overtimeRate">What % of hours are overtime?</label>
+      <div class="calc-slider-row">
+        <input type="range" id="overtimeSlider" min="0" max="30" value="8" step="1">
+        <span class="calc-slider-value" id="overtimeValue">8%</span>
+      </div>
+    </div>
+    <div class="calc-input-group">
+      <label for="turnoverRate">Annual staff turnover rate</label>
+      <div class="calc-slider-row">
+        <input type="range" id="turnoverSlider" min="0" max="150" value="50" step="5">
+        <span class="calc-slider-value" id="turnoverValue">50%</span>
+      </div>
+    </div>
+    <div class="calc-input-group">
+      <label for="hireCost">Cost to hire and onboard one new employee</label>
+      <div class="calc-input-prefix">
+        <input type="number" id="hireCost" min="100" max="20000" value="2000" step="100" placeholder="2000">
+      </div>
+    </div>
+    <div class="calc-nav">
+      <button class="calc-btn calc-btn-secondary" onclick="prevStep(4)">← Back</button>
+      <button class="calc-btn calc-btn-primary" onclick="nextStep(4)">Calculate →</button>
+    </div>
+  </div>
+
+  <!-- Step 5: Results -->
+  <div class="calc-step" id="step5">
+    <div class="calc-results show">
+      <div class="result-hero">
+        <h2>Your estimated annual cost of bad scheduling</h2>
+        <div class="result-big-number" id="totalCost">$0</div>
+        <div class="result-big-label">per year</div>
+        <div class="result-monthly" id="monthlyCost"></div>
+      </div>
+
+      <div class="result-breakdown">
+        <h3>Cost Breakdown</h3>
+        <div class="breakdown-row">
+          <span class="breakdown-label">No-shows & unfilled shifts</span>
+          <span class="breakdown-value" id="noShowCost">$0</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">Excess overtime</span>
+          <span class="breakdown-value" id="overtimeCost">$0</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">Turnover from scheduling frustration</span>
+          <span class="breakdown-value" id="turnoverCost">$0</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">Manager time spent on scheduling</span>
+          <span class="breakdown-value" id="adminCost">$0</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">Total annual cost</span>
+          <span class="breakdown-value" id="totalCostRow">$0</span>
+        </div>
+      </div>
+
+      <div class="email-capture">
+        <h3>📧 Get your full report + savings plan</h3>
+        <p>We'll email you a detailed breakdown, industry benchmarks, and a step-by-step plan to cut these costs — free.</p>
+        <form class="email-form" id="emailForm" onsubmit="return captureEmail(event)">
+          <input type="email" id="emailInput" placeholder="your@work-email.com" required>
+          <button type="submit">Send Report</button>
+        </form>
+        <div class="email-success" id="emailSuccess">✓ Check your inbox — your report is on its way!</div>
+      </div>
+
+      <div class="result-cta">
+        <a href="/">See how Senzii can fix this →</a>
+      </div>
+
+      <p style="text-align:center; font-size:0.82rem; color:var(--text-dim); margin-top:1rem;">
+        Estimates based on industry research and your inputs. Actual costs may vary.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ── More Free Tools ───────────────────────────────────── -->
+<section class="scenarios" style="border-top: 1px solid var(--border);">
+  <div class="section-inner">
+    <p class="section-eyebrow">Explore</p>
+    <h2 class="section-headline">More Free Scheduling Tools</h2>
+    <div class="scenarios-grid">
+      <a href="/scheduling-quiz" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <h3>Pain Point Quiz</h3>
+        <p>Answer 7 questions to find your biggest scheduling problem.</p>
+      </a>
+      <a href="/template-generator" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <h3>Template Generator</h3>
+        <p>Generate a ready-to-use weekly schedule template. Download as CSV.</p>
+      </a>
+      <a href="/coverage-analyzer" class="scenario-card" style="text-decoration:none;color:inherit;">
+        <h3>Coverage Gap Analyzer</h3>
+        <p>Map your weekly shift coverage and instantly see where you’re understaffed.</p>
+      </a>
+</div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">
+        <svg class="footer-logo-mark" width="20" height="20" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="700" height="700" rx="155" fill="#16a34a"/>
+          <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+            <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+            <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+            <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+          </g>
+        </svg>
+        Senzii
+      </span>
+      <span class="footer-tagline">Intelligent workforce scheduling</span>
+    </div>
+    <div class="footer-links">
+      <a href="/#pricing">Pricing</a>
+      <a href="/compare">Compare</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/refunds">Refund Policy</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 REPL Made LLC. Built with &hearts;.</div>
+  </div>
+</footer>
+
+<script>
+  let currentStep = 1;
+  let selectedIndustry = null;
+  const calcData = {};
+
+  // Industry selection
+  document.querySelectorAll('#industryOptions .calc-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('#industryOptions .calc-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      selectedIndustry = opt.dataset;
+      // Pre-fill sliders with industry defaults
+      document.getElementById('noShowSlider').value = Math.round(parseFloat(opt.dataset.noShowRate) * 100);
+      document.getElementById('noShowValue').textContent = Math.round(parseFloat(opt.dataset.noShowRate) * 100) + '%';
+      document.getElementById('overtimeSlider').value = Math.round(parseFloat(opt.dataset.overtimeRate) * 100);
+      document.getElementById('overtimeValue').textContent = Math.round(parseFloat(opt.dataset.overtimeRate) * 100) + '%';
+      document.getElementById('turnoverSlider').value = Math.round(parseFloat(opt.dataset.turnoverRate) * 100);
+      document.getElementById('turnoverValue').textContent = Math.round(parseFloat(opt.dataset.turnoverRate) * 100) + '%';
+    });
+  });
+
+  // Sliders
+  document.getElementById('noShowSlider').addEventListener('input', e => {
+    document.getElementById('noShowValue').textContent = e.target.value + '%';
+  });
+  document.getElementById('overtimeSlider').addEventListener('input', e => {
+    document.getElementById('overtimeValue').textContent = e.target.value + '%';
+  });
+  document.getElementById('turnoverSlider').addEventListener('input', e => {
+    document.getElementById('turnoverValue').textContent = e.target.value + '%';
+  });
+
+  function updateProgress(step) {
+    const dots = document.querySelectorAll('.progress-dot');
+    dots.forEach((dot, i) => {
+      dot.classList.remove('active', 'done');
+      if (i < step - 1) dot.classList.add('done');
+      if (i === step - 1) dot.classList.add('active');
+    });
+  }
+
+  function nextStep(step) {
+    if (step === 1 && !selectedIndustry) { alert('Please select your industry.'); return; }
+    if (step < 5) {
+      document.getElementById('step' + step).classList.remove('active');
+      currentStep = step + 1;
+      document.getElementById('step' + currentStep).classList.add('active');
+      updateProgress(currentStep);
+      if (currentStep === 5) calculateResults();
+    }
+  }
+
+  function prevStep(step) {
+    document.getElementById('step' + step).classList.remove('active');
+    currentStep = step - 1;
+    document.getElementById('step' + currentStep).classList.add('active');
+    updateProgress(currentStep);
+  }
+
+  function fmt(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+
+  function calculateResults() {
+    const staff = parseFloat(document.getElementById('staffCount').value) || 20;
+    const wage = parseFloat(document.getElementById('avgWage').value) || 22;
+    const hrs = parseFloat(document.getElementById('hoursPerWeek').value) || 32;
+    const noShowPct = parseFloat(document.getElementById('noShowSlider').value) / 100;
+    const fillTime = parseFloat(document.getElementById('fillTime').value) || 3;
+    const replacementCost = parseFloat(document.getElementById('replacementCost').value) || 150;
+    const overtimePct = parseFloat(document.getElementById('overtimeSlider').value) / 100;
+    const turnoverPct = parseFloat(document.getElementById('turnoverSlider').value) / 100;
+    const hireCost = parseFloat(document.getElementById('hireCost').value) || 2000;
+
+    const weeksPerYear = 52;
+    const totalWeeklyHours = staff * hrs;
+
+    // No-show costs: lost shifts + replacement search time + unfilled shift penalty
+    const noShowShiftsPerWeek = Math.ceil(staff * noShowPct * (hrs / 8));
+    const fillTimeCostPerWeek = noShowShiftsPerWeek * fillTime * wage;
+    const unfilledShiftPenaltyPerWeek = noShowShiftsPerWeek * replacementCost * 0.4; // 40% go unfilled
+    const noShowAnnual = (fillTimeCostPerWeek + unfilledShiftPenaltyPerWeek) * weeksPerYear;
+
+    // Overtime cost (OT premium = 1.5x)
+    const overtimeHours = totalWeeklyHours * overtimePct;
+    const overtimePremium = overtimeHours * wage * 0.5; // extra 50%
+    const overtimeAnnual = overtimePremium * weeksPerYear;
+
+    // Turnover cost: staff who leave * hiring cost
+    // Scheduling friction causes ~30% of turnover
+    const turnoverFromScheduling = staff * turnoverPct * 0.30;
+    const turnoverAnnual = turnoverFromScheduling * hireCost;
+
+    // Manager time: estimate 2 hrs/week per 10 staff at $30/hr manager rate
+    const managerRate = 30;
+    const managerHoursPerWeek = Math.max(2, Math.ceil(staff / 10) * 2);
+    const adminAnnual = managerHoursPerWeek * 52 * managerRate;
+
+    const total = noShowAnnual + overtimeAnnual + turnoverAnnual + adminAnnual;
+    const monthly = total / 12;
+
+    document.getElementById('noShowCost').textContent = fmt(noShowAnnual);
+    document.getElementById('overtimeCost').textContent = fmt(overtimeAnnual);
+    document.getElementById('turnoverCost').textContent = fmt(turnoverAnnual);
+    document.getElementById('adminCost').textContent = fmt(adminAnnual);
+    document.getElementById('totalCostRow').textContent = fmt(total);
+    document.getElementById('totalCost').textContent = fmt(total);
+    document.getElementById('monthlyCost').innerHTML = `That's <strong>${fmt(monthly)}</strong> per month`;
+
+    calcData.industry = selectedIndustry?.value || 'other';
+    calcData.staff = staff;
+    calcData.wage = wage;
+    calcData.totalCost = total;
+  }
+
+  function captureEmail(event) {
+    event.preventDefault();
+    const email = document.getElementById('emailInput').value;
+    // Send to backend lead collection endpoint
+    const payload = {
+      email,
+      tool: 'cost-calculator',
+      industry: calcData.industry || null,
+      staff_size: calcData.staff || null,
+      calculated_cost: calcData.totalCost || null,
+      extra_data: {
+        ...calcData,
+        timestamp: new Date().toISOString()
+      }
+    };
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function(r) {
+      window.location.href = '/thank-you?tool=cost-calculator';
+    }).catch(function(e) {
+      // Fallback: store locally if fetch fails
+      try { localStorage.setItem('senzii_calc_lead_' + Date.now(), JSON.stringify(payload)); } catch(e) {}
+      window.location.href = '/thank-you?tool=cost-calculator';
+    });
+    document.getElementById('emailForm').style.display = 'none';
+    document.getElementById('emailSuccess').classList.add('show');
+    return false;
+  }
+</script>
+
+</body>
+</html>

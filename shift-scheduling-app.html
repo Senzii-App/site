@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shift Scheduling App — Fill Shifts Faster with Smart Matching | Senzii</title>
+  <meta name="description" content="Shift scheduling app that automatically matches open shifts to available, qualified workers. Mobile-friendly, certification-aware, and overtime-smart. $5/seat/month.">
+  <link rel="canonical" href="https://senzii.com/shift-scheduling-app">
+  <meta property="og:title" content="Shift Scheduling App — Fill Shifts Faster | Senzii">
+  <meta property="og:description" content="Automatically match open shifts to available, qualified workers. Mobile-friendly, certification-aware, overtime-smart.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://senzii.com/shift-scheduling-app">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Senzii",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web, iOS, Android",
+    "description": "Shift scheduling app that automatically matches open shifts to available, qualified workers using skills, location, and certifications.",
+    "offers": {
+      "@type": "Offer",
+      "price": "5.00",
+      "priceCurrency": "USD",
+      "description": "Per seat per month, all features included"
+    },
+    "publisher": {"@type": "Organization", "name": "Senzii", "logo": {"@type": "ImageObject", "url": "https://senzii.com/logo.png"}}
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a shift scheduling app?",
+        "acceptedAnswer": {"@type": "Answer", "text": "A shift scheduling app is a mobile and web-based tool that lets managers create shifts and workers view, accept, swap, and trade them from their phones. Modern apps like Senzii go further by automatically suggesting the best worker for each open shift based on skills, certifications, location, and availability."}
+      },
+      {
+        "@type": "Question",
+        "name": "Can workers pick up shifts from their phones?",
+        "acceptedAnswer": {"@type": "Answer", "text": "Yes. Senzii is fully mobile-responsive. Workers receive push notifications for open shifts, callouts, and swap requests. They can accept or decline with one tap, view their full schedule, and request time off — all from their phone."}
+      },
+      {
+        "@type": "Question",
+        "name": "Does Senzii prevent unqualified workers from picking up shifts?",
+        "acceptedAnswer": {"@type": "Answer", "text": "Yes. Senzii validates every shift pickup against the worker's certifications and skills. If a shift requires a forklift certification and the worker doesn't have it, they cannot claim the shift. This prevents compliance violations and safety risks."}
+      },
+      {
+        "@type": "Question",
+        "name": "How does the shift swap workflow work?",
+        "acceptedAnswer": {"@type": "Answer", "text": "A worker requests a swap and proposes a replacement. Senzii checks that the replacement has the required certifications, no scheduling conflicts, and that the swap won't trigger overtime. The manager approves with one tap."}
+      },
+      {
+        "@type": "Question",
+        "name": "Does Senzii work for 24/7 operations?",
+        "acceptedAnswer": {"@type": "Answer", "text": "Yes. Senzii supports 24/7 shift patterns including fixed shifts, rotating shifts, split shifts, and on-call rotations. The system tracks hours across the full week to prevent overtime violations regardless of schedule type."}
+      }
+    ]
+  }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1a1a2e; }
+    .hero { background: linear-gradient(135deg, #0f3460 0%, #16213e 100%); color: white; padding: 4rem 1rem; text-align: center; }
+    .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; font-weight: 800; }
+    .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 2rem; opacity: 0.9; }
+    .hero .cta { display: inline-block; background: #e94560; color: white; padding: 0.85rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 1.1rem; }
+    .hero .cta:hover { background: #c73e54; }
+    .container { max-width: 900px; margin: 0 auto; padding: 3rem 1rem; }
+    h2 { font-size: 1.8rem; margin-bottom: 1rem; color: #0f3460; }
+    h3 { font-size: 1.3rem; margin: 1.5rem 0 0.5rem; color: #16213e; }
+    p { margin-bottom: 1rem; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+    .feature { background: #f8f9fa; border-radius: 8px; padding: 1.5rem; border: 1px solid #e9ecef; }
+    .feature h3 { margin-top: 0; color: #0f3460; }
+    .stat { background: #e8f4fd; border-left: 4px solid #0066cc; padding: 1rem 1.25rem; margin: 1.25rem 0; border-radius: 0 6px 6px 0; }
+    .stat h3 { margin-top: 0; font-size: 1.1rem; }
+    .warning { background: #fff7ed; border-left: 4px solid #ea580c; padding: 0.75rem 1rem; margin: 1rem 0; border-radius: 0 6px 6px 0; font-size: 0.9rem; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { text-align: left; padding: 0.6rem; border-bottom: 1px solid #e0e0e0; }
+    th { background: #f4f4f5; font-weight: 600; }
+    .cta-box { background: #f4f4f5; padding: 2rem; border-radius: 8px; text-align: center; margin-top: 2rem; }
+    .cta-box a { display: inline-block; background: #e94560; color: white; padding: 0.75rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 0.5rem; }
+    ul { padding-left: 1.2rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.3rem; }
+    .steps { display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 1.5rem 0; }
+    .step { flex: 1 1 220px; background: #f8f9fa; border-radius: 8px; padding: 1.25rem; border: 1px solid #e9ecef; }
+    .step-num { display: inline-block; background: #0f3460; color: white; width: 28px; height: 28px; line-height: 28px; text-align: center; border-radius: 50%; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; }
+    @media (max-width: 600px) { .hero h1 { font-size: 1.8rem; } .features { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <h1>Shift Scheduling App</h1>
+    <p>Fill open shifts in seconds — not hours. Senzii's mobile-friendly shift scheduling app matches every open shift to the nearest available, qualified worker automatically.</p>
+    <a href="https://senzii.com/#pricing" class="cta">Start Free Trial — $5/seat</a>
+  </section>
+
+  <div class="container">
+    <h2>The Shift Scheduling Problem</h2>
+    <p>Every manager in a shift-based industry knows the same three problems: creating the schedule takes too long, finding coverage for callouts takes even longer, and keeping track of who's qualified for which shift is a full-time job on its own.</p>
+
+    <p>Spreadsheets and whiteboards don't scale. Generic scheduling apps track shifts but not skills. Workers end up in the wrong place, overtime balloons, and managers spend their evenings on phone trees.</p>
+
+    <div class="stat">
+      <h3>The Mobile Shift Gap</h3>
+      <p>73% of shift workers say they would pick up extra shifts if they could do it from their phone. But most scheduling tools are desktop-first, or their mobile experience is so clunky that workers ignore it. Senzii is built mobile-first: push notifications, one-tap accept/decline, and full schedule visibility from any device.</p>
+    </div>
+
+    <h2>How It Works: 4 Steps to a Filled Shift</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">1</span>
+        <h3 style="margin-top:0.3rem;">Manager Creates or Opens a Shift</h3>
+        <p>Define the role, required certifications, location, and time. Or mark an existing shift as open when a worker calls out.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <h3 style="margin-top:0.3rem;">Senzii Ranks Candidates</h3>
+        <p>The app instantly scores every available worker by certification match, proximity to the site, current hours, and shift history.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <h3 style="margin-top:0.3rem;">Worker Gets a Push Notification</h3>
+        <p>The best match receives a notification on their phone. They accept or decline with one tap. If they decline, the offer cascades to the next candidate.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">4</span>
+        <h3 style="margin-top:0.3rem;">Shift is Covered, Automatically</h3>
+        <p>No phone tree. No manual checking. The right worker is matched, notified, and confirmed — usually within 60 seconds.</p>
+      </div>
+    </div>
+
+    <h2>Key Features</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>Mobile Push Notifications</h3>
+        <p>Workers get notified the moment a shift they qualify for opens up. No need to check a board or a group chat. One tap to accept or decline.</p>
+      </div>
+      <div class="feature">
+        <h3>Smart Shift Matching</h3>
+        <p>The app doesn't just show open shifts — it ranks them by fit. A CNA sees CNA shifts first. A forklift operator sees warehouse shifts first. Relevance, not noise.</p>
+      </div>
+      <div class="feature">
+        <h3>Self-Service Shift Swaps</h3>
+        <p>Workers propose swaps from their phone. The app validates certifications, checks for conflicts, and alerts the manager for one-tap approval.</p>
+      </div>
+      <div class="feature">
+        <h3>Overtime Guardrails</h3>
+        <p>Before any shift is confirmed, the app checks the worker's current weekly hours. If the shift would trigger overtime, it flags it and suggests alternatives.</p>
+      </div>
+      <div class="feature">
+        <h3>Certification Blocking</h3>
+        <p>Workers without the required certification simply cannot claim the shift. This prevents safety violations, compliance issues, and manager anxiety.</p>
+      </div>
+      <div class="feature">
+        <h3>Real-Time Schedule Sync</h3>
+        <p>Changes propagate instantly. If a manager updates a shift, every affected worker sees it immediately. No version conflicts, no "I didn't get the memo."</p>
+      </div>
+    </div>
+
+    <h2>Shift Scheduling by Use Case</h2>
+
+    <h3>On-Call &amp; Last-Minute Coverage</h3>
+    <p>When a worker calls out at 5 AM, the app finds the best replacement and sends them a push notification before the manager finishes their coffee. Learn more about <a href="/on-call-scheduling-software">on-call scheduling</a>.</p>
+
+    <h3>Open Shift Pickup</h3>
+    <p>Post open shifts to a pool of qualified workers. The app ranks candidates and sends offers in order of fit. Workers can set preferences ("I prefer morning shifts near downtown") and the app learns over time.</p>
+
+    <h3>Shift Swaps &amp; Drops</h3>
+    <p>Workers request swaps from their phone. The app validates the replacement's qualifications, checks for conflicts, and gets manager approval — all in under a minute. Explore <a href="/shift-swap-software">shift swap software</a>.</p>
+
+    <h3>Recurring Shift Templates</h3>
+    <p>Create templates for common shift patterns (2-2-3, DuPont, fixed weekly) and apply them with one click. Adjust for holidays, PTO, and coverage gaps in seconds.</p>
+
+    <div class="warning">
+      <strong>Why group chats fail for shift scheduling:</strong> Text threads and WhatsApp groups are fast — until they aren't. Messages get buried. Workers claim shifts they aren't qualified for. Managers lose track of who's covering what. A dedicated shift scheduling app replaces chaos with structure, without sacrificing speed.
+    </div>
+
+    <h2>Senzii vs Other Shift Scheduling Apps</h2>
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>Senzii</th><th>When I Work</th><th>Deputy</th><th>Group Chat</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Auto shift matching by skills</td><td>✅ Yes</td><td>❌ No</td><td>⚠️ Tags only</td><td>❌ No</td></tr>
+        <tr><td>Certification validation</td><td>✅ Automatic</td><td>❌ No</td><td>❌ No</td><td>❌ No</td></tr>
+        <tr><td>Proximity-based routing</td><td>✅ Yes</td><td>❌ No</td><td>❌ No</td><td>❌ No</td></tr>
+        <tr><td>Push notifications</td><td>✅ Yes</td><td>✅ Yes</td><td>✅ Yes</td><td>⚠️ Mixed</td></tr>
+        <tr><td>Overtime prevention (pre-shift)</td><td>✅ Yes</td><td>⚠️ After 40h</td><td>⚠️ After 40h</td><td>❌ No</td></tr>
+        <tr><td>Swap validation</td><td>✅ Yes</td><td>⚠️ Basic</td><td>⚠️ Basic</td><td>❌ No</td></tr>
+        <tr><td>Price</td><td>$5/seat</td><td>$20+/user</td><td>$15+/user</td><td>Free (costs hours)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Frequently Asked Questions</h2>
+    <h3>Is Senzii truly mobile-friendly?</h3>
+    <p>Yes. Senzii is built mobile-first. Workers can view their schedule, accept shifts, request swaps, and check their hours from any smartphone. Managers can create shifts, approve swaps, and monitor coverage from their phone.</p>
+
+    <h3>Can workers use Senzii without downloading an app?</h3>
+    <p>Yes. Senzii is a progressive web app (PWA) that works in any modern browser. Workers can bookmark it to their home screen for an app-like experience without visiting an app store.</p>
+
+    <h3>Does Senzii work offline?</h3>
+    <p>Workers can view their cached schedule offline. Changes sync automatically when connectivity returns. This is critical for field workers in areas with spotty coverage.</p>
+
+    <h3>How fast can Senzii fill an open shift?</h3>
+    <p>For shifts with standard requirements, Senzii typically identifies and notifies the best match within 5 seconds. The worker can accept with one tap. Total time from "shift opens" to "shift covered" is usually under 60 seconds.</p>
+
+    <div class="cta-box">
+      <h2>Stop Playing Phone Tag</h2>
+      <p>Fill shifts automatically with the right workers. Mobile-friendly, certification-aware, and overtime-smart. $5/seat/month.</p>
+      <a href="https://senzii.com/#pricing">Start Free Trial</a>
+    </div>
+
+    <section style="margin-top:2.5rem;padding:1.75rem;background:#f0f4f8;border-radius:12px;">
+      <h3 style="margin:0 0 0.75rem;font-size:1.15rem;color:#0f3460;">Free tools to help you schedule smarter</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;">
+        <a href="/cost-calculator" style="display:block;padding:0.8rem 1rem;background:#fff;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;color:#1a202c;font-size:0.85rem;">💰 Cost Calculator →</a>
+        <a href="/scheduling-quiz" style="display:block;padding:0.8rem 1rem;background:#fff;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;color:#1a202c;font-size:0.85rem;">🎯 Pain Point Quiz →</a>
+        <a href="/template-generator" style="display:block;padding:0.8rem 1rem;background:#fff;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;color:#1a202c;font-size:0.85rem;">📅 Template Generator →</a>
+        <a href="/coverage-analyzer" style="display:block;padding:0.8rem 1rem;background:#fff;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;color:#1a202c;font-size:0.85rem;">🔍 Coverage Gap Analyzer →</a>
+</div>
+    </section>
+  </div>
+
+  <footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">
+        <svg class="footer-logo-mark" width="20" height="20" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="700" height="700" rx="155" fill="#16a34a"/>
+          <g transform="translate(0,700) scale(0.1,-0.1)" fill="#fff" stroke="none">
+            <path d="M4396 6144 c-248 -60 -417 -310 -378 -561 25 -158 134 -307 275 -376 88 -44 140 -56 232 -57 145 0 271 55 374 165 70 75 105 138 126 227 19 82 19 155 -1 232 -71 274 -348 438 -628 370z"/>
+            <path d="M6056 5093 c-197 -215 -432 -372 -633 -423 -246 -63 -494 -21 -906 154 -234 99 -348 143 -459 176 -446 133 -920 93 -1333 -110 -385 -189 -722 -517 -904 -878 -40 -79 -73 -163 -67 -169 3 -3 27 15 53 40 292 275 670 485 1028 571 193 46 238 51 510 51 246 -1 267 -2 388 -28 148 -32 325 -91 517 -172 506 -214 557 -230 755 -229 150 0 224 15 348 71 134 60 242 136 362 257 128 129 211 247 295 421 60 124 124 303 118 329 -2 10 -28 -12 -72 -61z"/>
+            <path d="M4125 3914 c-190 -29 -359 -81 -530 -164 -207 -100 -365 -218 -545 -406 -131 -137 -229 -266 -429 -567 -284 -427 -423 -599 -697 -867 -409 -399 -866 -721 -1288 -906 l-69 -31 75 -7 c41 -3 129 -2 194 4 686 63 1325 458 2029 1255 217 246 327 352 444 430 445 296 1295 436 1654 273 129 -59 189 -161 173 -295 -14 -118 -104 -309 -230 -483 -89 -125 -169 -215 -360 -408 -94 -94 -168 -172 -164 -172 14 0 174 72 276 124 282 145 510 305 697 491 140 139 202 219 266 348 214 425 -99 838 -744 979 -92 20 -129 22 -382 22 -223 0 -302 -3 -385 -18 -58 -9 -121 -20 -140 -23 -33 -5 -23 8 162 197 109 110 203 210 208 221 10 18 7 19 -57 18 -37 -1 -108 -7 -158 -15z"/>
+          </g>
+        </svg>
+        Senzii
+      </span>
+      <span class="footer-tagline">Intelligent workforce scheduling</span>
+    </div>
+    <div class="footer-links">
+      <a href="/#pricing">Pricing</a>
+      <a href="/compare">Compare</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/refunds">Refund Policy</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 REPL Made LLC. Built with &hearts;.</div>
+  </div>
+</footer>
+</body>
+</html>
